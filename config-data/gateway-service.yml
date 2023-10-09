@@ -1,0 +1,68 @@
+server:
+  port: 9090
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8090/eureka}
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+spring:
+  cloud:
+    gateway:
+      globalcors:
+          corsConfigurations:
+            '[/**]':
+              allowedOrigins:
+              - "http://localhost:3000"
+              - "http://localhost:8000"
+              allowedHeaders: "*"
+              allowedMethods:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: alumno-service
+          uri: lb://alumno-service
+          predicates:
+            - Path=/alumno/**
+          filters:
+            - AuthFilter
+        - id: curso-service
+          uri: lb://curso-service
+          predicates:
+            - Path=/curso/**
+        - id: docente-service
+          uri: lb://docente-service
+          predicates:
+            - Path=/docente/**
+        - id: inscripccion-service
+          uri: lb://inscripccion-service
+          predicates:
+            - Path=/inscripccion/**
+          filters:
+            - AuthFilter
+        - id: asistencia-service
+          uri: lb://asistencia-service
+          predicates:
+            - Path=/asistencia/**,/horario/**,/detalleasistencia/**
+          filters:
+            - AuthFilter
+        - id: noticia-service
+          uri: lb://noticia-service
+          predicates:
+            - Path=/slider/**,/blog/**,/about/**,/galeriaactividad/**,/galeriaubicacion/**,/video/**
+        - id: categoria-service
+          uri: lb://categoria-service
+          predicates:
+            - Path=/categoriablog/**         
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**       
+
+   
+

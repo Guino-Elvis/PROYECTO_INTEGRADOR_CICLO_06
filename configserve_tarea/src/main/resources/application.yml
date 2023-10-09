@@ -1,0 +1,19 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Guino-Elvis/PROYECTO_INTEGRADOR_CICLO_06.git
+          search-paths: config-data
+          #username: Guino-Elvis
+          #password: gino123456123
+          default-label: main
+  security:
+    user:
+      name: root
+      password: s3cr3t
+      # holaaasoyservidorciclo6tareaaaaa
