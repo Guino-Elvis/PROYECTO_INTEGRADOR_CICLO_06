@@ -6,6 +6,7 @@ import 'package:flutter_application_1/view/CrearCategoriaPage.dart';
 import 'package:flutter_application_1/view/DetalleCategoria.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CategoriaList extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _CategoriaListState extends State<CategoriaList> {
       MaterialPageRoute(builder: (context) => CrearCategoriaPage()),
     );
 
-  if (result != null && result) {
+    if (result != null && result) {
       setState(() {});
     }
   }
@@ -113,7 +114,7 @@ class ItemList extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.all(8.0),
                             child: Icon(
-                             Icons.visibility,
+                              Icons.visibility,
                               color: Colors.white,
                               size: 30.0, // Tamaño del icono
                             ),
@@ -142,16 +143,51 @@ class ItemList extends StatelessWidget {
                             ],
                           ),
                         ),
-                        
+
                         // Mostrar la imagen
+                        // Container(
+                        //   margin: EdgeInsets.all(8.0),
+                        //   child: Image.network(
+                        //     foto,
+                        //     width: 80.0, // Ancho de la imagen
+                        //     height: 80.0, // Alto de la imagen
+                        //     fit:
+                        //         BoxFit.cover, // Ajustar la imagen al contenedor
+                        //   ),
+                        // ),
+                        // Mostrar la imagen
+
+                        // Container(
+                        //   margin: EdgeInsets.all(8.0),
+                        //   child: foto != null
+                        //       ? Image.network(
+                        //           foto,
+                        //           width: 80.0, // Ancho de la imagen
+                        //           height: 80.0, // Alto de la imagen
+                        //           fit: BoxFit
+                        //               .cover, // Ajustar la imagen al contenedor
+                        //         )
+                        //       : Image.asset(
+                        //           'assets/nofoto.jpg', // Ruta de la imagen predeterminada en tus assets
+                        //           width: 80.0,
+                        //           height: 80.0,
+                        //           fit: BoxFit.cover,
+                        //         ),
+                        // ),
                         Container(
-                          margin: EdgeInsets.all(8.0),
-                          child: Image.network(
-                            foto,
-                            width: 80.0, // Ancho de la imagen
-                            height: 80.0, // Alto de la imagen
-                            fit:
-                                BoxFit.cover, // Ajustar la imagen al contenedor
+                          margin: EdgeInsets.all(
+                              8.0), // Agrega márgenes alrededor de la imagen
+                          child: CachedNetworkImage(
+                            imageUrl: item.containsKey('foto')
+                                ? item['foto'].toString()
+                                : 'assets/nofoto.jpg',
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(), // Puedes personalizar el indicador de carga
+                            errorWidget: (context, url, error) =>
+                                Image.asset('assets/nofoto.jpg'),
+                            width: 80.0,
+                            height: 80.0,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ],

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "4455056114",
+    "project_id": "proyectointegrador-e2212",
+    "storage_bucket": "proyectointegrador-e2212.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4455056114:android:06f93be73cbf8cd7e9c66b",
+        "android_client_info": {
+          "package_name": "flutter.aplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4455056114-es9mageegsikabcv3lllftqhk22vik3i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY479LP-ktpO_FS3Tl3DgtKKOjrWbnpXs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4455056114-es9mageegsikabcv3lllftqhk22vik3i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

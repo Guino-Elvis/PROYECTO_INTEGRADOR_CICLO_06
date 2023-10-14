@@ -26,38 +26,71 @@ class _DetalleCategoriaState extends State<DetalleCategoria> {
     }
   }
 
-  //create function delete
-  void confirm() {
-    AlertDialog alertDialog = AlertDialog(
-      content: Text(
-          "¿Está seguro de eliminar esta categoría '${widget.list[widget.index]['id']}'?"),
-      actions: <Widget>[
-        ElevatedButton(
-          child: Text(
-            "Eliminar",
-            style: TextStyle(color: Colors.black),
-          ),
-          style: ElevatedButton.styleFrom(primary: Colors.red),
-          onPressed: () {
-            categoriaController
-                .removerCategoria(widget.list[widget.index]['id'].toString());
-            _navigateList(context);
-          },
-        ),
-        ElevatedButton(
-          child: Text(
-            "Cancelar",
-            style: TextStyle(color: Colors.black),
-          ),
-          style: ElevatedButton.styleFrom(primary: Colors.green),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ],
-    );
+  // //create function delete
+  // void confirm() {
+  //   AlertDialog alertDialog = AlertDialog(
+  //     content: Text(
+  //         "¿Está seguro de eliminar esta categoría '${widget.list[widget.index]['id']}'?"),
+  //     actions: <Widget>[
+  //       ElevatedButton(
+  //         child: Text(
+  //           "Eliminar",
+  //           style: TextStyle(color: Colors.black),
+  //         ),
+  //         style: ElevatedButton.styleFrom(primary: Colors.red),
+  //         onPressed: () {
+  //           categoriaController
+  //               .removerCategoria(widget.list[widget.index]['id'].toString());
+  //           _navigateList(context);
+  //         },
+  //       ),
+  //       ElevatedButton(
+  //         child: Text(
+  //           "Cancelar",
+  //           style: TextStyle(color: Colors.black),
+  //         ),
+  //         style: ElevatedButton.styleFrom(primary: Colors.green),
+  //         onPressed: () => Navigator.pop(context),
+  //       ),
+  //     ],
+  //   );
 
-    showDialog(
-        context: context, builder: (BuildContext context) => alertDialog);
-  }
+  //   showDialog(
+  //       context: context, builder: (BuildContext context) => alertDialog);
+  // }
+
+void confirm() {
+  final id = widget.list[widget.index]['id'].toString();
+  final fotoURL = widget.list[widget.index]['foto'].toString();
+
+  AlertDialog alertDialog = AlertDialog(
+    content: Text("¿Está seguro de eliminar esta categoría '$id'?"),
+    actions: <Widget>[
+      ElevatedButton(
+        child: Text(
+          "Eliminar",
+          style: TextStyle(color: Colors.black),
+        ),
+        style: ElevatedButton.styleFrom(primary: Colors.red),
+        onPressed: () async {
+          await categoriaController.removerCategoria(id, fotoURL);
+          _navigateList(context);
+        },
+      ),
+      ElevatedButton(
+        child: Text(
+          "Cancelar",
+          style: TextStyle(color: Colors.black),
+        ),
+        style: ElevatedButton.styleFrom(primary: Colors.green),
+        onPressed: () => Navigator.pop(context),
+      ),
+    ],
+  );
+
+  showDialog(
+      context: context, builder: (BuildContext context) => alertDialog);
+}
 
   @override
   Widget build(BuildContext context) {

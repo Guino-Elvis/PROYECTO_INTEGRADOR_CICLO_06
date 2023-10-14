@@ -1,6 +1,10 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/controller/CategoriaController.dart';
 import 'package:flutter_application_1/view/CategoriaList.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class EditCategoria extends StatefulWidget {
   final List list;
@@ -19,6 +23,8 @@ class _EditCategoriaState extends State<EditCategoria> {
   late TextEditingController controllertitulo;
   late TextEditingController controllerdescripccion;
   late TextEditingController controllerfoto;
+  File? selectedImage;
+  String categoriaImageURL = "";
 
   _navigateList(BuildContext context) async {
     final result = await Navigator.push(
@@ -33,15 +39,63 @@ class _EditCategoriaState extends State<EditCategoria> {
 
   @override
   void initState() {
+    super.initState();
     controllerid =
         TextEditingController(text: widget.list[widget.index]['id'].toString());
     controllertitulo = TextEditingController(
         text: widget.list[widget.index]['titulo'].toString());
     controllerdescripccion = TextEditingController(
         text: widget.list[widget.index]['descripccion'].toString());
-    controllerfoto = TextEditingController(
-        text: widget.list[widget.index]['foto'].toString());
-    super.initState();
+    // Obtiene la URL de la imagen de la categoría que estás editando
+    categoriaImageURL = widget.list[widget.index]['foto'];
+    // Inicializa selectedImage con la URL de la foto existente
+    selectedImage = File(categoriaImageURL);
+  }
+
+  Future<void> _pickImage() async {
+    final imagePicker = ImagePicker();
+    final image = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        selectedImage = File(image.path);
+      });
+    } else {
+      // El usuario no seleccionó una nueva imagen.
+    }
+  }
+
+  Future<void> _updateImageInFirebase() async {
+    String newImageUrl = widget.list[widget.index]
+        ['foto']; // Por defecto, se mantiene la imagen existente
+
+    if (selectedImage != null) {
+      final firebaseStorageReference = FirebaseStorage.instance
+          .ref()
+          .child('categoriablog/${DateTime.now()}.png');
+
+      try {
+        await firebaseStorageReference.putFile(selectedImage!);
+        final downloadUrl = await firebaseStorageReference.getDownloadURL();
+
+        if (downloadUrl != null) {
+          newImageUrl =
+              downloadUrl; // Si se selecciona una nueva imagen, se actualiza la URL
+        }
+      } catch (e) {
+        // Maneja el error, por ejemplo, muestra un mensaje al usuario
+        print("Error al cargar la imagen: $e");
+      }
+    }
+
+    // Actualiza la categoría, incluyendo la URL de la imagen (ya sea la existente o la nueva)
+    categoriaController.editarCategoria(
+      controllerid.text.trim(),
+      controllertitulo.text.trim(),
+      controllerdescripccion.text.trim(),
+      newImageUrl,
+    );
+
+    _navigateList(context);
   }
 
   @override
@@ -57,8 +111,7 @@ class _EditCategoriaState extends State<EditCategoria> {
             Column(
               children: <Widget>[
                 Visibility(
-                  visible:
-                      false, // Establece esta propiedad en false para ocultar el campo id.
+                  visible: false,
                   child: ListTile(
                     leading: Icon(Icons.title, color: Colors.black),
                     title: TextFormField(
@@ -70,15 +123,39 @@ class _EditCategoriaState extends State<EditCategoria> {
                     ),
                   ),
                 ),
+                // Image.network(
+                //   categoriaImageURL,
+                //   width: 200, // Ajusta el tamaño según tus necesidades
+                //   height: 200,
+                //   fit: BoxFit
+                //       .contain, // Puedes ajustar el ajuste según tus necesidades
+                // ),
+
+                Container(
+                  margin: EdgeInsets.all(
+                      8.0), // Agrega márgenes alrededor de la imagen
+                  child: CachedNetworkImage(
+                    imageUrl: categoriaImageURL.isNotEmpty
+                        ? categoriaImageURL
+                        : 'assets/nofoto.jpg',
+                    placeholder: (context, url) =>
+                        CircularProgressIndicator(), // Puedes personalizar el indicador de carga
+                    errorWidget: (context, url, error) =>
+                        Image.asset('assets/nofoto.jpg'),
+                    width: 80.0,
+                    height: 80.0,
+                    fit: BoxFit.cover,
+                  ),
+                ),
                 ListTile(
                   leading: Icon(Icons.person, color: Colors.black),
                   title: TextFormField(
                     controller: controllertitulo,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "El campo no puede estar vacío"; // Mensaje de error
+                        return "El campo no puede estar vacío";
                       }
-                      return null; // No hay error
+                      return null;
                     },
                     decoration: InputDecoration(
                       hintText: "titulo",
@@ -92,29 +169,13 @@ class _EditCategoriaState extends State<EditCategoria> {
                     controller: controllerdescripccion,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "El campo no puede estar vacío"; // Mensaje de error
+                        return "El campo no puede estar vacío";
                       }
-                      return null; // No hay error
+                      return null;
                     },
                     decoration: InputDecoration(
                       hintText: "descripccion",
                       labelText: "descripccion",
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.location_on, color: Colors.black),
-                  title: TextFormField(
-                    controller: controllerfoto,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "El campo no puede estar vacío"; // Mensaje de error
-                      }
-                      return null; // No hay error
-                    },
-                    decoration: InputDecoration(
-                      hintText: "foto",
-                      labelText: "foto",
                     ),
                   ),
                 ),
@@ -125,20 +186,21 @@ class _EditCategoriaState extends State<EditCategoria> {
                   padding: const EdgeInsets.all(10.0),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    categoriaController.editarCategoria(
-                      controllerid.text.trim(),
-                      controllertitulo.text.trim(),
-                      controllerdescripccion.text.trim(),
-                      controllerfoto.text.trim(),
-                    );
-                    _navigateList(context);
-                  },
-                  child: Text("Edit"),
+                  onPressed: _pickImage,
+                  child: Text("Cambiar Foto"),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.blueAccent,
                   ),
-                )
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _updateImageInFirebase();
+                  },
+                  child: Text("Editar"),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blueAccent,
+                  ),
+                ),
               ],
             ),
           ],
