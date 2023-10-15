@@ -33,9 +33,11 @@ dependencies:
   intl: ^0.18.1
   firebase_core: ^2.17.0
   firebase_storage: ^11.2.8
-  image_picker: ^1.0.4
+  image_picker: ^0.8.9
   cached_network_image: ^3.3.0
-
+  api_cache_manager: ^1.0.2
+  snippet_coder_utils: ^1.0.13
+  hexcolor: ^3.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -65,7 +67,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/  # Esta es la ubicación correcta
-    # - assets/img/nofoto.jpg  # Esta es la ubicación correcta
+    - assets/img/ # Esta es la ubicación correcta
     # - assets/nofoto.jpg 
 
   # To add assets to your application, add an assets section, like this:

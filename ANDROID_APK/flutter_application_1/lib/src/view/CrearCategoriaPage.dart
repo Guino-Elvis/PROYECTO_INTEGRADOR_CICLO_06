@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/controller/CategoriaController.dart';
-import 'package:flutter_application_1/view/CategoriaList.dart';
+import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/controller/CategoriaController.dart';
+import 'package:flutter_application_1/src/view/CategoriaList.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -73,6 +74,11 @@ class _CrearCategoriaPageState extends State<CrearCategoriaPage> {
       appBar: AppBar(
         title: Text('Crear Categoría'),
       ),
+      drawer: MyDrawer(accountName: "Usuario"),
+      // drawer: MyDrawer(
+      //     accountName: "Nombre Usuario",
+      //     accountEmail:
+      //         "usuario@example.com"), // Aquí proporciona los datos necesarios
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: ListView(
@@ -103,41 +109,60 @@ class _CrearCategoriaPageState extends State<CrearCategoriaPage> {
             if (selectedImage != null) Image.file(selectedImage!),
             SizedBox(height: 32.0),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Color.fromARGB(246, 104, 36, 24),
-              ),
-              onPressed: () async {
-                // Primero, carga la imagen en Firebase Storage
-                final downloadUrl = await _uploadImage();
-
-                // // Luego, llama a la función para crear la categoría solo si la imagen se cargó con éxito
-                // if (downloadUrl != null) {
-                //   categoriaController.CrearCategoria(
-                //     tituloController.text.trim(),
-                //     descripccionController.text.trim(),
-                //     downloadUrl,
-                //   );
-                //   _navigateList(context); // Utiliza _navigateList aquí
-                // } else {
-                //   // Aquí puedes manejar un caso en el que la carga de la imagen falló.
-                // }
-                // Luego, llama a la función para crear la categoría
-                categoriaController.CrearCategoria(
-                  tituloController.text.trim(),
-                  descripccionController.text.trim(),
-                  downloadUrl ?? "", // Si downloadUrl es nulo, se usa una cadena vacía como valor predeterminado
-                );
-
-                _navigateList(context); // Utiliza _navigateList aquí
-              },
-              child: Text(
-                'CREAR',
-                style: TextStyle(
-                  color: Colors.white,
-                  backgroundColor: Colors.blue,
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
                 ),
-              ),
-            ),
+                onPressed: () async {
+                  // Primero, carga la imagen en Firebase Storage
+                  final downloadUrl = await _uploadImage();
+                  categoriaController.CrearCategoria(
+                    tituloController.text.trim(),
+                    descripccionController.text.trim(),
+                    downloadUrl ??
+                        "", // Si downloadUrl es nulo, se usa una cadena vacía como valor predeterminado
+                  );
+                  _navigateList(context); // Utiliza _navigateList aquí
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                       
+                        borderRadius: BorderRadius.circular(
+                            50), // Agrega un BorderRadius de 10
+                      ),
+                      padding: EdgeInsets.all(10.0),
+                      child: Text(
+                        'CREAR',
+                        style: TextStyle(
+                          color: Colors.white,
+                        
+                        ),
+                      ),
+                    ),
+                   
+                  ],
+                )),
+                 SizedBox(
+                        width:
+                            16), // Agrega un espacio entre el texto y el botón "Cancelar"
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context,
+                            '/category'); // Navega a la ruta "categoria" al presionar "Cancelar"
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors
+                            .red, // Color de fondo para el botón "Cancelar"
+                      ),
+                      child: Text("Cancelar",
+                      style: TextStyle(
+                          color: Colors.white,
+                        
+                        ),)
+                      
+                    ),
           ],
         ),
       ),

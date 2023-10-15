@@ -1,19 +1,22 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/controller/CategoriaController.dart';
-import 'package:flutter_application_1/view/CrearCategoriaPage.dart';
-import 'package:flutter_application_1/view/DetalleCategoria.dart';
+import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/controller/CategoriaController.dart';
+import 'package:flutter_application_1/src/view/CrearCategoriaPage.dart';
+import 'package:flutter_application_1/src/view/DetalleCategoria.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class CategoriaList extends StatefulWidget {
+  const CategoriaList({super.key});
   @override
   State<CategoriaList> createState() => _CategoriaListState();
 }
 
 class _CategoriaListState extends State<CategoriaList> {
+  
   late List<dynamic> data;
 
   Future<List<dynamic>> getData() async {
@@ -62,6 +65,8 @@ class _CategoriaListState extends State<CategoriaList> {
           )
         ],
       ),
+      drawer: MyDrawer(accountName: "Usuario"),
+        // drawer: MyDrawer(accountName: "Nombre Usuario", accountEmail: "usuario@example.com"), // Aquí proporciona los datos necesarios
       body: data == null
           ? Center(
               child: CircularProgressIndicator(),

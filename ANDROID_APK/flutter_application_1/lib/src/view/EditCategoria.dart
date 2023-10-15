@@ -1,7 +1,8 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/controller/CategoriaController.dart';
-import 'package:flutter_application_1/view/CategoriaList.dart';
+import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/controller/CategoriaController.dart';
+import 'package:flutter_application_1/src/view/CategoriaList.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -104,9 +105,14 @@ class _EditCategoriaState extends State<EditCategoria> {
       appBar: AppBar(
         title: Text("Edit categoria"),
       ),
+      drawer: MyDrawer(accountName: "Usuario"),
+      // drawer: MyDrawer(
+      //     accountName: "Nombre Usuario",
+      //     accountEmail:
+      //         "usuario@example.com"), // Aquí proporciona los datos necesarios
       body: Form(
         child: ListView(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(12.0),
           children: <Widget>[
             Column(
               children: <Widget>[
@@ -185,22 +191,57 @@ class _EditCategoriaState extends State<EditCategoria> {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                 ),
-                ElevatedButton(
-                  onPressed: _pickImage,
-                  child: Text("Cambiar Foto"),
+                SizedBox(height: 16.0),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+               onPressed: _pickImage,
+                  child: Container(child: Text("Cambiar Foto")),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.blueAccent,
                   ),
+            ),
+                // ElevatedButton(
+                //   onPressed: _pickImage,
+                //   child: Container(child: Text("Cambiar Foto")),
+                //   style: ElevatedButton.styleFrom(
+                //     primary: Colors.blueAccent,
+                //   ),
+                // ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    _updateImageInFirebase();
-                  },
-                  child: Text("Editar"),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.blueAccent,
-                  ),
-                ),
+                      onPressed: () {
+                        _updateImageInFirebase();
+                      },
+                      child: Container(child: Text("Editar")),
+                     
+                    ),
+                    SizedBox(width: 16), // Agrega un espacio entre los botones
+                    ElevatedButton(
+                      onPressed: () {
+                         Navigator.pushNamed(context, '/category'); // Navega a la ruta "categoria"
+                      },
+                      child: Text("Cancelar"),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red, // Color de fondo para el botón "Cancelar"
+                      ),
+                    ),
+                  ],
+                )
+                // ElevatedButton(
+                //   onPressed: () {
+                //     _updateImageInFirebase();
+                //   },
+                //   child: Text("Editar"),
+                //   style: ElevatedButton.styleFrom(
+                //     primary: Colors.blueAccent,
+                //   ),
+                // ),
               ],
             ),
           ],

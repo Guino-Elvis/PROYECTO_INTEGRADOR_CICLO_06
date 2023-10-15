@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/controller/CategoriaController.dart';
-import 'package:flutter_application_1/view/CategoriaList.dart';
-import 'package:flutter_application_1/view/EditCategoria.dart';
+import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/controller/CategoriaController.dart';
+import 'package:flutter_application_1/src/view/CategoriaList.dart';
+import 'package:flutter_application_1/src/view/EditCategoria.dart';
 
 class DetalleCategoria extends StatefulWidget {
   late List list;
@@ -98,6 +99,8 @@ void confirm() {
       appBar: AppBar(
         title: Text('Detalle Categoría'),
       ),
+      drawer: MyDrawer(accountName: "Usuario"),
+      // drawer: MyDrawer(accountName: "Nombre Usuario", accountEmail: "usuario@example.com"), // Aquí proporciona los datos necesarios
       body: new Container(
         height: 270.0,
         padding: const EdgeInsets.all(20.0),

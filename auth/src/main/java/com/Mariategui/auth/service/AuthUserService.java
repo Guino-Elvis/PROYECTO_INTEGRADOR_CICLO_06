@@ -25,4 +25,7 @@ public interface AuthUserService {
     // confirmar contraseña
     public boolean isPasswordConfirmed(AuthUserDto authUserDto);
 
+    // Nuevo método para buscar usuario por correo electrónico
+    public AuthUser findUserByEmail(String email);
+
 }
