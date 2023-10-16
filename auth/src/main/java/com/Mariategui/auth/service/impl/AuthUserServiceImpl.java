@@ -82,4 +82,5 @@ public class AuthUserServiceImpl implements AuthUserService {
     public boolean isPasswordConfirmed(AuthUserDto authUserDto) {
         return authUserDto.getPassword().equals(authUserDto.getConfirmPassword());
     }
+
 }
