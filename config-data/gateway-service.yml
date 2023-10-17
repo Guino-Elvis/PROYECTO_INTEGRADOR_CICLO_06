@@ -29,8 +29,6 @@ spring:
           uri: lb://alumno-service
           predicates:
             - Path=/alumno/**
-          filters:
-            - AuthFilter
         - id: curso-service
           uri: lb://curso-service
           predicates:

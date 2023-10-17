@@ -13,25 +13,53 @@ class ApiService {
   
   static var client = http.Client();
 
-  static Future<bool> login(AuthRequestModel model) async{
-    Map<String, String> requestHeaders = {
-      'Content-Type':'application/json',
-    };
+  // static Future<bool> login(AuthRequestModel model) async{
+  //   Map<String, String> requestHeaders = {
+  //     'Content-Type':'application/json',
+  //   };
 
-    var url = Uri.http(ConfigApi.apiURL, ConfigApi.loginAPI);
+  //   var url = Uri.http(ConfigApi.apiURL, ConfigApi.loginAPI);
 
-    var response = await client.post(
-      url , 
-      headers: requestHeaders,
-      body: jsonEncode(model.toJson()),
-    );
-    if(response.statusCode == 200){
-      await ShareApiTokenService.setLoginDetails(authResponseJson(response.body));
-      return true;
-    } else{
-      return false;
-    }
+  //   var response = await client.post(
+  //     url , 
+  //     headers: requestHeaders,
+  //     body: jsonEncode(model.toJson()),
+  //   );
+  //   if(response.statusCode == 200){
+  //     await ShareApiTokenService.setLoginDetails(authResponseJson(response.body));
+      
+  //     return true;
+  //   } else{
+  //     return false;
+  //   }
+  // }
+
+  static Future<bool> login(AuthRequestModel model) async {
+  Map<String, String> requestHeaders = {
+    'Content-Type': 'application/json',
+  };
+
+  var url = Uri.http(ConfigApi.apiURL, ConfigApi.loginAPI);
+
+  var response = await client.post(
+    url,
+    headers: requestHeaders,
+    body: jsonEncode(model.toJson()),
+  );
+  if (response.statusCode == 200) {
+    final authResponse = authResponseJson(response.body);
+
+    // Agrega esta línea para imprimir el token en la consola
+    print('Token obtenido en el inicio de sesión: ${authResponse.token}');
+
+    await ShareApiTokenService.setLoginDetails(authResponse);
+
+    return true;
+  } else {
+    return false;
   }
+}
+
 
 static Future<RegisterResponseModel> register(RegisterRequestModel model) async {
   Map<String, String> requestHeaders = {
@@ -78,37 +106,6 @@ static Future<RegisterResponseModel> register(RegisterRequestModel model) async 
     return [];
   }
 }
-
-// static Future<List<String>> getUserProfilee() async {
-//   var loginDetails = await ShareApiTokenService.loginDetails();
-//   Map<String, String> requestHeaders = {
-//     'Content-Type': 'application/json',
-//     'Authorization': 'Basic ${loginDetails!.token}',
-//   };
-
-//   var url = Uri.http(ConfigApi.apiURL, ConfigApi.listUserAPI);
-
-//   try {
-//     var response = await client.get(
-//       url,
-//       headers: requestHeaders,
-//     );
-
-//     if (response.statusCode == 200) {
-//       final List<dynamic> jsonData = json.decode(response.body);
-//       final List<String> emails = jsonData.map((dynamic item) {
-//         return item["email"].toString(); // Ajusta la extracción al campo "email" o al campo deseado
-//       }).toList();
-
-//       return emails;
-//     } else {
-//       return [];
-//     }
-//   } catch (error) {
-//     // En caso de error, lanza una excepción con el mensaje de error.
-//     throw Exception("Error al obtener el perfil de usuario: $error");
-//   }
-// }
 
 static Future<List<Map<String, String>>> getUserProfilee() async {
   var loginDetails = await ShareApiTokenService.loginDetails();
