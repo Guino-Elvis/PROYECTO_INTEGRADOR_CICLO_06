@@ -4,6 +4,7 @@ import com.Mariategui.auth.dto.AuthUserDto;
 import com.Mariategui.auth.entity.AuthUser;
 import com.Mariategui.auth.entity.TokenDto;
 import com.Mariategui.auth.repository.AuthRepository;
+import com.Mariategui.auth.repository.EmailAlreadyExistsException;
 import com.Mariategui.auth.security.JwtProvider;
 import com.Mariategui.auth.service.AuthUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,28 @@ public class AuthUserServiceImpl implements AuthUserService {
     @Autowired
     JwtProvider jwtProvider;
 
+    // @Override
+    // public AuthUser save(AuthUserDto authUserDto) {
+    // Optional<AuthUser> user = authRepository.findByEmail(authUserDto.getEmail());
+    // if (user.isPresent())
+    // return null;
+    // String password = passwordEncoder.encode(authUserDto.getPassword());
+    // AuthUser authUser = AuthUser.builder()
+    // .name(authUserDto.getName()) // Mapea el nombre
+    // .role(authUserDto.getRole()) // Mapea el rol
+    // .email(authUserDto.getEmail())
+    // .password(password)
+    // .build();
+
+    // return authRepository.save(authUser);
+    // }
+
     @Override
     public AuthUser save(AuthUserDto authUserDto) {
         Optional<AuthUser> user = authRepository.findByEmail(authUserDto.getEmail());
-        if (user.isPresent())
-            return null;
+        if (user.isPresent()) {
+            throw new EmailAlreadyExistsException("El correo electrónico ya está registrado.");
+        }
         String password = passwordEncoder.encode(authUserDto.getPassword());
         AuthUser authUser = AuthUser.builder()
                 .name(authUserDto.getName()) // Mapea el nombre
