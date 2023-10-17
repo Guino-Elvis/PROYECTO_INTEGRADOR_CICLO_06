@@ -65,7 +65,7 @@ class _MyDrawerState extends State<MyDrawer> {
             leading: Icon(Icons.person),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamedAndRemoveUntil(context, '/category', (route) => false);
+              Navigator.pushNamedAndRemoveUntil(context, '/alumno', (route) => false);
             },
           ),
           Divider(),
