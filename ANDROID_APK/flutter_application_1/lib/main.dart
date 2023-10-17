@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/pages/alumno/AlumnoList.dart';
 import 'package:flutter_application_1/src/pages/auth/LoginPage.dart';
 import 'package:flutter_application_1/src/pages/auth/RegisterPage.dart';
+import 'package:flutter_application_1/src/pages/usuario/UsuarioList.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:flutter_application_1/src/pages/categoria/CategoriaList.dart';
 import 'package:flutter_application_1/src/view/HomePage.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) =>  HomePage(),
         '/category': (context) => const CategoriaList(),
         '/alumno': (context) => const AlumnoList(),
+        '/usuario': (context) => const UsuarioList(),
         },
       // home: CategoriaList(),
     );
