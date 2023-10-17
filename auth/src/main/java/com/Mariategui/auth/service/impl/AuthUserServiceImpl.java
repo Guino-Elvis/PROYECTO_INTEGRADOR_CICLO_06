@@ -29,8 +29,6 @@ public class AuthUserServiceImpl implements AuthUserService {
             return null;
         String password = passwordEncoder.encode(authUserDto.getPassword());
         AuthUser authUser = AuthUser.builder()
-                .name(authUserDto.getName())
-                .role(authUserDto.getRole())
                 .email(authUserDto.getEmail())
                 .password(password)
                 .build();
