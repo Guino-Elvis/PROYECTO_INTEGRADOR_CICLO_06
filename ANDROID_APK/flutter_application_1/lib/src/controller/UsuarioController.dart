@@ -6,8 +6,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class UsuarioController {
-  String? get id => null;
-
 
   Future<http.Response> CrearUsuario(
     String nameController,
@@ -44,7 +42,7 @@ class UsuarioController {
 
  //function for update or put
   Future<http.Response> editarUsuario(
-  // int id, // Debes recibir un entero (ID) como argumento
+  String id, 
   String nameController,
   String roleController,
   String emailController, 
@@ -52,24 +50,24 @@ class UsuarioController {
   String fotoController,
 ) async {
 
-  int a = int.parse(id!);
+  int a = int.parse(id);
   print(a);
-  var url = ConfigApi.buildUrl('/auth/update/$id'); // Utiliza el ID proporcionado
+  // var url = ConfigApi.buildUrl('/auth/update/$id'); // Utiliza el ID proporcionado
 
   Map data = {
-    // 'id': id, // Utiliza el ID proporcionado
-    'name': nameController,
-    'role': roleController,
-    'email': emailController,
-    'password': passwordController,
-    'foto': fotoController,
+    'id': '$a',
+    'name': '$nameController',
+    'role': '$roleController',
+    'email': '$emailController',
+    'password': '$passwordController',
+    'foto': '$fotoController',
   };
   
   // Codifica el Map en JSON
   var body = json.encode(data);
 
   var response = await http.put(
-    Uri.parse(url),
+    Uri.parse(ConfigApi.buildUrl('/auth')),
     headers: {
       "Content-Type": "application/json",
     },

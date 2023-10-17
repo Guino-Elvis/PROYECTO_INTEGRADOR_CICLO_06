@@ -111,7 +111,7 @@ public class AuthUserController {
         updatedUser.setEmail(authUserDto.getEmail());
         updatedUser.setRole(authUserDto.getRole());
         updatedUser.setName(authUserDto.getName());
-
+        updatedUser.setFoto(authUserDto.getFoto());
         // Verifica si la contraseña ha sido modificada y la encripta
         if (!authUserDto.getPassword().equals(existingUser.get().getPassword())) {
             String password = passwordEncoder.encode(authUserDto.getPassword());
