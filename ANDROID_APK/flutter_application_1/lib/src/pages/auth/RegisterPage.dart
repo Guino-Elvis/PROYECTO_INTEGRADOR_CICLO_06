@@ -23,19 +23,54 @@ class _RegisterPageState extends State<RegisterPage> {
   String? password;
   String? confirmPassword;
 
-  @override
+  // @override
+  // Widget build(BuildContext context) {
+  //   return SafeArea(
+  //     child: Scaffold(
+  //       backgroundColor: HexColor("#283B71"),
+  //       body: ProgressHUD(
+  //         child: Form(
+  //           key: globalFormkey,
+  //           child: _registerUI(context),
+  //         ),
+  //         inAsyncCall: isAPIcallProcess,
+  //         opacity: 0.3,
+  //         key: UniqueKey(),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: HexColor("#283B71"),
-        body: ProgressHUD(
-          child: Form(
-            key: globalFormkey,
-            child: _registerUI(context),
-          ),
-          inAsyncCall: isAPIcallProcess,
-          opacity: 0.3,
-          key: UniqueKey(),
+        body: Stack(
+          children: <Widget>[
+            // Fondo de imagen
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/fondologin.jfif'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            // Color encima
+            Container(
+              color: HexColor("#0e1b4d").withOpacity(0.8),
+            ),
+            // Contenido de la página
+            ProgressHUD(
+              child: Form(
+                key: globalFormkey,
+                child: _registerUI(context),
+              ),
+              inAsyncCall: isAPIcallProcess,
+              opacity: 0.3,
+              key: UniqueKey(),
+            ),
+          ],
         ),
       ),
     );
@@ -51,7 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
             width: MediaQuery.of(context).size.width,
             // height: MediaQuery.of(context).size.height,
             height: MediaQuery.of(context).size.height /
-                4.1, // Ajusta la altura aqui de la parte blanca
+                6, // Ajusta la altura aqui de la parte blanca
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -71,7 +106,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Align(
                   alignment: Alignment.center,
                   child: Image.asset(
-                    "assets/logo2.jfif",
+                    "assets/logou.jfif",
                     width: 150,
                     fit: BoxFit.contain,
                   ),
@@ -319,7 +354,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   });
                 }
               },
-              btnColor: HexColor("#283B71"),
+              btnColor: HexColor("#0e1b4d").withOpacity(0.8),
               borderColor: Colors.white,
               txtColor: Colors.white,
               borderRadius: 10,

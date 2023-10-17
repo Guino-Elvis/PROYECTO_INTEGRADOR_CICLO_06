@@ -7,8 +7,8 @@ import 'package:flutter_application_1/src/controller/CategoriaController.dart';
 import 'package:flutter_application_1/src/pages/alumno/CreateAlumnoPage.dart';
 import 'package:flutter_application_1/src/pages/alumno/DetalleAlumno.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
-import 'package:flutter_application_1/src/view/CrearCategoriaPage.dart';
-import 'package:flutter_application_1/src/view/DetalleCategoria.dart';
+import 'package:flutter_application_1/src/pages/categoria/CrearCategoriaPage.dart';
+import 'package:flutter_application_1/src/pages/categoria/DetalleCategoria.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -21,7 +21,6 @@ class AlumnoList extends StatefulWidget {
 }
 
 class _AlumnoListState extends State<AlumnoList> {
-
   // late List<dynamic> data;
   late List<dynamic> data = [];
 
@@ -30,25 +29,24 @@ class _AlumnoListState extends State<AlumnoList> {
 //   return json.decode(response.body);
 // }
 
-Future<List<dynamic>> getData() async {
-  final authResponse = await ShareApiTokenService.loginDetails();
-
-  if (authResponse != null) {
-    final token = authResponse.token;
-    if (token != null && token.isNotEmpty) {
-      final url = Uri.parse(ConfigApi.buildUrl('/alumno'));
-      final response = await http.get(
-        url,
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
-      );
-      return json.decode(response.body);
+  Future<List<dynamic>> getData() async {
+    final authResponse = await ShareApiTokenService.loginDetails();
+    if (authResponse != null) {
+      final token = authResponse.token;
+      if (token != null && token.isNotEmpty) {
+        final url = Uri.parse(ConfigApi.buildUrl('/alumno'));
+        final response = await http.get(
+          url,
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        );
+        return json.decode(response.body);
+      }
     }
-  }
 
-  return []; // Otra acción que consideres apropiada si el token no está disponible.
-}
+    return []; // Otra acción que consideres apropiada si el token no está disponible.
+  }
 
   _navigateCrearAlumno(BuildContext context) async {
     final result = await Navigator.push(
@@ -91,7 +89,7 @@ Future<List<dynamic>> getData() async {
         ],
       ),
       drawer: MyDrawer(accountName: "Usuario"),
-        // drawer: MyDrawer(accountName: "Nombre Usuario", accountEmail: "usuario@example.com"), // Aquí proporciona los datos necesarios
+      // drawer: MyDrawer(accountName: "Nombre Usuario", accountEmail: "usuario@example.com"), // Aquí proporciona los datos necesarios
       body: data == null
           ? Center(
               child: CircularProgressIndicator(),
@@ -181,21 +179,30 @@ class ItemList extends StatelessWidget {
                             ],
                           ),
                         ),
-                        
-                        Container(
-                          margin: EdgeInsets.all(
-                              8.0), // Agrega márgenes alrededor de la imagen
-                          child: CachedNetworkImage(
-                            imageUrl: item.containsKey('foto')
-                                ? item['foto'].toString()
-                                : 'assets/nofoto.jpg',
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(), // Puedes personalizar el indicador de carga
-                            errorWidget: (context, url, error) =>
-                                Image.asset('assets/nofoto.jpg'),
+                        Padding(
+                          padding: const EdgeInsets.all(1.0),
+                          child: Container(
                             width: 80.0,
                             height: 80.0,
-                            fit: BoxFit.cover,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle, // Forma circular
+                              border: Border.all(
+                                color: Colors.white, // Color del borde
+                                width: 3.0, // Ancho del borde
+                              ),
+                            ),
+                            clipBehavior: Clip
+                                .antiAlias, // Recorta el contenido al círculo
+                            child: CachedNetworkImage(
+                              imageUrl: item.containsKey('foto')
+                                  ? item['foto'].toString()
+                                  : 'assets/nofoto.jpg',
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  Image.asset('assets/nofoto.jpg', width: 500.0),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],

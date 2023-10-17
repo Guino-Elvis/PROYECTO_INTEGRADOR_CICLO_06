@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
-import 'package:flutter_application_1/src/model/auth/AuthResponseModel.dart';
-import 'package:flutter_application_1/src/pages/auth/UserProfile.dart';
 import 'package:flutter_application_1/src/service/authService/ApiService.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
-import 'package:flutter_application_1/src/view/CategoriaList.dart';
+
 
 class HomePage extends StatefulWidget {
   @override

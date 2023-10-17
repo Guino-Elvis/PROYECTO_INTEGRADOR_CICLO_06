@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/controller/CategoriaController.dart';
-import 'package:flutter_application_1/src/view/CategoriaList.dart';
-import 'package:flutter_application_1/src/view/EditCategoria.dart';
+import 'package:flutter_application_1/src/pages/categoria/CategoriaList.dart';
+import 'package:flutter_application_1/src/pages/categoria/EditCategoria.dart';
 
 class DetalleCategoria extends StatefulWidget {
   late List list;

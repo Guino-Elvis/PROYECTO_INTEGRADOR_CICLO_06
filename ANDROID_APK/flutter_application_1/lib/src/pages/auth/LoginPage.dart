@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/config/configapi.dart';
 import 'package:flutter_application_1/src/model/auth/AuthRequestModel.dart';
+import 'package:flutter_application_1/src/pages/auth/ZigZagClipper.dart';
 import 'package:flutter_application_1/src/service/authService/ApiService.dart';
 import 'package:flutter_application_1/src/view/HomePage.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -24,19 +25,54 @@ class _LoginPageState extends State<LoginPage> {
   String? email;
   String? password;
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return SafeArea(
+  //     child: Scaffold(
+  //       backgroundColor: HexColor("#283B71"),
+  //       body: ProgressHUD(
+  //         child: Form(
+  //           key: globalFormkey,
+  //           child: _loginUI(context),
+  //         ),
+  //         inAsyncCall: isAPIcallProcess,
+  //         opacity: 0.3,
+  //         key: UniqueKey(),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: HexColor("#283B71"),
-        body: ProgressHUD(
-          child: Form(
-            key: globalFormkey,
-            child: _loginUI(context),
-          ),
-          inAsyncCall: isAPIcallProcess,
-          opacity: 0.3,
-          key: UniqueKey(),
+        body: Stack(
+          children: <Widget>[
+            // Fondo de imagen
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/fondologin.jfif'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            // Color encima
+            Container(
+              color: HexColor("#0e1b4d").withOpacity(0.8),
+            ),
+            // Contenido de la página
+            ProgressHUD(
+              child: Form(
+                key: globalFormkey,
+                child: _loginUI(context),
+              ),
+              inAsyncCall: isAPIcallProcess,
+              opacity: 0.3,
+              key: UniqueKey(),
+            ),
+          ],
         ),
       ),
     );
@@ -51,8 +87,8 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             width: MediaQuery.of(context).size.width,
             // height: MediaQuery.of(context).size.height,
-            height: MediaQuery.of(context).size.height /
-                4.1, // Ajusta la altura aqui de la parte blanca
+            height: MediaQuery.of(context).size.height /6, // Ajusta la altura aqui de la parte blanca
+
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -72,133 +108,138 @@ class _LoginPageState extends State<LoginPage> {
                 Align(
                   alignment: Alignment.center,
                   child: Image.asset(
-                    "assets/logo2.jfif",
-                    width: 150,
+                    "assets/logou.jfif",
+                    width: 160,
                     fit: BoxFit.contain,
                   ),
                 )
               ],
             ),
           ),
+         
           Column(
-  children: [
-    Padding(
-      padding: const EdgeInsets.only(
-        left: 20,
-        bottom: 30,
-        top: 50,
-      ),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8), // Ajusta el espacio a la derecha del ícono
-            child: Icon(
-              Icons.person, // Ícono que deseas usar
-              color: Colors.white, // Color del ícono
-            ),
-          ),
-          Text(
-            "Login",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 25,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    ),
-    Row(
-      children: [
-        Padding(
-           padding: const EdgeInsets.only(left: 20,),
-          child: Icon(
-            Icons.email, // Ícono de correo electrónico
-            color: Colors.white, // Color del ícono
-          ),
-        ),
-         // Espacio entre el ícono y el campo de correo electrónico
-        Expanded(
-          child: FormHelper.inputFieldWidget(
-            context,
-            "email",
-            "  Email",
-            (onValidateVal) {
-              if (onValidateVal.isEmpty) {
-                return "Email can't be empty.";
-              }
-              return null;
-            },
-            (onSavedVal) {
-              email = onSavedVal;
-            },
-            borderErrorColor: Colors.white,
-            prefixIconColor: Colors.white,
-            borderColor: Colors.white,
-            textColor: Colors.white,
-            hintColor: Colors.white.withOpacity(0.7),
-            borderRadius: 10,
-          ),
-        ),
-      ],
-    ),
-  ],
-),
-
-          Column(
-  children: [
-    Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 20), // Agrega espacio a la izquierda del ícono
-          child: Icon(
-            Icons.lock, // Ícono que deseas usar
-            color: Colors.white, // Color del ícono
-          ),
-        ),
-        // SizedBox(width: 8),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: FormHelper.inputFieldWidget(
-              context,
-              "password",
-              "  Password",
-              (onValidateVal) {
-                if (onValidateVal.isEmpty) {
-                  return "Password can't be empty.";
-                }
-                return null;
-              },
-              (onSavedVal) {
-                password = onSavedVal;
-              },
-              borderErrorColor: Colors.white,
-              prefixIconColor: Colors.white,
-              borderColor: Colors.white,
-              textColor: Colors.white,
-              hintColor: Colors.white.withOpacity(0.7),
-              borderRadius: 10,
-              obscureText: hidenPassword,
-              suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    hidenPassword = !hidenPassword;
-                  });
-                },
-                color: Colors.white.withOpacity(0.7),
-                icon: Icon(
-                  hidenPassword ? Icons.visibility_off : Icons.visibility,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 20,
+                  bottom: 30,
+                  top: 50,
+                ),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          right: 8), // Ajusta el espacio a la derecha del ícono
+                      child: Icon(
+                        Icons.person, // Ícono que deseas usar
+                        color: Colors.white, // Color del ícono
+                      ),
+                    ),
+                    Text(
+                      "Login",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                    ),
+                    child: Icon(
+                      Icons.email, // Ícono de correo electrónico
+                      color: Colors.white, // Color del ícono
+                    ),
+                  ),
+                  // Espacio entre el ícono y el campo de correo electrónico
+                  Expanded(
+                    child: FormHelper.inputFieldWidget(
+                      context,
+                      "email",
+                      "  Email",
+                      (onValidateVal) {
+                        if (onValidateVal.isEmpty) {
+                          return "Email can't be empty.";
+                        }
+                        return null;
+                      },
+                      (onSavedVal) {
+                        email = onSavedVal;
+                      },
+                      borderErrorColor: Colors.white,
+                      prefixIconColor: Colors.white,
+                      borderColor: Colors.white,
+                      textColor: Colors.white,
+                      hintColor: Colors.white.withOpacity(0.7),
+                      borderRadius: 10,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ),
-      ],
-    ),
-  ],
-),
-
+          Column(
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20), // Agrega espacio a la izquierda del ícono
+                    child: Icon(
+                      Icons.lock, // Ícono que deseas usar
+                      color: Colors.white, // Color del ícono
+                    ),
+                  ),
+                  // SizedBox(width: 8),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: FormHelper.inputFieldWidget(
+                        context,
+                        "password",
+                        "  Password",
+                        (onValidateVal) {
+                          if (onValidateVal.isEmpty) {
+                            return "Password can't be empty.";
+                          }
+                          return null;
+                        },
+                        (onSavedVal) {
+                          password = onSavedVal;
+                        },
+                        borderErrorColor: Colors.white,
+                        prefixIconColor: Colors.white,
+                        borderColor: Colors.white,
+                        textColor: Colors.white,
+                        hintColor: Colors.white.withOpacity(0.7),
+                        borderRadius: 10,
+                        obscureText: hidenPassword,
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              hidenPassword = !hidenPassword;
+                            });
+                          },
+                          color: Colors.white.withOpacity(0.7),
+                          icon: Icon(
+                            hidenPassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
           Padding(
             padding: const EdgeInsets.only(
               right: 15,
@@ -241,38 +282,35 @@ class _LoginPageState extends State<LoginPage> {
                     isAPIcallProcess = true;
                   });
 
-                  AuthRequestModel model = AuthRequestModel(
-                   email: email,
-                   password: password
-                   );
+                  AuthRequestModel model =
+                      AuthRequestModel(email: email, password: password);
 
-                   ApiService.login(model).then((response){
-                     setState(() {
-                    isAPIcallProcess = false;
-                  });
-                     if(response){
+                  ApiService.login(model).then((response) {
+                    setState(() {
+                      isAPIcallProcess = false;
+                    });
+                    if (response) {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
-                        //  MaterialPageRoute(builder: (context) => HomePage()), 
-                        '/home', 
+                        //  MaterialPageRoute(builder: (context) => HomePage()),
+                        '/home',
                         (route) => false,
-                        );
-                     }
-                     else{
+                      );
+                    } else {
                       FormHelper.showSimpleAlertDialog(
-                        context, 
-                        ConfigApi.appName, 
-                        "user invalido/ o contraseña incorrecta !", 
-                        "OK", 
-                        (){
+                        context,
+                        ConfigApi.appName,
+                        "user invalido/ o contraseña incorrecta !",
+                        "OK",
+                        () {
                           Navigator.pop(context);
                         },
-                        );
-                     }
-                   });
+                      );
+                    }
+                  });
                 }
               },
-              btnColor: HexColor("#283B71"),
+              btnColor: HexColor("#0e1b4d").withOpacity(0.8),
               borderColor: Colors.white,
               txtColor: Colors.white,
               borderRadius: 10,
