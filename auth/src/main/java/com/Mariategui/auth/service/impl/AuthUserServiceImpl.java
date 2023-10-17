@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,14 +47,17 @@ public class AuthUserServiceImpl implements AuthUserService {
             throw new EmailAlreadyExistsException("El correo electrónico ya está registrado.");
         }
         String password = passwordEncoder.encode(authUserDto.getPassword());
+        LocalDateTime currentDateTime = LocalDateTime.now(); // Obtén la fecha y hora actual
         AuthUser authUser = AuthUser.builder()
                 .name(authUserDto.getName()) // Mapea el nombre
                 .role(authUserDto.getRole() != null ? authUserDto.getRole() : "user")
                 // .role(authUserDto.getRole()) // Mapea el rol
                 .email(authUserDto.getEmail())
                 .foto(authUserDto.getFoto())
-                .created_at(authUserDto.getCreated_at())
-                .updated_at(authUserDto.getUpdated_at())
+                // .created_at(authUserDto.getCreated_at())
+                // .updated_at(authUserDto.getUpdated_at())
+                .created_at(currentDateTime) // Establece la fecha de creación actual
+                .updated_at(currentDateTime) // Establece la fecha de actualización actual
                 .password(password)
                 .build();
 
@@ -86,8 +90,19 @@ public class AuthUserServiceImpl implements AuthUserService {
         return authRepository.findAll();
     }
 
+    // @Override
+    // public AuthUser actualizar(AuthUser authUser) {
+    // return authRepository.save(authUser);
+    // }
+
     @Override
     public AuthUser actualizar(AuthUser authUser) {
+        // Buscar un usuario con el nuevo correo electrónico
+        Optional<AuthUser> user = authRepository.findByEmail(authUser.getEmail());
+        // Verificar si el nuevo correo electrónico ya está registrado
+        if (user.isPresent() && user.get().getId() != authUser.getId()) {
+            throw new EmailAlreadyExistsException("El nuevo correo electrónico ya está registrado.");
+        }
         return authRepository.save(authUser);
     }
 
