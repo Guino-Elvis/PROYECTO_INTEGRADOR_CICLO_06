@@ -119,6 +119,9 @@ public class AuthUserController {
         }
 
         AuthUser savedUser = authUserService.actualizar(updatedUser);
+        CreateUserResponse response = new CreateUserResponse();
+        response.setMessage("Usuario actualizado con éxito.");
+        response.setUser(savedUser);
         return ResponseEntity.ok(savedUser);
     }
 
