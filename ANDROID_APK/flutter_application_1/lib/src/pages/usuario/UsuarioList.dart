@@ -13,9 +13,11 @@ class UsuarioList extends StatefulWidget {
   const UsuarioList({super.key});
   @override
   State<UsuarioList> createState() => _UsuarioListState();
+  
 }
 
 class _UsuarioListState extends State<UsuarioList> {
+  
 
   // late List<dynamic> data;
   late List<dynamic> data = [];
@@ -83,22 +85,32 @@ class ItemList extends StatelessWidget {
   final List<dynamic> list;
   ItemList({required this.list});
 
+    String truncateString(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return text.substring(0, maxLength) + '...';
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: (context, index) {
         final item = list[index];
-        final name = item['name'].toString();
-        final email = item['email'].toString();
-        final created_at =
-            DateTime.parse(item['created_at'].toString()); // Parsear la fecha
-        // Formatear la fecha como solo la fecha (sin la hora)
+        final name = truncateString(item['name']?.toString() ?? 'Nombre no especificado', 15);
+        final email = truncateString(item['email']?.toString() ?? 'Email no especificado', 15);
+        // final name = item['name']?.toString() ?? 'Nombre no especificado';
+        // final email = item['email']?.toString()?? 'email no especificado';
+        final created_at = item['created_at'] != null
+            ? DateTime.parse(item['created_at'].toString())
+            : DateTime.now(); // Establece la fecha actual si es nula
         final fechaFormateada = DateFormat('yyyy-MM-dd').format(created_at);
-
-        final foto = item['foto']
-            .toString(); // Asumiendo que 'foto' es la URL de la imagen
-
+        // Verifica si el campo 'foto' está presente y no es nulo
+        final foto = item.containsKey('foto') && item['foto'] != null
+            ? item['foto'].toString()
+            : 'assets/nofoto.jpg';
+            
         return Column(
           children: [
             Container(

@@ -98,7 +98,7 @@ class _EditUsuarioState extends State<EditUsuario> {
     // Actualiza la categoría, incluyendo la URL de la imagen (ya sea la existente o la nueva)
     usuarioController.editarUsuario(
       
-      controllerid.text.trim() as int,
+      // controllerid.text.trim() as int,
       controllername.text.trim(),
       controllerrole.text.trim(),
       controlleremail.text.trim(),
@@ -108,6 +108,8 @@ class _EditUsuarioState extends State<EditUsuario> {
 
     _navigateList(context);
   }
+
+
 
   @override
   Widget build(BuildContext context) {

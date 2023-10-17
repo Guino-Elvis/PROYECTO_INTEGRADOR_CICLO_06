@@ -98,9 +98,9 @@ public class AuthUserController {
     // return ResponseEntity.ok(savedUser);
     // }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<AuthUser> update(@PathVariable Integer id, @RequestBody AuthUserDto authUserDto) {
-        Optional<AuthUser> existingUser = authUserService.listarPorId(id);
+    @PutMapping()
+    public ResponseEntity<AuthUser> update(@RequestBody AuthUserDto authUserDto) {
+        Optional<AuthUser> existingUser = authUserService.listarPorId(authUserDto.getId());
         if (!existingUser.isPresent())
             return ResponseEntity.notFound().build();
 

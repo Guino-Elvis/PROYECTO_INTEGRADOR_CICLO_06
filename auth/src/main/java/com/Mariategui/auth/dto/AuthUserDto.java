@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthUserDto {
+    private int id;
     private String role;
     private String name;
     private String email;
