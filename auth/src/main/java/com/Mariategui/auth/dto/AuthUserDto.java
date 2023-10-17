@@ -1,5 +1,7 @@
 package com.Mariategui.auth.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +18,6 @@ public class AuthUserDto {
     private String password;
     private String confirmPassword;
     private String foto;
+    private LocalDateTime created_at = LocalDateTime.now();
+    private LocalDateTime updated_at = LocalDateTime.now();
 }
