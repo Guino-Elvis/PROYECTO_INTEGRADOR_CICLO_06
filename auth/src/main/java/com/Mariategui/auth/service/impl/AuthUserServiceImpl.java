@@ -52,6 +52,8 @@ public class AuthUserServiceImpl implements AuthUserService {
                 // .role(authUserDto.getRole()) // Mapea el rol
                 .email(authUserDto.getEmail())
                 .foto(authUserDto.getFoto())
+                .created_at(authUserDto.getCreated_at())
+                .updated_at(authUserDto.getUpdated_at())
                 .password(password)
                 .build();
 
