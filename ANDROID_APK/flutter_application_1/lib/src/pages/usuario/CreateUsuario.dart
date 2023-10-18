@@ -15,10 +15,11 @@ class _CreateUsuarioState extends State<CreateUsuario> {
   UsuarioController usuarioController = UsuarioController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController roleController = TextEditingController();
-   final TextEditingController emailController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-   final TextEditingController tituloController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController tituloController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   // final TextEditingController fotoController = TextEditingController();
   File? selectedImage;
   _navigateList(BuildContext context) async {
@@ -46,9 +47,8 @@ class _CreateUsuarioState extends State<CreateUsuario> {
 
   Future<String?> _uploadImage() async {
     if (selectedImage != null) {
-      final firebaseStorageReference = FirebaseStorage.instance
-          .ref()
-          .child('usuario/${DateTime.now()}.png');
+      final firebaseStorageReference =
+          FirebaseStorage.instance.ref().child('usuario/${DateTime.now()}.png');
       await firebaseStorageReference.putFile(selectedImage!);
       final downloadUrl = await firebaseStorageReference.getDownloadURL();
       return downloadUrl;
@@ -72,17 +72,22 @@ class _CreateUsuarioState extends State<CreateUsuario> {
     }
   }
 
+  String?
+      selectedRole; // Debes definir esta variable para almacenar el rol seleccionado
+  List<String> roles = [
+    'admin',
+    'user',
+    'docente',
+    'librero'
+  ]; // Definir la lista de roles
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Crear Usuario'),
       ),
-      drawer: MyDrawer(accountName: "Usuario"),
-      // drawer: MyDrawer(
-      //     accountName: "Nombre Usuario",
-      //     accountEmail:
-      //         "usuario@example.com"), // Aquí proporciona los datos necesarios
+      // drawer: MyDrawer(accountName: "Usuario"),
+
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: ListView(
@@ -95,12 +100,33 @@ class _CreateUsuarioState extends State<CreateUsuario> {
                 icon: Icon(Icons.person_add),
               ),
             ),
+            // SizedBox(height: 16.0),
+            // TextFormField(
+            //   controller: roleController,
+            //   decoration: InputDecoration(
+            //     labelText: 'Rol',
+            //     hintText: 'Rol del usuario',
+            //     icon: Icon(Icons.category_outlined),
+            //   ),
+            // ),
             SizedBox(height: 16.0),
-            TextFormField(
-              controller: roleController,
+            DropdownButtonFormField<String>(
+              value: selectedRole,
+              onChanged: (String? newValue) {
+                // Aquí puedes manejar el cambio de valor seleccionado
+                setState(() {
+                  selectedRole = newValue;
+                });
+              },
+              items: roles.map((String role) {
+                return DropdownMenuItem<String>(
+                  value: role,
+                  child: Text(role),
+                );
+              }).toList(),
               decoration: InputDecoration(
                 labelText: 'Rol',
-                hintText: 'Rol del usuario',
+                hintText: 'Selecciona un rol',
                 icon: Icon(Icons.category_outlined),
               ),
             ),
@@ -113,7 +139,7 @@ class _CreateUsuarioState extends State<CreateUsuario> {
                 icon: Icon(Icons.email_outlined),
               ),
             ),
-              SizedBox(height: 16.0),
+            SizedBox(height: 16.0),
             TextFormField(
               controller: passwordController,
               decoration: InputDecoration(
@@ -122,7 +148,7 @@ class _CreateUsuarioState extends State<CreateUsuario> {
                 icon: Icon(Icons.category_outlined),
               ),
             ),
-              SizedBox(height: 16.0),
+            SizedBox(height: 16.0),
             TextFormField(
               controller: confirmPasswordController,
               decoration: InputDecoration(
@@ -162,7 +188,6 @@ class _CreateUsuarioState extends State<CreateUsuario> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                       
                         borderRadius: BorderRadius.circular(
                             50), // Agrega un BorderRadius de 10
                       ),
@@ -171,32 +196,28 @@ class _CreateUsuarioState extends State<CreateUsuario> {
                         'CREAR',
                         style: TextStyle(
                           color: Colors.white,
-                        
                         ),
                       ),
                     ),
-                   
                   ],
                 )),
-                 SizedBox(
-                        width:
-                            16), // Agrega un espacio entre el texto y el botón "Cancelar"
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context,
-                            '/usuario');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors
-                            .red, // Color de fondo para el botón "Cancelar"
-                      ),
-                      child: Text("Cancelar",
-                      style: TextStyle(
-                          color: Colors.white,
-                        
-                        ),)
-                      
-                    ),
+            SizedBox(
+                width:
+                    16), // Agrega un espacio entre el texto y el botón "Cancelar"
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/usuario');
+                },
+                style: ElevatedButton.styleFrom(
+                  primary:
+                      Colors.red, // Color de fondo para el botón "Cancelar"
+                ),
+                child: Text(
+                  "Cancelar",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                )),
           ],
         ),
       ),

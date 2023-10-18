@@ -181,7 +181,7 @@ class ItemList extends StatelessWidget {
                         //         ),
                         // ),
                         Padding(
-                          padding: const EdgeInsets.all(1.0),
+                           padding: const EdgeInsets.all(10.0),
                           child: Container(
                             width: 80.0,
                             height: 80.0,

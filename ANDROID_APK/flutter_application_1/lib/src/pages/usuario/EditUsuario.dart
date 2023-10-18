@@ -46,18 +46,23 @@ class _EditUsuarioState extends State<EditUsuario> {
     controllerid =
         TextEditingController(text: widget.list[widget.index]['id'].toString());
     controllername = TextEditingController(
-        text: widget.list[widget.index]['name'].toString());
+        text: widget.list[widget.index]['name']?.toString() ?? 'Nombre no especificado');
     controllerrole = TextEditingController(
-        text: widget.list[widget.index]['role'].toString());
+        text: widget.list[widget.index]['role']?.toString()?? 'Nombre no especificado');
     controlleremail = TextEditingController(
         text: widget.list[widget.index]['email'].toString());
     controllerpassword = TextEditingController(
         text: widget.list[widget.index]['password'].toString());
 
+usuarioImageURL = widget.list[widget.index]['foto'] != null
+      ? widget.list[widget.index]['foto'].toString()
+      : 'assets/nofoto.jpg';
+  // Inicializa selectedImage con la URL de la foto existente
+  selectedImage = File(usuarioImageURL);
     // Obtiene la URL de la imagen de la categoría que estás editando
-    usuarioImageURL = widget.list[widget.index]['foto'];
-    // Inicializa selectedImage con la URL de la foto existente
-    selectedImage = File(usuarioImageURL);
+    // usuarioImageURL = widget.list[widget.index]['foto'];
+    // // Inicializa selectedImage con la URL de la foto existente
+    // selectedImage = File(usuarioImageURL);
   }
 
   Future<void> _pickImage() async {
@@ -73,9 +78,9 @@ class _EditUsuarioState extends State<EditUsuario> {
   }
 
   Future<void> _updateImageInFirebase() async {
-    String newImageUrl = widget.list[widget.index]
-        ['foto']; // Por defecto, se mantiene la imagen existente
-
+    // String newImageUrl = widget.list[widget.index]
+    //     ['foto']; // Por defecto, se mantiene la imagen existente
+ String newImageUrl = widget.list[widget.index]['foto'] ?? ""; // Default to an empty string
     if (selectedImage != null) {
       final firebaseStorageReference = FirebaseStorage.instance
           .ref()
@@ -88,10 +93,15 @@ class _EditUsuarioState extends State<EditUsuario> {
         if (downloadUrl != null) {
           newImageUrl =
               downloadUrl; // Si se selecciona una nueva imagen, se actualiza la URL
-        }
+        }else {
+        // Handle the case where downloadUrl is null (image upload failed)
+        // You might want to display an error message or use a default image URL.
+      
+      }
       } catch (e) {
         // Maneja el error, por ejemplo, muestra un mensaje al usuario
         print("Error al cargar la imagen: $e");
+
       }
     }
 
@@ -117,7 +127,7 @@ class _EditUsuarioState extends State<EditUsuario> {
       appBar: AppBar(
         title: Text("Edit Usuario"),
       ),
-      drawer: MyDrawer(accountName: "Usuario"),
+      // drawer: MyDrawer(accountName: "Usuario"),
       // drawer: MyDrawer(
       //     accountName: "Nombre Usuario",
       //     accountEmail:

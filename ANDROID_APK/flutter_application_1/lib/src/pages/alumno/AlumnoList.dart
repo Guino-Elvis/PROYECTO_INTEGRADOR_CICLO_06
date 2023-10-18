@@ -162,13 +162,13 @@ class ItemList extends StatelessWidget {
                                   color: Colors.black87,
                                 ),
                               ),
-                              Text(
-                                apellido,
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.black87,
-                                ),
-                              ),
+                              // Text(
+                              //   apellido,
+                              //   style: TextStyle(
+                              //     fontSize: 20.0,
+                              //     color: Colors.black87,
+                              //   ),
+                              // ),
                               Text(
                                 fechaFormateada,
                                 style: TextStyle(
@@ -180,7 +180,7 @@ class ItemList extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(1.0),
+                         padding: const EdgeInsets.all(10.0),
                           child: Container(
                             width: 80.0,
                             height: 80.0,
@@ -202,7 +202,8 @@ class ItemList extends StatelessWidget {
                               errorWidget: (context, url, error) =>
                                   Image.asset('assets/nofoto.jpg', width: 500.0),
                               fit: BoxFit.cover,
-                            ),
+                            )
+                            ,
                           ),
                         ),
                       ],

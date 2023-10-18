@@ -128,6 +128,7 @@ static Future<List<Map<String, String>>> getUserProfilee() async {
         return {
           "name": item["name"].toString(),
           "email": item["email"].toString(),
+          "foto": item["foto"].toString(),
         };
       }).toList();
 

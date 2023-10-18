@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/service/authService/ApiService.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
 
 class MyDrawer extends StatefulWidget {
   final String accountName;
@@ -13,7 +14,8 @@ class MyDrawer extends StatefulWidget {
 
 class _MyDrawerState extends State<MyDrawer> {
   String accountEmail = ""; // Correo electrónico del usuario
-  String accountName = "";  // Nombre del usuario
+  String accountName = ""; // Nombre del usuario
+  String accountFoto = ""; // Nombre del usuario
 
   @override
   void initState() {
@@ -27,6 +29,7 @@ class _MyDrawerState extends State<MyDrawer> {
       setState(() {
         accountName = profileData.first["name"]!;
         accountEmail = profileData.first["email"]!;
+        accountFoto = profileData.first["foto"]!;
       });
     }
   }
@@ -36,20 +39,63 @@ class _MyDrawerState extends State<MyDrawer> {
     return Drawer(
       child: ListView(
         children: [
-          UserAccountsDrawerHeader(
-            accountName: Text(accountName.isEmpty ? widget.accountName : accountName),
-            accountEmail: Text(accountEmail),
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: Colors.white,
-              child: Icon(Icons.person),
-            ),
+          Stack(
+            children: [
+              Container(
+                // Ajusta la altura a tu preferencia
+                height: 160,
+                width: 420,
+                // Ancho adaptable para adaptarse al contenedor
+                child: Image.asset(
+                  "assets/fondologin.jfif",
+                  fit: BoxFit.cover,
+                ),
+              ),
+              UserAccountsDrawerHeader(
+                accountName: Text(
+                    accountName.isEmpty ? widget.accountName : accountName),
+                accountEmail: Text(accountEmail),
+                currentAccountPicture: accountFoto.isEmpty
+                    ? Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white, // Color del borde
+                            width: 2.0, // Ancho del borde
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Icon(Icons.person),
+                        ),
+                      )
+                    : Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white, // Color del borde
+                            width: 3.0, // Ancho del borde
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(accountFoto),
+                        ),
+                      ),
+                decoration: BoxDecoration(
+                  color: HexColor("#0e1b4d").withOpacity(0.8),
+                ),
+                margin: EdgeInsets.all(0),
+                // Elimina el margen predeterminado para evitar superposiciones
+              ),
+            ],
           ),
           ListTile(
             title: Text('Home'),
             leading: Icon(Icons.person),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/home', (route) => false);
             },
           ),
           ListTile(
@@ -57,7 +103,8 @@ class _MyDrawerState extends State<MyDrawer> {
             leading: Icon(Icons.category),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamedAndRemoveUntil(context, '/category', (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/category', (route) => false);
             },
           ),
           ListTile(
@@ -65,16 +112,17 @@ class _MyDrawerState extends State<MyDrawer> {
             leading: Icon(Icons.person),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamedAndRemoveUntil(context, '/alumno', (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/alumno', (route) => false);
             },
           ),
-
           ListTile(
             title: Text('Usuarios'),
             leading: Icon(Icons.person_4_rounded),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamedAndRemoveUntil(context, '/usuario', (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/usuario', (route) => false);
             },
           ),
           Divider(),

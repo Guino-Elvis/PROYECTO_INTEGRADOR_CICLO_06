@@ -2,11 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/config/configapi.dart';
 import 'package:flutter_application_1/src/model/auth/AuthRequestModel.dart';
-import 'package:flutter_application_1/src/pages/auth/ZigZagClipper.dart';
 import 'package:flutter_application_1/src/service/authService/ApiService.dart';
-import 'package:flutter_application_1/src/view/HomePage.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:http/http.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
 

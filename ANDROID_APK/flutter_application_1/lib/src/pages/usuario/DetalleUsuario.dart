@@ -3,7 +3,7 @@ import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/controller/UsuarioController.dart';
 import 'package:flutter_application_1/src/pages/usuario/EditUsuario.dart';
 import 'package:flutter_application_1/src/pages/usuario/UsuarioList.dart';
-
+import 'package:snippet_coder_utils/hex_color.dart';
 
 class DetalleUsuario extends StatefulWidget {
   late List list;
@@ -28,46 +28,53 @@ class _DetalleUsuarioState extends State<DetalleUsuario> {
     }
   }
 
-void confirm() {
-  final id = widget.list[widget.index]['id'].toString();
-  final fotoURL = widget.list[widget.index]['foto'].toString();
+  void confirm() {
+    final id = widget.list[widget.index]['id'].toString();
+    final fotoURL = widget.list[widget.index]['foto'].toString();
 
-  AlertDialog alertDialog = AlertDialog(
-    content: Text("¿Está seguro de eliminar este usuario? '$id'?"),
-    actions: <Widget>[
-      ElevatedButton(
-        child: Text(
-          "Eliminar",
-          style: TextStyle(color: Colors.black),
+    AlertDialog alertDialog = AlertDialog(
+      content: Text("¿Está seguro de eliminar este usuario? '$id'?"),
+      actions: <Widget>[
+        ElevatedButton(
+          child: Text(
+            "Eliminar",
+            style: TextStyle(color: Colors.black),
+          ),
+          style: ElevatedButton.styleFrom(primary: Colors.red),
+          onPressed: () async {
+            await usuarioController.removerUsuario(id, fotoURL);
+            _navigateList(context);
+          },
         ),
-        style: ElevatedButton.styleFrom(primary: Colors.red),
-        onPressed: () async {
-          await usuarioController.removerUsuario(id, fotoURL);
-          _navigateList(context);
-        },
-      ),
-      ElevatedButton(
-        child: Text(
-          "Cancelar",
-          style: TextStyle(color: Colors.black),
+        ElevatedButton(
+          child: Text(
+            "Cancelar",
+            style: TextStyle(color: Colors.black),
+          ),
+          style: ElevatedButton.styleFrom(primary: Colors.green),
+          onPressed: () => Navigator.pop(context),
         ),
-        style: ElevatedButton.styleFrom(primary: Colors.green),
-        onPressed: () => Navigator.pop(context),
-      ),
-    ],
-  );
+      ],
+    );
 
-  showDialog(
-      context: context, builder: (BuildContext context) => alertDialog);
-}
+    showDialog(
+        context: context, builder: (BuildContext context) => alertDialog);
+  }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text('Detalle del Usuario'),
+        title: Text('Detalle del Usuario',
+         style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold), // Cambia el color del texto en la AppBar
+        ),
+              iconTheme: IconThemeData(
+        color: Colors.white
       ),
-      drawer: MyDrawer(accountName: "Usuario"),
+         backgroundColor: HexColor("#0e1b4d"),
+         toolbarHeight: 40.0, // Ajusta la altura deseada
+      ),
+      // drawer: MyDrawer(accountName: "Usuario"),
       body: new Container(
         height: 270.0,
         padding: const EdgeInsets.all(20.0),
@@ -79,12 +86,13 @@ void confirm() {
                   padding: const EdgeInsets.only(top: 30.0),
                 ),
                 new Text(
-                  widget.list[widget.index]['name'],
+                  widget.list[widget.index]['name']?.toString() ??
+                      'Nombre no especificado',
                   style: new TextStyle(fontSize: 20.0),
                 ),
                 Divider(),
                 new Text(
-                  "Email : ${widget.list[widget.index]['email']}",
+                  "Email : ${widget.list[widget.index]['email']?.toString() ?? 'Correo no especificado'}",
                   style: new TextStyle(fontSize: 18.0),
                 ),
                 new Row(
