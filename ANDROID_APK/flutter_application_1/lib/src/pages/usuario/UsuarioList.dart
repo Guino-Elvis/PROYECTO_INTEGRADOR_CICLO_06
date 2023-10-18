@@ -124,10 +124,10 @@ class ItemList extends StatelessWidget {
           padding: EdgeInsets.all(10.0), // Agrega relleno a todos los lados
           decoration: BoxDecoration(
             color: Colors.white, // Fondo blanco
-            borderRadius: BorderRadius.circular(10.0), // Bordes redondeados
+            borderRadius: BorderRadius.circular(10.0),
             boxShadow: [
               BoxShadow(
-               color: HexColor("#0e1b4d").withOpacity(0.5), // Sombra suave
+               color: HexColor("#0e1b4d").withOpacity(0.5), 
                 spreadRadius: 2,
                 blurRadius: 5,
                 offset: Offset(0, 2),
