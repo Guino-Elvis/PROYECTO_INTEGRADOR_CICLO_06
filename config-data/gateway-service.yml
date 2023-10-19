@@ -15,6 +15,7 @@ spring:
               allowedOrigins:
               - "http://localhost:3000"
               - "http://localhost:8000"
+              - "http://localhost:56857"
               allowedHeaders: "*"
               allowedMethods:
                 - GET
