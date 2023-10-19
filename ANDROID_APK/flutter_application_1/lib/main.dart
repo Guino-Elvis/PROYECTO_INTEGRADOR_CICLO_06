@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/component/Actualizar.dart';
 import 'package:flutter_application_1/src/pages/alumno/AlumnoList.dart';
 import 'package:flutter_application_1/src/pages/auth/LoginPage.dart';
 import 'package:flutter_application_1/src/pages/auth/RegisterPage.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_application_1/src/pages/usuario/UsuarioList.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:flutter_application_1/src/pages/categoria/CategoriaList.dart';
 import 'package:flutter_application_1/src/view/HomePage.dart';
+import 'package:provider/provider.dart';
 
 // void main() {
 //   runApp(const MyApp());
@@ -30,7 +32,16 @@ void main() async {
   if(_result){
     _defaultHome = HomePage();
   }
-  runApp(MyApp());
+  runApp(
+      MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Actualizar>(create: (_) => Actualizar()),
+        // Otros providers si los tienes
+      ],
+      child: MyApp(),
+    ),
+     );
+    // MyApp());
 }
 
 class MyApp extends StatelessWidget {
