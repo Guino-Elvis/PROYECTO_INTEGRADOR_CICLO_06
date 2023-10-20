@@ -22,13 +22,16 @@ public class AuthUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String foto;
-    // private String role;
     @Builder.Default
     private String role = "user";
     private String name;
     private String email;
     private String password;
     private String confirmPassword;
+    private String apellido_p;
+    private String apellido_m;
+    private String dni;
+    private String codigo;
     private LocalDateTime created_at = LocalDateTime.now();
     private LocalDateTime updated_at = LocalDateTime.now();
 

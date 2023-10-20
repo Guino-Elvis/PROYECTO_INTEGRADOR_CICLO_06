@@ -53,6 +53,12 @@ public class AuthUserServiceImpl implements AuthUserService {
                 .role(authUserDto.getRole() != null ? authUserDto.getRole() : "user")
                 // .role(authUserDto.getRole()) // Mapea el rol
                 .email(authUserDto.getEmail())
+
+                .apellido_m(authUserDto.getApellido_m())
+                .apellido_p(authUserDto.getApellido_p())
+                .dni(authUserDto.getDni())
+                .codigo(authUserDto.getCodigo())
+
                 .foto(authUserDto.getFoto())
                 // .created_at(authUserDto.getCreated_at())
                 // .updated_at(authUserDto.getUpdated_at())
