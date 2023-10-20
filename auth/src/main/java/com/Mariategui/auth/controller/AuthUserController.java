@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,6 +126,11 @@ public class AuthUserController {
             String password = passwordEncoder.encode(authUserDto.getPassword());
             updatedUser.setPassword(password);
         }
+        // Actualiza la fecha updated_at con la fecha actual
+        // Actualiza la fecha updated_at con la fecha y hora actuales como LocalDateTime
+        // Actualiza la fecha updated_at con la fecha y hora actuales como LocalDateTime
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        updatedUser.setUpdated_at(currentDateTime);
 
         AuthUser savedUser = authUserService.actualizar(updatedUser);
         CreateUserResponse response = new CreateUserResponse();

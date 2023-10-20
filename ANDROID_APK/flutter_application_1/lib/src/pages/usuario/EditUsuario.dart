@@ -6,6 +6,7 @@ import 'package:flutter_application_1/src/pages/usuario/UsuarioList.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:intl/intl.dart';
 
 class EditUsuario extends StatefulWidget {
   final List list;
@@ -21,6 +22,11 @@ class _EditUsuarioState extends State<EditUsuario> {
   UsuarioController usuarioController = UsuarioController();
 
   late TextEditingController controllerid;
+  late TextEditingController controllerapellido_p;
+  late TextEditingController controllerapellido_m;
+  late TextEditingController controllerdni;
+  late TextEditingController controllercodigo;
+  late TextEditingController controllerupdated_at;
   late TextEditingController controllername;
   late TextEditingController controllerrole;
   late TextEditingController controlleremail;
@@ -48,7 +54,23 @@ class _EditUsuarioState extends State<EditUsuario> {
     controllername = TextEditingController(
         text: widget.list[widget.index]['name']?.toString() ?? 'Nombre no especificado');
     controllerrole = TextEditingController(
-        text: widget.list[widget.index]['role']?.toString()?? 'Nombre no especificado');
+        text: widget.list[widget.index]['role']?.toString()?? 'rol no especificado');
+    
+    controllerapellido_p = TextEditingController(
+        text: widget.list[widget.index]['apellido_p']?.toString()?? 'apellido_p no especificado');
+    controllerapellido_m = TextEditingController(
+        text: widget.list[widget.index]['apellido_m']?.toString()?? 'apellido_m no especificado');
+    controllerdni = TextEditingController(
+        text: widget.list[widget.index]['dni']?.toString()?? 'dni no especificado');
+    controllercodigo = TextEditingController(
+        text: widget.list[widget.index]['codigo']?.toString()?? 'codigo no especificado');
+    // // Obtén la fecha actual
+    // String formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+    // controllerupdated_at = TextEditingController(
+    //     text: widget.list[widget.index]['updated_at']?.toString() ?? formattedDate);
+
+
+
     controlleremail = TextEditingController(
         text: widget.list[widget.index]['email'].toString());
     controllerpassword = TextEditingController(
@@ -112,6 +134,11 @@ usuarioImageURL = widget.list[widget.index]['foto'] != null
       controllername.text.trim(),
       controllerrole.text.trim(),
       controlleremail.text.trim(),
+      controllerapellido_p.text.trim(),
+      controllerapellido_m.text.trim(),
+      controllerdni.text.trim(),
+      controllercodigo.text.trim(),
+      // controllerupdated_at.text.trim(),
       controllerpassword.text.trim(),
       newImageUrl,
     );
@@ -180,6 +207,70 @@ usuarioImageURL = widget.list[widget.index]['foto'] != null
                     decoration: InputDecoration(
                       hintText: "nombre",
                       labelText: "nombre del usuario",
+                    ),
+                  ),
+                ),
+                 ListTile(
+                  leading: Icon(Icons.person, color: Colors.black),
+                  title: TextFormField(
+                    controller: controllerapellido_p,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "El campo no puede estar vacío";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Apellido paterno",
+                      labelText: "Apellido paterno del usuario",
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(Icons.person, color: Colors.black),
+                  title: TextFormField(
+                    controller: controllerapellido_m,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "El campo no puede estar vacío";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Apellido materno",
+                      labelText: "Apellido materno del usuario",
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(Icons.person, color: Colors.black),
+                  title: TextFormField(
+                    controller: controllerdni,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "El campo no puede estar vacío";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      hintText: "DNI",
+                      labelText: "Dni del usuario",
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(Icons.person, color: Colors.black),
+                  title: TextFormField(
+                    controller: controllercodigo,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "El campo no puede estar vacío";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Codigo",
+                      labelText: "codigo del usuario",
                     ),
                   ),
                 ),

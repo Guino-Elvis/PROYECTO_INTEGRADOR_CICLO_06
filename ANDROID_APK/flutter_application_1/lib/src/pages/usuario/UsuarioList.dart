@@ -8,6 +8,7 @@ import 'package:flutter_application_1/src/controller/UsuarioController.dart';
 import 'package:flutter_application_1/src/pages/usuario/CreateUsuario.dart';
 import 'package:flutter_application_1/src/pages/usuario/DetalleUsuario.dart';
 import 'package:flutter_application_1/src/component/LeftNotifier.dart';
+import 'package:flutter_application_1/src/pages/usuario/DetalleUsuarioo.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -151,7 +152,7 @@ class ItemList extends StatelessWidget {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) => DetalleUsuario(list: list, index: index),
+                                  builder: (BuildContext context) => DetalleUsuarioo(list: list, index: index),
                                 ),
                               );
                             },

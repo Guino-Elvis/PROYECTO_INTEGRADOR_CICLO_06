@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_1/src/component/Actualizar.dart';
 import 'package:flutter_application_1/src/pages/alumno/AlumnoList.dart';
 import 'package:flutter_application_1/src/pages/auth/LoginPage.dart';
 import 'package:flutter_application_1/src/pages/auth/RegisterPage.dart';
+import 'package:flutter_application_1/src/pages/usuario/DetalleUsuarioo.dart';
 import 'package:flutter_application_1/src/pages/usuario/UsuarioList.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:flutter_application_1/src/pages/categoria/CategoriaList.dart';
@@ -48,8 +50,10 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: ' APIS APLICACION',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -63,6 +67,7 @@ class MyApp extends StatelessWidget {
         '/category': (context) => const CategoriaList(),
         '/alumno': (context) => const AlumnoList(),
         '/usuario': (context) => const UsuarioList(),
+   
         },
       // home: CategoriaList(),
     );

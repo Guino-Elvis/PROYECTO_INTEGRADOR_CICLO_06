@@ -14,10 +14,14 @@ class CreateUsuario extends StatefulWidget {
 class _CreateUsuarioState extends State<CreateUsuario> {
   UsuarioController usuarioController = UsuarioController();
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController codigoController = TextEditingController();
+  final TextEditingController apellido_pController = TextEditingController();
+  final TextEditingController apellido_mController = TextEditingController();
+  final TextEditingController dniController = TextEditingController();
   final TextEditingController roleController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController tituloController = TextEditingController();
+
   final TextEditingController confirmPasswordController =
       TextEditingController();
   // final TextEditingController fotoController = TextEditingController();
@@ -100,15 +104,42 @@ class _CreateUsuarioState extends State<CreateUsuario> {
                 icon: Icon(Icons.person_add),
               ),
             ),
-            // SizedBox(height: 16.0),
-            // TextFormField(
-            //   controller: roleController,
-            //   decoration: InputDecoration(
-            //     labelText: 'Rol',
-            //     hintText: 'Rol del usuario',
-            //     icon: Icon(Icons.category_outlined),
-            //   ),
-            // ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              controller: apellido_mController,
+              decoration: InputDecoration(
+                labelText: 'Apellido materno',
+                hintText: 'Apellido materno del usuario',
+                icon: Icon(Icons.email_outlined),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              controller: apellido_pController,
+              decoration: InputDecoration(
+                labelText: 'Apellido paterno',
+                hintText: 'Apellido paterno del usuario',
+                icon: Icon(Icons.email_outlined),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              controller: codigoController,
+              decoration: InputDecoration(
+                labelText: 'Codigo',
+                hintText: 'Codigo del usuario',
+                icon: Icon(Icons.email_outlined),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              controller: dniController,
+              decoration: InputDecoration(
+                labelText: 'Dni',
+                hintText: 'Dni del usuario',
+                icon: Icon(Icons.email_outlined),
+              ),
+            ),
             SizedBox(height: 16.0),
             DropdownButtonFormField<String>(
               value: selectedRole,
@@ -174,6 +205,11 @@ class _CreateUsuarioState extends State<CreateUsuario> {
                   final downloadUrl = await _uploadImage();
                   usuarioController.CrearUsuario(
                     nameController.text.trim(),
+                    apellido_mController.text.trim(),
+                    apellido_pController.text.trim(),
+                    codigoController.text.trim(),
+                    dniController.text.trim(),
+
                     roleController.text.trim(),
                     emailController.text.trim(),
                     passwordController.text.trim(),
