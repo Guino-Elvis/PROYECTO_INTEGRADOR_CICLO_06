@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/service/authService/ApiService.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
@@ -12,7 +13,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState();
+  @override
+  void initState() {
+    super.initState();
 
+    // Para ocultar las superposiciones de la interfaz de usuario (por ejemplo, la barra de estado y la barra de navegación)
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
+
+    // Si deseas que las superposiciones de la interfaz de usuario sean visibles (por ejemplo, la barra de estado)
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: SystemUiOverlay.values);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

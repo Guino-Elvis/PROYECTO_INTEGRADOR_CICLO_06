@@ -5,6 +5,7 @@ import 'package:flutter_application_1/src/pages/alumno/AlumnoList.dart';
 import 'package:flutter_application_1/src/pages/alumno/EditAlumno.dart';
 
 
+// ignore: must_be_immutable
 class DetalleAlumno extends StatefulWidget {
   late List list;
   late int index;

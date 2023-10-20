@@ -5,7 +5,6 @@ import 'package:flutter_application_1/src/model/auth/AuthRequestModel.dart';
 import 'package:flutter_application_1/src/model/auth/AuthResponseModel.dart';
 import 'package:flutter_application_1/src/model/auth/RegisterRequestModel.dart';
 import 'package:flutter_application_1/src/model/auth/RegisterResponseModel.dart';
-import 'package:flutter_application_1/src/pages/auth/UserProfile.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:http/http.dart' as http;
 

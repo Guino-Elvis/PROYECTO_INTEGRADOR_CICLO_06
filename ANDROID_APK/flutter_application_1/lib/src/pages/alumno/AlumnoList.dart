@@ -87,6 +87,7 @@ class _AlumnoListState extends State<AlumnoList> {
       ),
       drawer: MyDrawer(accountName: "Usuario"),
       // drawer: MyDrawer(accountName: "Nombre Usuario", accountEmail: "usuario@example.com"), // Aquí proporciona los datos necesarios
+      // ignore: unnecessary_null_comparison
       body: data == null
           ? Center(
               child: CircularProgressIndicator(),
@@ -109,12 +110,14 @@ class ItemList extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = list[index];
         final nombre = item['nombre'].toString();
+        // ignore: unused_local_variable
         final apellido = item['apellido'].toString();
         final created_at =
             DateTime.parse(item['created_at'].toString()); // Parsear la fecha
         // Formatear la fecha como solo la fecha (sin la hora)
         final fechaFormateada = DateFormat('yyyy-MM-dd').format(created_at);
 
+        // ignore: unused_local_variable
         final foto = item['foto']
             .toString(); // Asumiendo que 'foto' es la URL de la imagen
 

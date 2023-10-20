@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
@@ -84,6 +86,7 @@ class _EditCategoriaState extends State<EditCategoria> {
         }
       } catch (e) {
         // Maneja el error, por ejemplo, muestra un mensaje al usuario
+        // ignore: avoid_print
         print("Error al cargar la imagen: $e");
       }
     }

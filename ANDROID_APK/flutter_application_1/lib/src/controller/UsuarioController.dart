@@ -1,5 +1,4 @@
-import 'dart:io';
-
+// ignore_for_file: file_names
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_application_1/src/config/ConfigApi.dart';
 import 'package:http/http.dart' as http;
@@ -10,33 +9,27 @@ class UsuarioController {
     String nameController,
     String roleController,
     String emailController,
-
+    String passwordController,
+    String confirmPasswordController,
     String apellido_pController,
     String apellido_mController,
     String dniController,
     String codigoController,
-
-    String passwordController,
-    String confirmPasswordController,
     String fotoController,
-    // String created_atController,
-    // String updated_atController,
+
   ) async {
     Map data = {
       'name': '$nameController',
       'role': '$roleController',
       'email': '$emailController',
-      
+      'password': '$passwordController',
+      'confirmPassword': '$confirmPasswordController',
       'apellido_p': '$apellido_pController',
       'apellido_m': '$apellido_mController',
       'dni': '$dniController',
       'codigo': '$codigoController',
-      
-      'password': '$passwordController',
-      'confirmPassword': '$confirmPasswordController',
       'foto': '$fotoController',
-      // 'created_at': '$created_atController',
-      // 'updated_at': '$updated_atController',
+
     };
 
     var body = json.encode(data);
@@ -54,33 +47,29 @@ class UsuarioController {
   Future<http.Response> editarUsuario(
     String id,
     String nameController,
-    String roleController,
-    String emailController,
-    String passwordController,
-    String fotoController,
     String apellido_pController,
     String apellido_mController,
     String dniController,
     String codigoController,
-    // String updated_atController,
+    String roleController,
+    String emailController,
+    String passwordController,
+     String fotoController,
   ) async {
     int a = int.parse(id);
     print(a);
-    // var url = ConfigApi.buildUrl('/auth/update/$id'); // Utiliza el ID proporcionado
 
     Map data = {
       'id': '$a',
       'name': '$nameController',
-      'role': '$roleController',
-      'email': '$emailController',
-      'password': '$passwordController',
-      'foto': '$fotoController',
-
       'apellido_p': '$apellido_pController',
       'apellido_m': '$apellido_mController',
       'dni': '$dniController',
       'codigo': '$codigoController',
-      // 'updated_at': '$updated_atController',
+      'role': '$roleController',
+      'email': '$emailController',
+      'password': '$passwordController',
+      'foto': '$fotoController',
 
     };
 

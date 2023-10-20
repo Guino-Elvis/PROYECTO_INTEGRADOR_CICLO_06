@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_1/src/component/Actualizar.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/component/bottomNavigationBar.dart';
@@ -30,7 +31,21 @@ class _UsuarioListState extends State<UsuarioList> {
  Future<List<dynamic>> getData() async {
     final response =
         await http.get(Uri.parse(ConfigApi.buildUrl('/auth/list')));
-    return json.decode(response.body);
+          final responseData = json.decode(response.body);
+
+  // Itera sobre los elementos y convierte las fechas de cadenas a objetos DateTime
+  for (var item in responseData) {
+    if (item['created_at'] is String) {
+      item['created_at'] = DateTime.parse(item['created_at']);
+    }
+    if (item['updated_at'] is String) {
+      item['updated_at'] = DateTime.parse(item['updated_at']);
+    }
+    // Repite el proceso para otras fechas si es necesario.
+  }
+
+  return responseData;
+    // return json.decode(response.body);
   }
   void actualizarVista(List<dynamic> newData) => getData().then((result) {
     Provider.of<Actualizar>(context, listen: false).setData(result);
@@ -42,6 +57,8 @@ class _UsuarioListState extends State<UsuarioList> {
   @override
   void initState() {
     super.initState();
+      // Para ocultar las superposiciones de la interfaz de usuario (por ejemplo, la barra de estado y la barra de navegación)
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
     getData().then((result) => setState(() => data = result));
   }
 

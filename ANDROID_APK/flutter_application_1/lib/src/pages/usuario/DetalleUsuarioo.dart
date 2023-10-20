@@ -8,6 +8,8 @@ import 'package:flutter_application_1/src/component/bottomNavigationBar.dart';
 import 'package:flutter_application_1/src/controller/UsuarioController.dart';
 import 'package:flutter_application_1/src/pages/usuario/EditUsuario.dart';
 import 'package:flutter_application_1/src/pages/usuario/UsuarioList.dart';
+import 'package:intl/intl.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
 
 class DetalleUsuarioo extends StatefulWidget {
   final List list;
@@ -67,45 +69,67 @@ class ProfilePage extends StatelessWidget {
   ProfilePage({required this.widget});
 
   TextStyle _style() {
-    return TextStyle(fontWeight: FontWeight.bold);
+    return TextStyle(fontWeight: FontWeight.bold,color: HexColor("#060c22"));
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-           Text("Name"),
+           Text("Name",),
             SizedBox(height: 4,),
-            // Text(widget.list[widget.index]['name']?? "no hay nombre", style: _style(),),
-            Text(
-              "${widget.list[widget.index]['name'] ?? 'Sin nombre'} ${widget.list[widget.index]['apellido_p'] ?? 'Sin apellido paterno'} ${widget.list[widget.index]['apellido_m'] ?? 'Sin apellido materno'}",
+           Text(
+              "${(widget.list[widget.index]['name'] ?? 'Sin nombre').toUpperCase()} ${(widget.list[widget.index]['apellido_p'] ?? 'Sin apellido paterno').toUpperCase()} ${(widget.list[widget.index]['apellido_m'] ?? 'Sin apellido materno').toUpperCase()}",
               style: _style(),
             ),
             SizedBox(height: 16,),
 
             Text("Email", style: _style(),),
             SizedBox(height: 4,),
-            Text(widget.list[widget.index]['email'],),
+            Text(widget.list[widget.index]['email']?? 'No tienes email',),
             SizedBox(height: 16,),
 
+            Row(
+              children: [
+                Text("Codigo U :", style: _style()),
+                SizedBox(width: 4),
+                Text(widget.list[widget.index]['codigo'] ?? 'No tienes codigo',),
+                SizedBox(width: 16),
+                Text("DNI :", style: _style()),
+                SizedBox(width: 4),
+                Text(widget.list[widget.index]['dni']?? 'No tienes dni',),
+              ],
+            ),
+            SizedBox(height: 16,),
             Text("Location", style: _style(),),
             SizedBox(height: 4,),
-            Text("New York, USA"),
+            Text("Juliaca-puno PERU"),
             SizedBox(height: 16,),
 
-            Text("Language", style: _style(),),
+            Text("Telefono", style: _style(),),
             SizedBox(height: 4,),
-            Text("English, French"),
+            Text("916882598"),
             SizedBox(height: 16,),
 
-            Text("Occupation", style: _style(),),
+            Text("Rol", style: _style(),),
             SizedBox(height: 4,),
-            Text("Employee"),
+            Text(widget.list[widget.index]['role']?? 'No tienes rol',),
             SizedBox(height: 16,),
-
+            Row(
+            children: [
+              Text("Created_at", style: _style()),
+              SizedBox(width: 4),
+              Text(DateFormat('dd/MM/yyyy').format(widget.list[widget.index]['created_at']?? 'No tienes fecha crea')),
+              SizedBox(width: 16),
+              Text("Updated_at", style: _style()),
+              SizedBox(width: 4),
+              Text(DateFormat('dd/MM/yyyy').format(widget.list[widget.index]['updated_at']?? 'No tienes fecha edit')),
+            ],
+          ),
             Divider(color: Colors.grey,)
         ],
       ),
@@ -113,8 +137,7 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-final String url =
-    "http://chuteirafc.cartacapital.com.br/wp-content/uploads/2018/12/15347041965884.jpg";
+
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final DetalleUsuarioo widget;
@@ -126,17 +149,41 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    ImageProvider<Object> imageProvider;
+
+    if (widget.list[widget.index]['foto'] != null && widget.list[widget.index]['foto'].isNotEmpty) {
+      imageProvider = NetworkImage(widget.list[widget.index]['foto']); // Usar la foto del usuario si está disponible
+    } else {
+      imageProvider = AssetImage('assets/nofoto.jpg'); // Usar una imagen de respaldo si no hay foto
+    }
+
     return ClipPath(
       clipper: MyClipper(),
       child: Container(
-        padding: EdgeInsets.only(top: 4),
-        decoration: BoxDecoration(color: Colors.redAccent, boxShadow: [
-          BoxShadow(color: Colors.red, blurRadius: 20, offset: Offset(0, 0))
-        ]),
-        child: Column(
+        padding: EdgeInsets.only(top: 0),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/fondologin2.jpg'), // Reemplaza 'tu_ruta_de_imagen' con la ruta de tu imagen de fondo
+            fit: BoxFit.cover,
+          ),
+          
+          ),
+        child: Stack(
+      children: <Widget>[
+        Positioned.fill(
+          child: Container(
+            // color: HexColor("#0e1b4d").withOpacity(0.9),
+             color: Color.fromARGB(255, 5, 27, 65).withOpacity(0.9),
+          ),
+        ),  
+        
+        Column(
+        
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              
               children: <Widget>[
                 IconButton(
                   icon: Icon(
@@ -165,22 +212,39 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start, // Alinea los elementos en la parte superior
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    Container(
+                   Container(
                       width: 100,
                       height: 100,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              fit: BoxFit.cover, image: NetworkImage(url))),
+                        border: Border.all(color: Colors.white, width: 4), // Agregar borde blanco
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: imageProvider, // Asignar la variable imageProvider
+                        ),
+                      ),
+                      child: FutureBuilder(
+                        future: precacheImage(imageProvider, context),
+                        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            // Muestra un indicador de carga mientras se carga la imagen
+                            return CircularProgressIndicator();
+                          } else {
+                            // La imagen se ha cargado, puedes mostrarla
+                            return Container(); // Opcional: Puedes quitar este contenedor si no necesitas mostrar nada adicional
+                          }
+                        },
+                      ),
                     ),
                     SizedBox(
                       height: 16,
                     ),
                     Text(
-                      "Milan Short",
+                     "${(widget.list[widget.index]['name'] ?? 'Sin nombre')}",
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     )
                   ],
@@ -221,43 +285,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     )
                   ],
                 ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Text(
-                      "Savings",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      "20K",
-                      style: TextStyle(color: Colors.white, fontSize: 24),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  width: 32,
-                ),
-                Column(
-                  children: <Widget>[
-                    Text(
-                      "July Goals",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text("50K",
-                        style: TextStyle(color: Colors.white, fontSize: 24))
-                  ],
-                ),
-                SizedBox(
-                  width: 16,
-                )
+                
               ],
             ),
             SizedBox(
-              height: 8,
+              height: 2,
             ),
             Align(
               alignment: Alignment.bottomRight,
@@ -273,13 +305,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 24, 16, 0),
+                  
                   child: Transform.rotate(
                     angle: (math.pi * 0.05),
                     child: Container(
                       width: 110,
                       height: 32,
                       child: Center(
-                        child: Text("Edit Profile"),
+                        child: Text("Edit Profile",style: TextStyle(color: HexColor("#0e1b4d")),),
                       ),
                       decoration: BoxDecoration(
                           color: Colors.white,
@@ -294,7 +327,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             )
           ],
         ),
+         ],
+        ),
       ),
+      
     );
   }
 }

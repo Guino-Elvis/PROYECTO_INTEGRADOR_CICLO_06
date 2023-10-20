@@ -81,6 +81,7 @@ class _EditAlumnoState extends State<EditAlumno> {
         await firebaseStorageReference.putFile(selectedImage!);
         final downloadUrl = await firebaseStorageReference.getDownloadURL();
 
+        // ignore: unnecessary_null_comparison
         if (downloadUrl != null) {
           newImageUrl =
               downloadUrl; // Si se selecciona una nueva imagen, se actualiza la URL

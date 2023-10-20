@@ -1,12 +1,11 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/controller/UsuarioController.dart';
 import 'package:flutter_application_1/src/pages/usuario/UsuarioList.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:intl/intl.dart';
+
 
 class EditUsuario extends StatefulWidget {
   final List list;
@@ -26,7 +25,6 @@ class _EditUsuarioState extends State<EditUsuario> {
   late TextEditingController controllerapellido_m;
   late TextEditingController controllerdni;
   late TextEditingController controllercodigo;
-  late TextEditingController controllerupdated_at;
   late TextEditingController controllername;
   late TextEditingController controllerrole;
   late TextEditingController controlleremail;
@@ -52,39 +50,33 @@ class _EditUsuarioState extends State<EditUsuario> {
     controllerid =
         TextEditingController(text: widget.list[widget.index]['id'].toString());
     controllername = TextEditingController(
-        text: widget.list[widget.index]['name']?.toString() ?? 'Nombre no especificado');
-    controllerrole = TextEditingController(
-        text: widget.list[widget.index]['role']?.toString()?? 'rol no especificado');
-    
+        text: widget.list[widget.index]['name']?.toString() ??
+            'Nombre no especificado');
     controllerapellido_p = TextEditingController(
-        text: widget.list[widget.index]['apellido_p']?.toString()?? 'apellido_p no especificado');
+        text: widget.list[widget.index]['apellido_p']?.toString() ??
+            'apellido_p no especificado');
     controllerapellido_m = TextEditingController(
-        text: widget.list[widget.index]['apellido_m']?.toString()?? 'apellido_m no especificado');
+        text: widget.list[widget.index]['apellido_m']?.toString() ??
+            'apellido_m no especificado');
     controllerdni = TextEditingController(
-        text: widget.list[widget.index]['dni']?.toString()?? 'dni no especificado');
+        text: widget.list[widget.index]['dni']?.toString() ??
+            'dni no especificado');
     controllercodigo = TextEditingController(
-        text: widget.list[widget.index]['codigo']?.toString()?? 'codigo no especificado');
-    // // Obtén la fecha actual
-    // String formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
-    // controllerupdated_at = TextEditingController(
-    //     text: widget.list[widget.index]['updated_at']?.toString() ?? formattedDate);
-
-
-
+        text: widget.list[widget.index]['codigo']?.toString() ??
+            'codigo no especificado');
+    selectedRole = widget.list[widget.index]['role']?.toString() ?? "";
+    // controllerrole = TextEditingController(
+    //     text: widget.list[widget.index]['role']?.toString()?? 'rol no especificado');
     controlleremail = TextEditingController(
         text: widget.list[widget.index]['email'].toString());
     controllerpassword = TextEditingController(
         text: widget.list[widget.index]['password'].toString());
 
-usuarioImageURL = widget.list[widget.index]['foto'] != null
-      ? widget.list[widget.index]['foto'].toString()
-      : 'assets/nofoto.jpg';
-  // Inicializa selectedImage con la URL de la foto existente
-  selectedImage = File(usuarioImageURL);
-    // Obtiene la URL de la imagen de la categoría que estás editando
-    // usuarioImageURL = widget.list[widget.index]['foto'];
-    // // Inicializa selectedImage con la URL de la foto existente
-    // selectedImage = File(usuarioImageURL);
+    usuarioImageURL = widget.list[widget.index]['foto'] != null
+        ? widget.list[widget.index]['foto'].toString()
+        : 'assets/nofoto.jpg';
+
+    selectedImage = File(usuarioImageURL);
   }
 
   Future<void> _pickImage() async {
@@ -100,13 +92,11 @@ usuarioImageURL = widget.list[widget.index]['foto'] != null
   }
 
   Future<void> _updateImageInFirebase() async {
-    // String newImageUrl = widget.list[widget.index]
-    //     ['foto']; // Por defecto, se mantiene la imagen existente
- String newImageUrl = widget.list[widget.index]['foto'] ?? ""; // Default to an empty string
+    String newImageUrl =
+        widget.list[widget.index]['foto'] ?? ""; // Default to an empty string
     if (selectedImage != null) {
-      final firebaseStorageReference = FirebaseStorage.instance
-          .ref()
-          .child('usuario/${DateTime.now()}.png');
+      final firebaseStorageReference =
+          FirebaseStorage.instance.ref().child('usuario/${DateTime.now()}.png');
 
       try {
         await firebaseStorageReference.putFile(selectedImage!);
@@ -115,38 +105,38 @@ usuarioImageURL = widget.list[widget.index]['foto'] != null
         if (downloadUrl != null) {
           newImageUrl =
               downloadUrl; // Si se selecciona una nueva imagen, se actualiza la URL
-        }else {
-        // Handle the case where downloadUrl is null (image upload failed)
-        // You might want to display an error message or use a default image URL.
-      
-      }
+        } else {
+          // Handle the case where downloadUrl is null (image upload failed)
+          // You might want to display an error message or use a default image URL.
+        }
       } catch (e) {
         // Maneja el error, por ejemplo, muestra un mensaje al usuario
         print("Error al cargar la imagen: $e");
-
       }
     }
 
     // Actualiza la categoría, incluyendo la URL de la imagen (ya sea la existente o la nueva)
     usuarioController.editarUsuario(
-      
       controllerid.text.trim(),
       controllername.text.trim(),
-      controllerrole.text.trim(),
-      controlleremail.text.trim(),
       controllerapellido_p.text.trim(),
       controllerapellido_m.text.trim(),
       controllerdni.text.trim(),
       controllercodigo.text.trim(),
-      // controllerupdated_at.text.trim(),
+      // controllerrole.text.trim(),
+      selectedRole ?? "", // Rol seleccionado
+      controlleremail.text.trim(),
       controllerpassword.text.trim(),
+
       newImageUrl,
     );
 
     _navigateList(context);
   }
 
-
+  String?
+      selectedRole; // Debes definir esta variable para almacenar el rol seleccionado
+  List<String> roles = ['admin', 'user', 'docente', 'librero'];
 
   @override
   Widget build(BuildContext context) {
@@ -154,11 +144,6 @@ usuarioImageURL = widget.list[widget.index]['foto'] != null
       appBar: AppBar(
         title: Text("Edit Usuario"),
       ),
-      // drawer: MyDrawer(accountName: "Usuario"),
-      // drawer: MyDrawer(
-      //     accountName: "Nombre Usuario",
-      //     accountEmail:
-      //         "usuario@example.com"), // Aquí proporciona los datos necesarios
       body: Form(
         child: ListView(
           padding: const EdgeInsets.all(12.0),
@@ -210,7 +195,7 @@ usuarioImageURL = widget.list[widget.index]['foto'] != null
                     ),
                   ),
                 ),
-                 ListTile(
+                ListTile(
                   leading: Icon(Icons.person, color: Colors.black),
                   title: TextFormField(
                     controller: controllerapellido_p,
@@ -274,19 +259,25 @@ usuarioImageURL = widget.list[widget.index]['foto'] != null
                     ),
                   ),
                 ),
-                ListTile(
-                  leading: Icon(Icons.person, color: Colors.black),
-                  title: TextFormField(
-                    controller: controllerrole,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "El campo no puede estar vacío";
-                      }
-                      return null;
+                Container(
+                  margin: EdgeInsets.only(left:16.0,right: 20.0), // Margen izquierdo para alinear visualmente con los otros campos
+                  child: DropdownButtonFormField<String>(
+                    value: selectedRole,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedRole = newValue;
+                      });
                     },
+                    items: roles.map((String role) {
+                      return DropdownMenuItem<String>(
+                        value: role,
+                        child: Text(role),
+                      );
+                    }).toList(),
                     decoration: InputDecoration(
-                      hintText: "Rol",
-                      labelText: "Rol de usuario",
+                      labelText: 'Rol',
+                      hintText: 'Selecciona un rol',
+                      icon: Icon(Icons.category_outlined),
                     ),
                   ),
                 ),
@@ -310,6 +301,7 @@ usuarioImageURL = widget.list[widget.index]['foto'] != null
                   leading: Icon(Icons.person, color: Colors.black),
                   title: TextFormField(
                     controller: controllerpassword,
+                    obscureText: true, // Esto ocultará la contraseña
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "El campo no puede estar vacío";
@@ -352,13 +344,11 @@ usuarioImageURL = widget.list[widget.index]['foto'] != null
                     SizedBox(width: 16), // Agrega un espacio entre los botones
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context,
-                            '/usuario');
+                        Navigator.pushNamed(context, '/usuario');
                       },
                       child: Text("Cancelar"),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors
-                            .red,
+                        primary: Colors.red,
                       ),
                     ),
                   ],

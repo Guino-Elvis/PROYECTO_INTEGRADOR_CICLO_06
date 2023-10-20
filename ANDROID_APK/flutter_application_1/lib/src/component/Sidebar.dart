@@ -125,15 +125,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   context, '/usuario', (route) => false);
             },
           ),
-           ListTile(
-            title: Text('Usuarios Perfil'),
-            leading: Icon(Icons.person_4_rounded),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/usuarioperfil', (route) => false);
-            },
-          ),
+
           Divider(),
           ListTile(
             title: Text('Logout'),

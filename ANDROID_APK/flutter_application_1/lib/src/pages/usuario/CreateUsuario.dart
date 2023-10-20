@@ -13,17 +13,17 @@ class CreateUsuario extends StatefulWidget {
 
 class _CreateUsuarioState extends State<CreateUsuario> {
   UsuarioController usuarioController = UsuarioController();
+  final TextEditingController roleController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   final TextEditingController codigoController = TextEditingController();
   final TextEditingController apellido_pController = TextEditingController();
   final TextEditingController apellido_mController = TextEditingController();
   final TextEditingController dniController = TextEditingController();
-  final TextEditingController roleController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
 
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
   // final TextEditingController fotoController = TextEditingController();
   File? selectedImage;
   _navigateList(BuildContext context) async {
@@ -106,29 +106,30 @@ class _CreateUsuarioState extends State<CreateUsuario> {
             ),
             SizedBox(height: 16.0),
             TextFormField(
-              controller: apellido_mController,
-              decoration: InputDecoration(
-                labelText: 'Apellido materno',
-                hintText: 'Apellido materno del usuario',
-                icon: Icon(Icons.email_outlined),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            TextFormField(
               controller: apellido_pController,
               decoration: InputDecoration(
                 labelText: 'Apellido paterno',
                 hintText: 'Apellido paterno del usuario',
-                icon: Icon(Icons.email_outlined),
+                icon: Icon(Icons.person),
               ),
             ),
             SizedBox(height: 16.0),
+            TextFormField(
+              controller: apellido_mController,
+              decoration: InputDecoration(
+                labelText: 'Apellido materno',
+                hintText: 'Apellido materno del usuario',
+                icon: Icon(Icons.person),
+              ),
+            ),
+            SizedBox(height: 16.0),
+
             TextFormField(
               controller: codigoController,
               decoration: InputDecoration(
                 labelText: 'Codigo',
                 hintText: 'Codigo del usuario',
-                icon: Icon(Icons.email_outlined),
+                icon: Icon(Icons.person),
               ),
             ),
             SizedBox(height: 16.0),
@@ -204,18 +205,17 @@ class _CreateUsuarioState extends State<CreateUsuario> {
                   // Primero, carga la imagen en Firebase Storage
                   final downloadUrl = await _uploadImage();
                   usuarioController.CrearUsuario(
-                    nameController.text.trim(),
-                    apellido_mController.text.trim(),
-                    apellido_pController.text.trim(),
-                    codigoController.text.trim(),
-                    dniController.text.trim(),
-
-                    roleController.text.trim(),
-                    emailController.text.trim(),
-                    passwordController.text.trim(),
-                    confirmPasswordController.text.trim(),
-                    downloadUrl ??
-                        "", // Si downloadUrl es nulo, se usa una cadena vacía como valor predeterminado
+                    nameController.text.trim(), // Nombre
+                    selectedRole ?? "", // Rol seleccionado
+                    emailController.text.trim(), // Correo
+                    passwordController.text.trim(), // Contraseña
+                    confirmPasswordController.text
+                        .trim(), // Confirmación de contraseña
+                    apellido_pController.text.trim(), // Apellido paterno
+                    apellido_mController.text.trim(), // Apellido materno
+                    dniController.text.trim(), // DNI
+                    codigoController.text.trim(), // Código
+                    downloadUrl ?? "", // URL de la imagen
                   );
                   _navigateList(context); // Utiliza _navigateList aquí
                 },
