@@ -1,10 +1,10 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'dart:math' as math;
 
 import 'package:flutter_application_1/src/component/Sidebar.dart';
-import 'package:flutter_application_1/src/component/bottomNavigationBar.dart';
 import 'package:flutter_application_1/src/controller/UsuarioController.dart';
 import 'package:flutter_application_1/src/pages/usuario/EditUsuario.dart';
 import 'package:flutter_application_1/src/pages/usuario/UsuarioList.dart';
@@ -75,63 +75,66 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-           Text("Name",),
-            SizedBox(height: 4,),
-           Text(
-              "${(widget.list[widget.index]['name'] ?? 'Sin nombre').toUpperCase()} ${(widget.list[widget.index]['apellido_p'] ?? 'Sin apellido paterno').toUpperCase()} ${(widget.list[widget.index]['apellido_m'] ?? 'Sin apellido materno').toUpperCase()}",
-              style: _style(),
-            ),
-            SizedBox(height: 16,),
-
-            Text("Email", style: _style(),),
-            SizedBox(height: 4,),
-            Text(widget.list[widget.index]['email']?? 'No tienes email',),
-            SizedBox(height: 16,),
-
-            Row(
+    return BounceInRight(
+     
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+             Text("Name",),
+              SizedBox(height: 4,),
+             Text(
+                "${(widget.list[widget.index]['name'] ?? 'Sin nombre').toUpperCase()} ${(widget.list[widget.index]['apellido_p'] ?? 'Sin apellido paterno').toUpperCase()} ${(widget.list[widget.index]['apellido_m'] ?? 'Sin apellido materno').toUpperCase()}",
+                style: _style(),
+              ),
+              SizedBox(height: 16,),
+    
+              Text("Email", style: _style(),),
+              SizedBox(height: 4,),
+              Text(widget.list[widget.index]['email']?? 'No tienes email',),
+              SizedBox(height: 16,),
+    
+              Row(
+                children: [
+                  Text("Codigo U :", style: _style()),
+                  SizedBox(width: 4),
+                  Text(widget.list[widget.index]['codigo'] ?? 'No tienes codigo',),
+                  SizedBox(width: 16),
+                  Text("DNI :", style: _style()),
+                  SizedBox(width: 4),
+                  Text(widget.list[widget.index]['dni']?? 'No tienes dni',),
+                ],
+              ),
+              SizedBox(height: 16,),
+              Text("Location", style: _style(),),
+              SizedBox(height: 4,),
+              Text("Juliaca-puno PERU"),
+              SizedBox(height: 16,),
+    
+              Text("Telefono", style: _style(),),
+              SizedBox(height: 4,),
+              Text("916882598"),
+              SizedBox(height: 16,),
+    
+              Text("Rol", style: _style(),),
+              SizedBox(height: 4,),
+              Text(widget.list[widget.index]['role']?? 'No tienes rol',),
+              SizedBox(height: 16,),
+              Row(
               children: [
-                Text("Codigo U :", style: _style()),
+                Text("Created_at", style: _style()),
                 SizedBox(width: 4),
-                Text(widget.list[widget.index]['codigo'] ?? 'No tienes codigo',),
+                Text(DateFormat('dd/MM/yyyy').format(widget.list[widget.index]['created_at']?? 'No tienes fecha crea')),
                 SizedBox(width: 16),
-                Text("DNI :", style: _style()),
+                Text("Updated_at", style: _style()),
                 SizedBox(width: 4),
-                Text(widget.list[widget.index]['dni']?? 'No tienes dni',),
+                Text(DateFormat('dd/MM/yyyy').format(widget.list[widget.index]['updated_at']?? 'No tienes fecha edit')),
               ],
             ),
-            SizedBox(height: 16,),
-            Text("Location", style: _style(),),
-            SizedBox(height: 4,),
-            Text("Juliaca-puno PERU"),
-            SizedBox(height: 16,),
-
-            Text("Telefono", style: _style(),),
-            SizedBox(height: 4,),
-            Text("916882598"),
-            SizedBox(height: 16,),
-
-            Text("Rol", style: _style(),),
-            SizedBox(height: 4,),
-            Text(widget.list[widget.index]['role']?? 'No tienes rol',),
-            SizedBox(height: 16,),
-            Row(
-            children: [
-              Text("Created_at", style: _style()),
-              SizedBox(width: 4),
-              Text(DateFormat('dd/MM/yyyy').format(widget.list[widget.index]['created_at']?? 'No tienes fecha crea')),
-              SizedBox(width: 16),
-              Text("Updated_at", style: _style()),
-              SizedBox(width: 4),
-              Text(DateFormat('dd/MM/yyyy').format(widget.list[widget.index]['updated_at']?? 'No tienes fecha edit')),
-            ],
-          ),
-            Divider(color: Colors.grey,)
-        ],
+              Divider(color: Colors.grey,)
+          ],
+        ),
       ),
     );
   }
@@ -158,179 +161,195 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       imageProvider = AssetImage('assets/nofoto.jpg'); // Usar una imagen de respaldo si no hay foto
     }
 
-    return ClipPath(
-      clipper: MyClipper(),
-      child: Container(
-        padding: EdgeInsets.only(top: 0),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/fondologin2.jpg'), // Reemplaza 'tu_ruta_de_imagen' con la ruta de tu imagen de fondo
-            fit: BoxFit.cover,
-          ),
-          
-          ),
-        child: Stack(
-      children: <Widget>[
-        Positioned.fill(
-          child: Container(
-            // color: HexColor("#0e1b4d").withOpacity(0.9),
-             color: Color.fromARGB(255, 5, 27, 65).withOpacity(0.9),
-          ),
-        ),  
-        
-        Column(
-        
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    Icons.menu,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer(); // Abre el Drawer
-                  },
-                ),
-                Text(
-                  "Profile",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.notifications,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {},
-                )
-              ],
+    return SlideInUp(
+      child: ClipPath(
+        clipper: MyClipper(),
+        child: Container(
+          padding: EdgeInsets.only(top: 0),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/fondologin2.jpg'), // Reemplaza 'tu_ruta_de_imagen' con la ruta de tu imagen de fondo
+              fit: BoxFit.cover,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start, // Alinea los elementos en la parte superior
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                   Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 4), // Agregar borde blanco
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: imageProvider, // Asignar la variable imageProvider
+            
+            ),
+          child: Stack(
+        children: <Widget>[
+          Positioned.fill(
+            child: Container(
+              // color: HexColor("#0e1b4d").withOpacity(0.9),
+               color: Color.fromARGB(255, 5, 27, 65).withOpacity(0.9),
+            ),
+          ),  
+          
+          Column(
+          
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                      Icons.menu,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer(); // Abre el Drawer
+                    },
+                  ),
+                  Text(
+                    "Profile",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(
+                          Icons.notifications,
+                          color: Colors.white,
                         ),
+                        onPressed: () {},
                       ),
-                      child: FutureBuilder(
-                        future: precacheImage(imageProvider, context),
-                        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            // Muestra un indicador de carga mientras se carga la imagen
-                            return CircularProgressIndicator();
-                          } else {
-                            // La imagen se ha cargado, puedes mostrarla
-                            return Container(); // Opcional: Puedes quitar este contenedor si no necesitas mostrar nada adicional
-                          }
+                      // Espacio de 2 píxeles entre los iconos
+                      IconButton(
+                        icon: Icon(
+                          Icons.subdirectory_arrow_right_sharp,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/usuario');
                         },
                       ),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                     "${(widget.list[widget.index]['name'] ?? 'Sin nombre')}",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    )
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Text(
-                      "Schedule",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      "8",
-                      style: TextStyle(fontSize: 26, color: Colors.white),
-                    )
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Text(
-                      "Events",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      "12",
-                      style: TextStyle(fontSize: 26, color: Colors.white),
-                    )
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Text(
-                      "Routines",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      "4",
-                      style: TextStyle(fontSize: 26, color: Colors.white),
-                    )
-                  ],
-                ),
-                
-              ],
-            ),
-            SizedBox(
-              height: 2,
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: GestureDetector(
-                onTap: () {
-                  print("//TODO: button clicked");
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => EditUsuario(
-                      list: widget.list,
-                      index: widget.index,
-                    ),
-                  ));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 24, 16, 0),
-                  
-                  child: Transform.rotate(
-                    angle: (math.pi * 0.05),
-                    child: Container(
-                      width: 110,
-                      height: 32,
-                      child: Center(
-                        child: Text("Edit Profile",style: TextStyle(color: HexColor("#0e1b4d")),),
+                    ],
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start, // Alinea los elementos en la parte superior
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                     Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 4), // Agregar borde blanco
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: imageProvider, // Asignar la variable imageProvider
+                          ),
+                        ),
+                        child: FutureBuilder(
+                          future: precacheImage(imageProvider, context),
+                          builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              // Muestra un indicador de carga mientras se carga la imagen
+                              return CircularProgressIndicator();
+                            } else {
+                              // La imagen se ha cargado, puedes mostrarla
+                              return Container(); // Opcional: Puedes quitar este contenedor si no necesitas mostrar nada adicional
+                            }
+                          },
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(16)),
-                          boxShadow: [
-                            BoxShadow(color: Colors.black12, blurRadius: 20)
-                          ]),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                       "${(widget.list[widget.index]['name'] ?? 'Sin nombre')}",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: <Widget>[
+                      Text(
+                        "Schedule",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        "8",
+                        style: TextStyle(fontSize: 26, color: Colors.white),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: <Widget>[
+                      Text(
+                        "Events",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        "12",
+                        style: TextStyle(fontSize: 26, color: Colors.white),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: <Widget>[
+                      Text(
+                        "Routines",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        "4",
+                        style: TextStyle(fontSize: 26, color: Colors.white),
+                      )
+                    ],
+                  ),
+                  
+                ],
+              ),
+              SizedBox(
+                height: 2,
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: GestureDetector(
+                  onTap: () {
+                    print("//TODO: button clicked");
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => EditUsuario(
+                        list: widget.list,
+                        index: widget.index,
+                      ),
+                    ));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 24, 16, 0),
+                    
+                    child: Transform.rotate(
+                      angle: (math.pi * 0.05),
+                      child: Container(
+                        width: 110,
+                        height: 32,
+                        child: Center(
+                          child: Text("Edit Profile",style: TextStyle(color: HexColor("#0e1b4d")),),
+                        ),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black12, blurRadius: 20)
+                            ]),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
+           ],
+          ),
         ),
-         ],
-        ),
+        
       ),
-      
     );
   }
 }

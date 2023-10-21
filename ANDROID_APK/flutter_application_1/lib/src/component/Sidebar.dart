@@ -125,7 +125,6 @@ class _MyDrawerState extends State<MyDrawer> {
                   context, '/usuario', (route) => false);
             },
           ),
-
           Divider(),
           ListTile(
             title: Text('Logout'),

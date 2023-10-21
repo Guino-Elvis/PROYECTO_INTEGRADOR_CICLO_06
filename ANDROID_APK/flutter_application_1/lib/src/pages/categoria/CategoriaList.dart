@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/component/BottomNavBarFlex.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/config/ConfigApi.dart';
 import 'package:flutter_application_1/src/pages/categoria/CrearCategoriaPage.dart';
@@ -69,13 +70,15 @@ Future<List<dynamic>> getData() async {
       ),
       drawer: MyDrawer(accountName: "Usuario"),
         // drawer: MyDrawer(accountName: "Nombre Usuario", accountEmail: "usuario@example.com"), // Aquí proporciona los datos necesarios
-      body: data == null
+      body : data == null 
+      
           ? Center(
               child: CircularProgressIndicator(),
             )
           : ItemList(
               list: data,
             ),
+         
     );
   }
 }

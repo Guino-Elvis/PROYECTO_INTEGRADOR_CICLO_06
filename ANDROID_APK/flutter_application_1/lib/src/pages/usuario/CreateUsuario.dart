@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/controller/UsuarioController.dart';
@@ -92,169 +93,173 @@ class _CreateUsuarioState extends State<CreateUsuario> {
       ),
       // drawer: MyDrawer(accountName: "Usuario"),
 
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: ListView(
-          children: [
-            TextFormField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: 'Nombre',
-                hintText: 'Nombre del usuario',
-                icon: Icon(Icons.person_add),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            TextFormField(
-              controller: apellido_pController,
-              decoration: InputDecoration(
-                labelText: 'Apellido paterno',
-                hintText: 'Apellido paterno del usuario',
-                icon: Icon(Icons.person),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            TextFormField(
-              controller: apellido_mController,
-              decoration: InputDecoration(
-                labelText: 'Apellido materno',
-                hintText: 'Apellido materno del usuario',
-                icon: Icon(Icons.person),
-              ),
-            ),
-            SizedBox(height: 16.0),
-
-            TextFormField(
-              controller: codigoController,
-              decoration: InputDecoration(
-                labelText: 'Codigo',
-                hintText: 'Codigo del usuario',
-                icon: Icon(Icons.person),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            TextFormField(
-              controller: dniController,
-              decoration: InputDecoration(
-                labelText: 'Dni',
-                hintText: 'Dni del usuario',
-                icon: Icon(Icons.email_outlined),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            DropdownButtonFormField<String>(
-              value: selectedRole,
-              onChanged: (String? newValue) {
-                // Aquí puedes manejar el cambio de valor seleccionado
-                setState(() {
-                  selectedRole = newValue;
-                });
-              },
-              items: roles.map((String role) {
-                return DropdownMenuItem<String>(
-                  value: role,
-                  child: Text(role),
-                );
-              }).toList(),
-              decoration: InputDecoration(
-                labelText: 'Rol',
-                hintText: 'Selecciona un rol',
-                icon: Icon(Icons.category_outlined),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            TextFormField(
-              controller: emailController,
-              decoration: InputDecoration(
-                labelText: 'Gmail -o- Hotmail ***',
-                hintText: 'Correo del usuario',
-                icon: Icon(Icons.email_outlined),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            TextFormField(
-              controller: passwordController,
-              decoration: InputDecoration(
-                labelText: 'Contraseña',
-                hintText: 'Contraseña del usuario',
-                icon: Icon(Icons.category_outlined),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            TextFormField(
-              controller: confirmPasswordController,
-              decoration: InputDecoration(
-                labelText: 'Confirma la contraseña',
-                hintText: 'Confirma la contraseña del usuario',
-                icon: Icon(Icons.password),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _pickImage,
-              child: Text('Seleccionar Imagen'),
-            ),
-            if (selectedImage != null) Image.file(selectedImage!),
-            SizedBox(height: 32.0),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                ),
-                onPressed: () async {
-                  // Primero, carga la imagen en Firebase Storage
-                  final downloadUrl = await _uploadImage();
-                  usuarioController.CrearUsuario(
-                    nameController.text.trim(), // Nombre
-                    selectedRole ?? "", // Rol seleccionado
-                    emailController.text.trim(), // Correo
-                    passwordController.text.trim(), // Contraseña
-                    confirmPasswordController.text
-                        .trim(), // Confirmación de contraseña
-                    apellido_pController.text.trim(), // Apellido paterno
-                    apellido_mController.text.trim(), // Apellido materno
-                    dniController.text.trim(), // DNI
-                    codigoController.text.trim(), // Código
-                    downloadUrl ?? "", // URL de la imagen
-                  );
-                  _navigateList(context); // Utiliza _navigateList aquí
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            50), // Agrega un BorderRadius de 10
-                      ),
-                      padding: EdgeInsets.all(10.0),
-                      child: Text(
-                        'CREAR',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-            SizedBox(
-                width:
-                    16), // Agrega un espacio entre el texto y el botón "Cancelar"
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/usuario');
-                },
-                style: ElevatedButton.styleFrom(
-                  primary:
-                      Colors.red, // Color de fondo para el botón "Cancelar"
-                ),
-                child: Text(
-                  "Cancelar",
-                  style: TextStyle(
-                    color: Colors.white,
+      body: BounceInRight(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: SlideInUp(
+            child: ListView(
+              children: [
+                TextFormField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    labelText: 'Nombre',
+                    hintText: 'Nombre del usuario',
+                    icon: Icon(Icons.person_add),
                   ),
-                )),
-          ],
+                ),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: apellido_pController,
+                  decoration: InputDecoration(
+                    labelText: 'Apellido paterno',
+                    hintText: 'Apellido paterno del usuario',
+                    icon: Icon(Icons.person),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: apellido_mController,
+                  decoration: InputDecoration(
+                    labelText: 'Apellido materno',
+                    hintText: 'Apellido materno del usuario',
+                    icon: Icon(Icons.person),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                
+                TextFormField(
+                  controller: codigoController,
+                  decoration: InputDecoration(
+                    labelText: 'Codigo',
+                    hintText: 'Codigo del usuario',
+                    icon: Icon(Icons.person),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: dniController,
+                  decoration: InputDecoration(
+                    labelText: 'Dni',
+                    hintText: 'Dni del usuario',
+                    icon: Icon(Icons.email_outlined),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                DropdownButtonFormField<String>(
+                  value: selectedRole,
+                  onChanged: (String? newValue) {
+                    // Aquí puedes manejar el cambio de valor seleccionado
+                    setState(() {
+                      selectedRole = newValue;
+                    });
+                  },
+                  items: roles.map((String role) {
+                    return DropdownMenuItem<String>(
+                      value: role,
+                      child: Text(role),
+                    );
+                  }).toList(),
+                  decoration: InputDecoration(
+                    labelText: 'Rol',
+                    hintText: 'Selecciona un rol',
+                    icon: Icon(Icons.category_outlined),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Gmail -o- Hotmail ***',
+                    hintText: 'Correo del usuario',
+                    icon: Icon(Icons.email_outlined),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Contraseña',
+                    hintText: 'Contraseña del usuario',
+                    icon: Icon(Icons.category_outlined),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: confirmPasswordController,
+                  decoration: InputDecoration(
+                    labelText: 'Confirma la contraseña',
+                    hintText: 'Confirma la contraseña del usuario',
+                    icon: Icon(Icons.password),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: _pickImage,
+                  child: Text('Seleccionar Imagen'),
+                ),
+                if (selectedImage != null) Image.file(selectedImage!),
+                SizedBox(height: 32.0),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue,
+                    ),
+                    onPressed: () async {
+                      // Primero, carga la imagen en Firebase Storage
+                      final downloadUrl = await _uploadImage();
+                      usuarioController.CrearUsuario(
+                        nameController.text.trim(), // Nombre
+                        selectedRole ?? "", // Rol seleccionado
+                        emailController.text.trim(), // Correo
+                        passwordController.text.trim(), // Contraseña
+                        confirmPasswordController.text
+                            .trim(), // Confirmación de contraseña
+                        apellido_pController.text.trim(), // Apellido paterno
+                        apellido_mController.text.trim(), // Apellido materno
+                        dniController.text.trim(), // DNI
+                        codigoController.text.trim(), // Código
+                        downloadUrl ?? "", // URL de la imagen
+                      );
+                      _navigateList(context); // Utiliza _navigateList aquí
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                50), // Agrega un BorderRadius de 10
+                          ),
+                          padding: EdgeInsets.all(10.0),
+                          child: Text(
+                            'CREAR',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+                SizedBox(
+                    width:
+                        16), // Agrega un espacio entre el texto y el botón "Cancelar"
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/usuario');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary:
+                          Colors.red, // Color de fondo para el botón "Cancelar"
+                    ),
+                    child: Text(
+                      "Cancelar",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    )),
+              ],
+            ),
+          ),
         ),
       ),
     );

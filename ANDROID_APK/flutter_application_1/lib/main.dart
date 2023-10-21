@@ -7,18 +7,24 @@ import 'package:flutter_application_1/src/pages/auth/RegisterPage.dart';
 import 'package:flutter_application_1/src/pages/usuario/UsuarioList.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:flutter_application_1/src/pages/categoria/CategoriaList.dart';
+import 'package:flutter_application_1/src/sql/ApiCacheDatabase.dart';
 import 'package:flutter_application_1/src/view/HomePage.dart';
 import 'package:provider/provider.dart';
-
+import 'package:sqflite/sqflite.dart';
 
 // void main() {
 //   runApp(const MyApp());
 // }
+
+
 Widget _defaultHome =  const LoginPage();
 
 void main() async {
- 
   WidgetsFlutterBinding.ensureInitialized();
+ // Initialize sqflite
+final apiCacheDatabase = ApiCacheDatabase();
+  await apiCacheDatabase.open();
+
   await Firebase.initializeApp(
     options: FirebaseOptions(
         apiKey: "AIzaSyCVq_E2pZ5FD8Q6RWSKEmnjmZ8WVrh7PkA",

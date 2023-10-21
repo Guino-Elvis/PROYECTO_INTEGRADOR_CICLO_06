@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/src/component/BottomNavBarFlex.dart';
+import 'package:flutter_application_1/src/component/BottomNavBarFlex2.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/service/authService/ApiService.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
@@ -23,56 +25,71 @@ class _HomePageState extends State<HomePage> {
     // Si deseas que las superposiciones de la interfaz de usuario sean visibles (por ejemplo, la barra de estado)
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: SystemUiOverlay.values);
   }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text('Home Page'),
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              ShareApiTokenService.logout(context);
-            },
-            icon: const Icon(
-              Icons.logout,
-              color: Colors.black,
-            ),
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    key: _scaffoldKey,
+    appBar: AppBar(
+      title: Text('Home Page'),
+      elevation: 0,
+      actions: [
+        IconButton(
+          onPressed: () {
+            ShareApiTokenService.logout(context);
+          },
+          icon: const Icon(
+            Icons.logout,
+            color: Colors.black,
           ),
-        ],
-      ),
-      drawer: MyDrawer(accountName: "Usuario"),
-      // drawer: MyDrawer(accountName: "Usuario"),
-      // drawer: MyDrawer(accountName: "Usuario", accountEmail: "usuario@example.com"),
-      backgroundColor: Colors.grey[200],
-      body: userProfile(),
-    );
-  }
+        ),
+      ],
+    ),
+    drawer: MyDrawer(accountName: "Usuario"),
+    backgroundColor: Colors.grey[200],
+    body: Column(
+      children: [
+        Expanded(
+          child: userProfile(),
+        ),
+        Container(
+          height: 60.0, // Ajusta la altura deseada para el BottomNavBarFlex
+          child: BottomNavBarFlex2(
+            onPressedSpecialButtonItem: () {},
+            onPressedSpecialButtonExel: () {},
+            onPressedSpecialButtonPdf: () {},
+            buttonColor: Colors.green,
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
-  Widget userProfile() {
-    return FutureBuilder<List<String>>(
-      future: ApiService.getUserProfile(),
-      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            final emailList = snapshot.data!;
 
-            return ListView.builder(
-              itemCount: emailList.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(emailList[index], style: TextStyle(fontSize: 16)),
-                );
-              },
-            );
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error.toString()}'));
-          }
+Widget userProfile() {
+  return FutureBuilder<List<String>>(
+    future: ApiService.getUserProfile(),
+    builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+      if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.hasData) {
+          final emailList = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: emailList.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(emailList[index], style: TextStyle(fontSize: 16)),
+              );
+            },
+          );
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error.toString()}'));
         }
+      }
 
-        return Center(child: CircularProgressIndicator());
-      },
-    );
-  }
+      return Center(child: CircularProgressIndicator());
+    },
+  );
+}
+
 }

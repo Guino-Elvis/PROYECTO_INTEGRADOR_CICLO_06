@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 class LeftNotifier with ChangeNotifier {
   double _left = 0.0;
   bool _showButton = false;
+ 
 
   double get left => _left;
   set left(double value) {
@@ -22,6 +23,10 @@ class LeftNotifier with ChangeNotifier {
   }
   
   bool get showButton => _showButton;
+    set showButton(bool value) {
+    _showButton = value;
+    notifyListeners();
+  }
 
   
 }

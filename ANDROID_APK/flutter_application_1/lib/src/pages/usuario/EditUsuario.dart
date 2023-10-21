@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/controller/UsuarioController.dart';
@@ -144,218 +145,244 @@ class _EditUsuarioState extends State<EditUsuario> {
       appBar: AppBar(
         title: Text("Edit Usuario"),
       ),
-      body: Form(
-        child: ListView(
-          padding: const EdgeInsets.all(12.0),
-          children: <Widget>[
-            Column(
+      body: SlideInUp(
+        child: Form(
+          child: BounceInRight(
+            child: ListView(
+              padding: const EdgeInsets.all(12.0),
               children: <Widget>[
-                Visibility(
-                  visible: false,
-                  child: ListTile(
-                    leading: Icon(Icons.title, color: Colors.black),
-                    title: TextFormField(
-                      controller: controllerid,
-                      decoration: InputDecoration(
-                        hintText: "id",
-                        labelText: "id",
+                Column(
+                  children: <Widget>[
+                    Visibility(
+                      visible: false,
+                      child: ListTile(
+                        leading: Icon(Icons.title, color: Colors.black),
+                        title: TextFormField(
+                          controller: controllerid,
+                          decoration: InputDecoration(
+                            hintText: "id",
+                            labelText: "id",
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(
-                      8.0), // Agrega márgenes alrededor de la imagen
-                  child: CachedNetworkImage(
-                    imageUrl: usuarioImageURL.isNotEmpty
-                        ? usuarioImageURL
-                        : 'assets/nofoto.jpg',
-                    placeholder: (context, url) =>
-                        CircularProgressIndicator(), // Puedes personalizar el indicador de carga
-                    errorWidget: (context, url, error) =>
-                        Image.asset('assets/nofoto.jpg'),
-                    width: 80.0,
-                    height: 80.0,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.person, color: Colors.black),
-                  title: TextFormField(
-                    controller: controllername,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "El campo no puede estar vacío";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "nombre",
-                      labelText: "nombre del usuario",
+                    // Container(
+                    //   margin: EdgeInsets.all(
+                    //       8.0), // Agrega márgenes alrededor de la imagen
+                    //   child: CachedNetworkImage(
+                    //     imageUrl: usuarioImageURL.isNotEmpty
+                    //         ? usuarioImageURL
+                    //         : 'assets/nofoto.jpg',
+                    //     placeholder: (context, url) =>
+                    //         CircularProgressIndicator(), // Puedes personalizar el indicador de carga
+                    //     errorWidget: (context, url, error) =>
+                    //         Image.asset('assets/nofoto.jpg'),
+                    //     width: 80.0,
+                    //     height: 80.0,
+                    //     fit: BoxFit.cover,
+                    //   ),
+                    // ),
+                    Card(
+                        elevation: 4, // Define la elevación de la sombra negra
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0), // Define la forma del Card
+                        ),
+                        child: Container(
+                          width: 80.0,
+                          height: 80.0,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0), // Hace que la imagen esté recortada con bordes redondeados
+                            child: CachedNetworkImage(
+                              imageUrl: usuarioImageURL.isNotEmpty
+                                  ? usuarioImageURL
+                                  : 'assets/nofoto.jpg',
+                              placeholder: (context, url) => CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  Image.asset('assets/nofoto.jpg'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ListTile(
+                      leading: Icon(Icons.person, color: Colors.black),
+                      title: TextFormField(
+                        controller: controllername,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "El campo no puede estar vacío";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: "nombre",
+                          labelText: "nombre del usuario",
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.person, color: Colors.black),
-                  title: TextFormField(
-                    controller: controllerapellido_p,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "El campo no puede estar vacío";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Apellido paterno",
-                      labelText: "Apellido paterno del usuario",
+                    ListTile(
+                      leading: Icon(Icons.person, color: Colors.black),
+                      title: TextFormField(
+                        controller: controllerapellido_p,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "El campo no puede estar vacío";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Apellido paterno",
+                          labelText: "Apellido paterno del usuario",
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.person, color: Colors.black),
-                  title: TextFormField(
-                    controller: controllerapellido_m,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "El campo no puede estar vacío";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Apellido materno",
-                      labelText: "Apellido materno del usuario",
+                    ListTile(
+                      leading: Icon(Icons.person, color: Colors.black),
+                      title: TextFormField(
+                        controller: controllerapellido_m,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "El campo no puede estar vacío";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Apellido materno",
+                          labelText: "Apellido materno del usuario",
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.person, color: Colors.black),
-                  title: TextFormField(
-                    controller: controllerdni,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "El campo no puede estar vacío";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "DNI",
-                      labelText: "Dni del usuario",
+                    ListTile(
+                      leading: Icon(Icons.person, color: Colors.black),
+                      title: TextFormField(
+                        controller: controllerdni,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "El campo no puede estar vacío";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: "DNI",
+                          labelText: "Dni del usuario",
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.person, color: Colors.black),
-                  title: TextFormField(
-                    controller: controllercodigo,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "El campo no puede estar vacío";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Codigo",
-                      labelText: "codigo del usuario",
+                    ListTile(
+                      leading: Icon(Icons.person, color: Colors.black),
+                      title: TextFormField(
+                        controller: controllercodigo,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "El campo no puede estar vacío";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Codigo",
+                          labelText: "codigo del usuario",
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left:16.0,right: 20.0), // Margen izquierdo para alinear visualmente con los otros campos
-                  child: DropdownButtonFormField<String>(
-                    value: selectedRole,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedRole = newValue;
-                      });
-                    },
-                    items: roles.map((String role) {
-                      return DropdownMenuItem<String>(
-                        value: role,
-                        child: Text(role),
-                      );
-                    }).toList(),
-                    decoration: InputDecoration(
-                      labelText: 'Rol',
-                      hintText: 'Selecciona un rol',
-                      icon: Icon(Icons.category_outlined),
+                    Container(
+                      margin: EdgeInsets.only(left:16.0,right: 20.0), // Margen izquierdo para alinear visualmente con los otros campos
+                      child: DropdownButtonFormField<String>(
+                        value: selectedRole,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedRole = newValue;
+                          });
+                        },
+                        items: roles.map((String role) {
+                          return DropdownMenuItem<String>(
+                            value: role,
+                            child: Text(role),
+                          );
+                        }).toList(),
+                        decoration: InputDecoration(
+                          labelText: 'Rol',
+                          hintText: 'Selecciona un rol',
+                          icon: Icon(Icons.category_outlined),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.person, color: Colors.black),
-                  title: TextFormField(
-                    controller: controlleremail,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "El campo no puede estar vacío";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Email",
-                      labelText: "Correo electronico de usuario",
+                    ListTile(
+                      leading: Icon(Icons.person, color: Colors.black),
+                      title: TextFormField(
+                        controller: controlleremail,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "El campo no puede estar vacío";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Email",
+                          labelText: "Correo electronico de usuario",
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.person, color: Colors.black),
-                  title: TextFormField(
-                    controller: controllerpassword,
-                    obscureText: true, // Esto ocultará la contraseña
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "El campo no puede estar vacío";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Contraseña",
-                      labelText: "Contraseña de usuario",
+                    ListTile(
+                      leading: Icon(Icons.person, color: Colors.black),
+                      title: TextFormField(
+                        controller: controllerpassword,
+                        obscureText: true, // Esto ocultará la contraseña
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "El campo no puede estar vacío";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Contraseña",
+                          labelText: "Contraseña de usuario",
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                Divider(
-                  height: 1.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                ),
-                SizedBox(height: 16.0),
-                SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: _pickImage,
-                  child: Container(child: Text("Cambiar Foto")),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.blueAccent,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                    Divider(
+                      height: 1.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                    ),
+                    SizedBox(height: 16.0),
+                    SizedBox(height: 16.0),
                     ElevatedButton(
+                      onPressed: _pickImage,
+                      child: Container(child: Text("Cambiar Foto")),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.blue,
-                      ),
-                      onPressed: () {
-                        _updateImageInFirebase();
-                      },
-                      child: Container(child: Text("Editar")),
-                    ),
-                    SizedBox(width: 16), // Agrega un espacio entre los botones
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/usuario');
-                      },
-                      child: Text("Cancelar"),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.red,
+                        primary: Colors.blueAccent,
                       ),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.blue,
+                          ),
+                          onPressed: () {
+                            _updateImageInFirebase();
+                          },
+                          child: Container(child: Text("Editar")),
+                        ),
+                        SizedBox(width: 16), // Agrega un espacio entre los botones
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/usuario');
+                          },
+                          child: Text("Cancelar"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                          ),
+                        ),
+                      ],
+                    )
                   ],
-                )
+                ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
