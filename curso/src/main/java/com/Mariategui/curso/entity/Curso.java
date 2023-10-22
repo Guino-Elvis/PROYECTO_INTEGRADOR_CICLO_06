@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Transient;
 import lombok.Data;
 
@@ -29,5 +30,10 @@ public class Curso {
 
     public Curso() {
         this.costo = (double) 0;
+    }
+
+    @PreUpdate
+    private void preUpdate() {
+        updated_at = LocalDateTime.now();
     }
 }

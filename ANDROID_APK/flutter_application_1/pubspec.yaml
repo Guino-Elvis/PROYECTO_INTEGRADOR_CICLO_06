@@ -35,7 +35,7 @@ dependencies:
   firebase_storage: ^11.2.8
   image_picker: ^0.8.9
   cached_network_image: ^3.3.0
-  #api_cache_manager: ^1.0.2
+  api_cache_manager: ^1.0.2
   snippet_coder_utils: ^1.0.13
   hexcolor: ^3.0.1
   flutter_slidable: ^3.0.0
@@ -45,6 +45,7 @@ dependencies:
   sqflite: ^2.0.0
   permission_handler: ^11.0.1
   android_path_provider: ^0.3.0
+  shared_preferences: ^2.2.2
   
 
   # The following adds the Cupertino Icons font to your application.

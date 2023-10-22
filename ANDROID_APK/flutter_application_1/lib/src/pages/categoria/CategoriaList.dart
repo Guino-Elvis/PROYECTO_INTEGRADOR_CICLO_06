@@ -80,6 +80,14 @@ class _CategoriaListtState extends State<CategoriaList> {
     initializeAsyncState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+
+    // Asegúrate de restaurar el comportamiento predeterminado al salir de la pantalla
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+        overlays: SystemUiOverlay.values);
+  }
   Future<void> initializeAsyncState() async {
     final dir = await getApplicationDocumentsDirectory();
     excelFile = File('${dir.path}/data.xlsx');
@@ -90,7 +98,9 @@ class _CategoriaListtState extends State<CategoriaList> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+    
         appBar: AppBar(
+          
           title: isSearching
               ? TextField(
                   controller: searchController,
@@ -124,6 +134,7 @@ class _CategoriaListtState extends State<CategoriaList> {
         ),
         drawer: MyDrawer(accountName: "Categoria"),
         body: Column(
+          
           children: [
             Expanded(
               child: Container(
@@ -134,6 +145,7 @@ class _CategoriaListtState extends State<CategoriaList> {
               ),
             ),
             Container(
+           
               height: 60.0, // Ajusta la altura deseada para el BottomNavBarFlex
               child: BottomNavBarFlex2(
                 onPressedSpecialButtonItem: () {

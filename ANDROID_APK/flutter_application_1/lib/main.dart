@@ -8,7 +8,9 @@ import 'package:flutter_application_1/src/pages/usuario/UsuarioList.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:flutter_application_1/src/pages/categoria/CategoriaList.dart';
 import 'package:flutter_application_1/src/sql/ApiCacheDatabase.dart';
+import 'package:flutter_application_1/src/view/AdminHomePage.dart';
 import 'package:flutter_application_1/src/view/HomePage.dart';
+import 'package:flutter_application_1/src/view/UserHomePage.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -72,6 +74,10 @@ class MyApp extends StatelessWidget {
         '/category': (context) => const CategoriaList(),
         '/alumno': (context) => const AlumnoList(),
         '/usuario': (context) => const UsuarioList(),
+        '/admin_home': (context) => AdminHomePage(),
+        '/docente_home': (context) => const UsuarioList(),
+        '/panadero_home': (context) => const UsuarioList(),
+        '/user_home': (context) =>  UserHomePage(),
         },
       // home: CategoriaList(),
     );

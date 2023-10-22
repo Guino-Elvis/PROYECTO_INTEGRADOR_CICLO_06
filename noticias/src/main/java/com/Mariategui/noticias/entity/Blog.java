@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Transient;
 import lombok.Data;
 
@@ -29,5 +30,10 @@ public class Blog {
     private LocalDateTime updated_at = LocalDateTime.now();
     @Transient
     private CategoriaBlog categoriaBlog;
+
+    @PreUpdate
+    private void preUpdate() {
+        updated_at = LocalDateTime.now();
+    }
 
 }

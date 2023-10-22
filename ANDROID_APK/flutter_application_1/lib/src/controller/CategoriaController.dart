@@ -12,7 +12,7 @@ import 'package:pdf/widgets.dart' as pw;
 class CategoriaController {
     Future<List<dynamic>> getData() async {
       final response =
-          await http.get(Uri.parse(ConfigApi.buildUrl('/auth/list')));
+          await http.get(Uri.parse(ConfigApi.buildUrl('/categoriablog')));
       return json.decode(response.body);
     }
 
@@ -146,7 +146,7 @@ Future<void> exportDataToPDF() async {
               pw.Table.fromTextArray(context: context, data: [
                 ['id', 'titulo', 'descripccion','created_at', 'updated_at'],
                 for (var item in data)
-                  [item['id'], item['titulo'], item['descripccio'], item['created_at'], item['updated_at']],
+                  [item['id'], item['titulo'], item['descripccion'], item['created_at'], item['updated_at']],
               ]),
             ],
           );

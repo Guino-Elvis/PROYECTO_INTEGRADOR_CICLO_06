@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/src/component/BottomNavBarFlex.dart';
 import 'package:flutter_application_1/src/component/BottomNavBarFlex2.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/service/authService/ApiService.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 
 
-class HomePage extends StatefulWidget {
+class UserHomePage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _UserHomePageState createState() => _UserHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _UserHomePageState extends State<UserHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState();
   @override
@@ -30,7 +29,7 @@ Widget build(BuildContext context) {
   return Scaffold(
     key: _scaffoldKey,
     appBar: AppBar(
-      title: Text('Home Page h'),
+      title: Text('Home Page User'),
       elevation: 0,
       actions: [
         IconButton(

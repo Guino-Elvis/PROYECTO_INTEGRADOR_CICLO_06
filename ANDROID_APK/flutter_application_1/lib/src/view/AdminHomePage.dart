@@ -7,12 +7,12 @@ import 'package:flutter_application_1/src/service/authService/ApiService.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 
 
-class HomePage extends StatefulWidget {
+class AdminHomePage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _AdminHomePageState createState() => _AdminHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _AdminHomePageState extends State<AdminHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState();
   @override
@@ -30,7 +30,7 @@ Widget build(BuildContext context) {
   return Scaffold(
     key: _scaffoldKey,
     appBar: AppBar(
-      title: Text('Home Page h'),
+      title: Text('Home Page admin'),
       elevation: 0,
       actions: [
         IconButton(
