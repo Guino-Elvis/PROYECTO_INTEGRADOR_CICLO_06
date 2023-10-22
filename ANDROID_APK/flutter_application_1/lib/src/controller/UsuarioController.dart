@@ -11,6 +11,13 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 class UsuarioController {
+
+    Future<List<dynamic>> getData() async {
+      final response =
+          await http.get(Uri.parse(ConfigApi.buildUrl('/auth/list')));
+      return json.decode(response.body);
+    }
+
   Future<http.Response> CrearUsuario(
     String nameController,
     String roleController,
@@ -115,65 +122,25 @@ class UsuarioController {
     return response;
   }
 
-  Future<List<dynamic>> getData() async {
-    final response =
-        await http.get(Uri.parse(ConfigApi.buildUrl('/auth/list')));
-    final responseData = json.decode(response.body);
-    // Itera sobre los elementos y convierte las fechas de cadenas a objetos DateTime
-    for (var item in responseData) {
-      if (item['created_at'] is String) {
-        item['created_at'] = DateTime.parse(item['created_at']);
-      }
-      if (item['updated_at'] is String) {
-        item['updated_at'] = DateTime.parse(item['updated_at']);
-      }
-      // Repite el proceso para otras fechas si es necesario.
-    }
-    return responseData;
-  }
-
-//  Future<void> exportDataToExcel() async {
-//   try {
-//     List<dynamic> data = await getData();
-//     final excel = Excel.createExcel();
-    
-//     final sheet = excel['Sheet1'];
-//     sheet.appendRow(['id','codigo','role','email', 'apellido_p', 'apellido_m','name', 'dni' ,'created_at' ,'updated_at','foto']); 
-//     for (var item in data) {
-//       sheet.appendRow([item['id'], item['codigo'], item['role'], item['email'],item['apellido_p'], item['apellido_m'], item['name'], item['dni'], item['created_at'], item['updated_at'], item['foto']]); 
-//     }
-
-//     final dir = await getApplicationDocumentsDirectory();
-//     final excelFile = File('${dir.path}/data.xlsx');
-
-//     final excelData = excel.encode();
-//     if (excelData != null) {
-//       await excelFile.writeAsBytes(excelData); // Use await to ensure the file is fully written
-//       print("Excel file saved at: ${excelFile.path}");
-//     } else {
-//       print("Excel data is null");
-//     }
-//   } catch (e) {
-//     print("Error during export: $e");
-//     throw e;
-//   }
-// }
-
-
 Future<void> exportDataToExcel() async {
   try {
     List<dynamic> data = await getData();
     final excel = Excel.createExcel();
     
     final sheet = excel['Sheet1'];
-    sheet.appendRow(['id','codigo','role','email', 'apellido_p', 'apellido_m','name', 'dni' ,'created_at' ,'updated_at','foto']); 
+    sheet.appendRow(['id','codigo','role','email', 'apellido_p', 'apellido_m','name', 'dni' ,'created_at' ,'updated_at']); 
     for (var item in data) {
-      sheet.appendRow([item['id'], item['codigo'], item['role'], item['email'],item['apellido_p'], item['apellido_m'], item['name'], item['dni'], item['created_at'], item['updated_at'], item['foto']]); 
+      // Obtener solo el año, mes y día de created_at y updated_at
+      DateTime createdAt = DateTime.parse(item['created_at']);
+      DateTime updatedAt = DateTime.parse(item['updated_at']);
+      String createdAtFormatted = "${createdAt.year}-${createdAt.month}-${createdAt.day}";
+      String updatedAtFormatted = "${updatedAt.year}-${updatedAt.month}-${updatedAt.day}";
+
+      sheet.appendRow([item['id'], item['codigo'], item['role'], item['email'], item['apellido_p'], item['apellido_m'], item['name'], item['dni'], createdAtFormatted, updatedAtFormatted]); 
     }
 
-   final dir = await AndroidPathProvider.downloadsPath;
-   final excelFile = File('$dir/data.xlsx');
-    // final excelFile = File('${dir.path}/data.xlsx');
+    final dir = await AndroidPathProvider.downloadsPath;
+    final excelFile = File('$dir/data.xlsx');
 
     final excelData = excel.encode();
     if (excelData != null) {
@@ -188,21 +155,33 @@ Future<void> exportDataToExcel() async {
   }
 }
 
+
 Future<void> exportDataToPDF() async {
   try {
     List<dynamic> data = await getData();
     
     final pdf = pw.Document();
 
-    pdf.addPage(pw.MultiPage(
-      build: (context) => [
-        pw.Table.fromTextArray(context: context, data: [
-          ['id', 'codigo', 'role', 'email', 'apellido_p', 'apellido_m', 'name', 'dni', 'created_at', 'updated_at', 'foto'],
-          for (var item in data)
-            [item['id'], item['codigo'], item['role'], item['email'], item['apellido_p'], item['apellido_m'], item['name'], item['dni'], item['created_at'], item['updated_at'], item['foto']],
-        ]),
-      ],
-    ));
+    // Establecer el tamaño de la página en orientación horizontal
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4.copyWith(
+          width: PdfPageFormat.a4.height,
+          height: PdfPageFormat.a4.width,
+        ),
+        build: (context) {
+          return pw.Column(
+            children: [
+              pw.Table.fromTextArray(context: context, data: [
+                ['id', 'codigo', 'role', 'email', 'apellido_p', 'apellido_m', 'name', 'dni', 'created_at', 'updated_at'],
+                for (var item in data)
+                  [item['id'], item['codigo'], item['role'], item['email'], item['apellido_p'], item['apellido_m'], item['name'], item['dni'], item['created_at'], item['updated_at']],
+              ]),
+            ],
+          );
+        },
+      ),
+    );
 
     final dir = await AndroidPathProvider.downloadsPath;
     final pdfFile = File('$dir/data.pdf');
@@ -214,6 +193,5 @@ Future<void> exportDataToPDF() async {
     throw e;
   }
 }
-
 
 }
