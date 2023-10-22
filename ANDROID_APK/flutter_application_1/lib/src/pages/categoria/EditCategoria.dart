@@ -1,13 +1,14 @@
-// ignore_for_file: unnecessary_null_comparison
-
+import 'package:animate_do/animate_do.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/controller/CategoriaController.dart';
+
 import 'package:flutter_application_1/src/pages/categoria/CategoriaList.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+
 
 class EditCategoria extends StatefulWidget {
   final List list;
@@ -46,12 +47,15 @@ class _EditCategoriaState extends State<EditCategoria> {
     controllerid =
         TextEditingController(text: widget.list[widget.index]['id'].toString());
     controllertitulo = TextEditingController(
-        text: widget.list[widget.index]['titulo'].toString());
+        text: widget.list[widget.index]['titulo']?.toString() ??
+            'titulo no especificado');
     controllerdescripccion = TextEditingController(
-        text: widget.list[widget.index]['descripccion'].toString());
-    // Obtiene la URL de la imagen de la categoría que estás editando
-    categoriaImageURL = widget.list[widget.index]['foto'];
-    // Inicializa selectedImage con la URL de la foto existente
+        text: widget.list[widget.index]['descripccion']?.toString() ??
+            'descripcion no especificado');
+    categoriaImageURL = widget.list[widget.index]['foto'] != null
+        ? widget.list[widget.index]['foto'].toString()
+        : 'assets/nofoto.jpg';
+
     selectedImage = File(categoriaImageURL);
   }
 
@@ -63,18 +67,15 @@ class _EditCategoriaState extends State<EditCategoria> {
         selectedImage = File(image.path);
       });
     } else {
-      // El usuario no seleccionó una nueva imagen.
     }
   }
 
   Future<void> _updateImageInFirebase() async {
-    String newImageUrl = widget.list[widget.index]
-        ['foto']; // Por defecto, se mantiene la imagen existente
-
+    String newImageUrl =
+        widget.list[widget.index]['foto'] ?? ""; // Default to an empty string
     if (selectedImage != null) {
-      final firebaseStorageReference = FirebaseStorage.instance
-          .ref()
-          .child('categoriablog/${DateTime.now()}.png');
+      final firebaseStorageReference =
+          FirebaseStorage.instance.ref().child('categoriablog/${DateTime.now()}.png');
 
       try {
         await firebaseStorageReference.putFile(selectedImage!);
@@ -82,11 +83,11 @@ class _EditCategoriaState extends State<EditCategoria> {
 
         if (downloadUrl != null) {
           newImageUrl =
-              downloadUrl; // Si se selecciona una nueva imagen, se actualiza la URL
+              downloadUrl;
+        } else {
+         
         }
       } catch (e) {
-        // Maneja el error, por ejemplo, muestra un mensaje al usuario
-        // ignore: avoid_print
         print("Error al cargar la imagen: $e");
       }
     }
@@ -102,152 +103,133 @@ class _EditCategoriaState extends State<EditCategoria> {
     _navigateList(context);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit categoria"),
+        title: Text("Edit Categoria"),
       ),
-      drawer: MyDrawer(accountName: "Usuario"),
-      // drawer: MyDrawer(
-      //     accountName: "Nombre Usuario",
-      //     accountEmail:
-      //         "usuario@example.com"), // Aquí proporciona los datos necesarios
-      body: Form(
-        child: ListView(
-          padding: const EdgeInsets.all(12.0),
-          children: <Widget>[
-            Column(
+      body: SlideInUp(
+        child: Form(
+          child: BounceInRight(
+            child: ListView(
+              padding: const EdgeInsets.all(12.0),
               children: <Widget>[
-                Visibility(
-                  visible: false,
-                  child: ListTile(
-                    leading: Icon(Icons.title, color: Colors.black),
-                    title: TextFormField(
-                      controller: controllerid,
-                      decoration: InputDecoration(
-                        hintText: "id",
-                        labelText: "id",
+                Column(
+                  children: <Widget>[
+                    Visibility(
+                      visible: false,
+                      child: ListTile(
+                        leading: Icon(Icons.title, color: Colors.black),
+                        title: TextFormField(
+                          controller: controllerid,
+                          decoration: InputDecoration(
+                            hintText: "id",
+                            labelText: "id",
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                // Image.network(
-                //   categoriaImageURL,
-                //   width: 200, // Ajusta el tamaño según tus necesidades
-                //   height: 200,
-                //   fit: BoxFit
-                //       .contain, // Puedes ajustar el ajuste según tus necesidades
-                // ),
-
-                Container(
-                  margin: EdgeInsets.all(
-                      8.0), // Agrega márgenes alrededor de la imagen
-                  child: CachedNetworkImage(
-                    imageUrl: categoriaImageURL.isNotEmpty
-                        ? categoriaImageURL
-                        : 'assets/nofoto.jpg',
-                    placeholder: (context, url) =>
-                        CircularProgressIndicator(), // Puedes personalizar el indicador de carga
-                    errorWidget: (context, url, error) =>
-                        Image.asset('assets/nofoto.jpg'),
-                    width: 80.0,
-                    height: 80.0,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.person, color: Colors.black),
-                  title: TextFormField(
-                    controller: controllertitulo,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "El campo no puede estar vacío";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "titulo",
-                      labelText: "titulo",
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.person, color: Colors.black),
-                  title: TextFormField(
-                    controller: controllerdescripccion,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "El campo no puede estar vacío";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "descripccion",
-                      labelText: "descripccion",
-                    ),
-                  ),
-                ),
-                Divider(
-                  height: 1.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                ),
-                SizedBox(height: 16.0),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-               onPressed: _pickImage,
-                  child: Container(child: Text("Cambiar Foto")),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.blueAccent,
-                  ),
-            ),
-                // ElevatedButton(
-                //   onPressed: _pickImage,
-                //   child: Container(child: Text("Cambiar Foto")),
-                //   style: ElevatedButton.styleFrom(
-                //     primary: Colors.blueAccent,
-                //   ),
-                // ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                ),
-                      onPressed: () {
-                        _updateImageInFirebase();
-                      },
-                      child: Container(child: Text("Editar")),
-                     
-                    ),
-                    SizedBox(width: 16), // Agrega un espacio entre los botones
-                    ElevatedButton(
-                      onPressed: () {
-                         Navigator.pushNamed(context, '/category'); // Navega a la ruta "categoria"
-                      },
-                      child: Text("Cancelar"),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.red, // Color de fondo para el botón "Cancelar"
+                    Card(
+                        elevation: 4, // Define la elevación de la sombra negra
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0), // Define la forma del Card
+                        ),
+                        child: Container(
+                          width: 80.0,
+                          height: 80.0,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0), // Hace que la imagen esté recortada con bordes redondeados
+                            child: CachedNetworkImage(
+                              imageUrl: categoriaImageURL.isNotEmpty
+                                  ? categoriaImageURL
+                                  : 'assets/nofoto.jpg',
+                              placeholder: (context, url) => CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  Image.asset('assets/nofoto.jpg'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ListTile(
+                      leading: Icon(Icons.person, color: Colors.black),
+                      title: TextFormField(
+                        controller: controllertitulo,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "El campo no puede estar vacío";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: "titulo",
+                          labelText: "titulo de la categoria",
+                        ),
                       ),
                     ),
+                    ListTile(
+                      leading: Icon(Icons.person, color: Colors.black),
+                      title: TextFormField(
+                        controller: controllerdescripccion,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "El campo no puede estar vacío";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Descripcion",
+                          labelText: "Descripcion de la categoria",
+                        ),
+                      ),
+                    ),
+                   
+                    Divider(
+                      height: 1.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                    ),
+                    SizedBox(height: 16.0),
+                    SizedBox(height: 16.0),
+                    ElevatedButton(
+                      onPressed: _pickImage,
+                      child: Container(child: Text("Cambiar Foto")),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blueAccent,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.blue,
+                          ),
+                          onPressed: () {
+                            _updateImageInFirebase();
+                          },
+                          child: Container(child: Text("Editar")),
+                        ),
+                        SizedBox(width: 16), // Agrega un espacio entre los botones
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/category');
+                          },
+                          child: Text("Cancelar"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                          ),
+                        ),
+                      ],
+                    )
                   ],
-                )
-                // ElevatedButton(
-                //   onPressed: () {
-                //     _updateImageInFirebase();
-                //   },
-                //   child: Text("Editar"),
-                //   style: ElevatedButton.styleFrom(
-                //     primary: Colors.blueAccent,
-                //   ),
-                // ),
+                ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

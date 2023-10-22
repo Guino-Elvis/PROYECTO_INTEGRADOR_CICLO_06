@@ -29,71 +29,6 @@ class _DetalleCategoriaState extends State<DetalleCategoria> {
     }
   }
 
-  // //create function delete
-  // void confirm() {
-  //   AlertDialog alertDialog = AlertDialog(
-  //     content: Text(
-  //         "¿Está seguro de eliminar esta categoría '${widget.list[widget.index]['id']}'?"),
-  //     actions: <Widget>[
-  //       ElevatedButton(
-  //         child: Text(
-  //           "Eliminar",
-  //           style: TextStyle(color: Colors.black),
-  //         ),
-  //         style: ElevatedButton.styleFrom(primary: Colors.red),
-  //         onPressed: () {
-  //           categoriaController
-  //               .removerCategoria(widget.list[widget.index]['id'].toString());
-  //           _navigateList(context);
-  //         },
-  //       ),
-  //       ElevatedButton(
-  //         child: Text(
-  //           "Cancelar",
-  //           style: TextStyle(color: Colors.black),
-  //         ),
-  //         style: ElevatedButton.styleFrom(primary: Colors.green),
-  //         onPressed: () => Navigator.pop(context),
-  //       ),
-  //     ],
-  //   );
-
-  //   showDialog(
-  //       context: context, builder: (BuildContext context) => alertDialog);
-  // }
-
-void confirm() {
-  final id = widget.list[widget.index]['id'].toString();
-  final fotoURL = widget.list[widget.index]['foto'].toString();
-
-  AlertDialog alertDialog = AlertDialog(
-    content: Text("¿Está seguro de eliminar esta categoría '$id'?"),
-    actions: <Widget>[
-      ElevatedButton(
-        child: Text(
-          "Eliminar",
-          style: TextStyle(color: Colors.black),
-        ),
-        style: ElevatedButton.styleFrom(primary: Colors.red),
-        onPressed: () async {
-          await categoriaController.removerCategoria(id, fotoURL);
-          _navigateList(context);
-        },
-      ),
-      ElevatedButton(
-        child: Text(
-          "Cancelar",
-          style: TextStyle(color: Colors.black),
-        ),
-        style: ElevatedButton.styleFrom(primary: Colors.green),
-        onPressed: () => Navigator.pop(context),
-      ),
-    ],
-  );
-
-  showDialog(
-      context: context, builder: (BuildContext context) => alertDialog);
-}
 
   @override
   Widget build(BuildContext context) {
@@ -101,8 +36,7 @@ void confirm() {
       appBar: AppBar(
         title: Text('Detalle Categoría'),
       ),
-      drawer: MyDrawer(accountName: "Usuario"),
-      // drawer: MyDrawer(accountName: "Nombre Usuario", accountEmail: "usuario@example.com"), // Aquí proporciona los datos necesarios
+      drawer: MyDrawer(accountName: "categoria"),
       body: new Container(
         height: 270.0,
         padding: const EdgeInsets.all(20.0),
@@ -122,18 +56,7 @@ void confirm() {
                   "Descripcion : ${widget.list[widget.index]['descripccion']}",
                   style: new TextStyle(fontSize: 18.0),
                 ),
-                // Container(
-                //   margin: EdgeInsets.all(8.0),
-                //   child: Image.network(
-                //      widget.list[widget.index]['foto'],
-                //     width: 80.0, // Ancho de la imagen
-                //     height: 80.0, // Alto de la imagen
-                //     fit: BoxFit.cover, // Ajustar la imagen al contenedor
-                //   ),
-                // ),
-                // new Padding(
-                //   padding: const EdgeInsets.only(top: 30.0),
-                // ),
+               
                 new Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -152,17 +75,6 @@ void confirm() {
                           index: widget.index,
                         ),
                       )),
-                    ),
-                    VerticalDivider(),
-                    ElevatedButton(
-                      child: Text("Delete"),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.redAccent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0),
-                        ),
-                      ),
-                      onPressed: () => confirm(),
                     ),
                   ],
                 )

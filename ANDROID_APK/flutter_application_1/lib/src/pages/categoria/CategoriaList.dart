@@ -1,224 +1,449 @@
-// ignore_for_file: unnecessary_null_comparison, unused_local_variable
+// ignore: file_names
 import 'dart:convert';
-import 'dart:math';
+import 'dart:io';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/component/BottomNavBarFlex.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_application_1/src/component/Actualizar.dart';
+import 'package:flutter_application_1/src/component/BottomNavBarFlex2.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/config/ConfigApi.dart';
-import 'package:flutter_application_1/src/pages/categoria/CrearCategoriaPage.dart';
+import 'package:flutter_application_1/src/controller/CategoriaController.dart';
+import 'package:flutter_application_1/src/pages/categoria/CreateCategoria.dart';
 import 'package:flutter_application_1/src/pages/categoria/DetalleCategoria.dart';
+import 'package:flutter_application_1/src/component/LeftNotifier.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
+import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CategoriaList extends StatefulWidget {
-  const CategoriaList({super.key});
+  
+  const CategoriaList({Key? key}) : super(key: key);
+  
   @override
-  State<CategoriaList> createState() => _CategoriaListState();
+  State<CategoriaList> createState() => _CategoriaListtState();
 }
 
-class _CategoriaListState extends State<CategoriaList> {
-
-  // late List<dynamic> data;
+class _CategoriaListtState extends State<CategoriaList> {
+  
   late List<dynamic> data = [];
+  CategoriaController categoriaController = CategoriaController();
+  late File excelFile;
 
+  Future<List<dynamic>> getData() async {
+    final response = await http.get(Uri.parse(ConfigApi.buildUrl('/categoriablog')));
+    final responseData = json.decode(response.body);
 
-Future<List<dynamic>> getData() async {
-  final response = await http.get(Uri.parse(ConfigApi.buildUrl('/categoriablog')));
-  return json.decode(response.body);
+    // Itera sobre los elementos y convierte las fechas de cadenas a objetos DateTime
+    for (var item in responseData) {
+      if (item['created_at'] is String) {
+        item['created_at'] = DateTime.parse(item['created_at']);
+      }
+      if (item['updated_at'] is String) {
+        item['updated_at'] = DateTime.parse(item['updated_at']);
+      }
+      // Repite el proceso para otras fechas si es necesario.
+    }
+
+    return responseData;
+  }
+
+  // void actualizarVista(List<dynamic> newData) => getData().then((result) {
+  //   Provider.of<Actualizar>(context, listen: false).setData(result);
+  //   setState(() => data = result);
+  // });
+
+  void actualizarVista(List<dynamic> newData) {
+  getData().then((result) {
+    Provider.of<Actualizar>(context, listen: false).setData(result);
+    setState(() => data = result);
+  });
 }
 
-  _navigateCrearCategoria(BuildContext context) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CrearCategoriaPage()),
-    );
-
-    if (result != null && result) {
+  Future<void> _navigateCrearCategoria(BuildContext context) async {
+    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateCategoria()));
+    if (result != null) {
       setState(() {});
     }
   }
 
+  bool isSearching = false;
+  TextEditingController searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    getData().then((result) {
-      setState(() {
-        data = result;
-      });
-    });
+    initializeAsyncState();
+  }
+
+  Future<void> initializeAsyncState() async {
+    final dir = await getApplicationDocumentsDirectory();
+    excelFile = File('${dir.path}/data.xlsx');
+    // Para ocultar las superposiciones de la interfaz  (por ejemplo, la barra de estado y la barra de navegación)
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
+    getData().then((result) => setState(() => data = result));
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Lista de Categorías'),
-        actions: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Color.fromARGB(246, 104, 36, 24),
-            ),
-            onPressed: () => _navigateCrearCategoria(context),
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-            // Cambia el color del icono aquí
-          )
-        ],
-      ),
-      drawer: MyDrawer(accountName: "Usuario"),
-        // drawer: MyDrawer(accountName: "Nombre Usuario", accountEmail: "usuario@example.com"), // Aquí proporciona los datos necesarios
-      body : data == null 
-      
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : ItemList(
-              list: data,
-            ),
-         
-    );
-  }
-}
-
-class ItemList extends StatelessWidget {
-  final List<dynamic> list;
-  ItemList({required this.list});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (context, index) {
-        final item = list[index];
-        final titulo = item['titulo'].toString();
-        final created_at =
-            DateTime.parse(item['created_at'].toString()); // Parsear la fecha
-        // Formatear la fecha como solo la fecha (sin la hora)
-        final fechaFormateada = DateFormat('yyyy-MM-dd').format(created_at);
-
-        final foto = item['foto']
-            .toString(); // Asumiendo que 'foto' es la URL de la imagen
-
-        return Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(10.0),
-              child: GestureDetector(
-                child: Container(
-                  height: 100.0,
-                  child: Card(
-                    color: Colors
-                        .primaries[Random().nextInt(Colors.primaries.length)],
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    DetalleCategoria(list: list, index: index)),
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.visibility,
-                              color: Colors.white,
-                              size: 30.0, // Tamaño del icono
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                titulo,
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              Text(
-                                fechaFormateada,
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Mostrar la imagen
-                        // Container(
-                        //   margin: EdgeInsets.all(8.0),
-                        //   child: Image.network(
-                        //     foto,
-                        //     width: 80.0, // Ancho de la imagen
-                        //     height: 80.0, // Alto de la imagen
-                        //     fit:
-                        //         BoxFit.cover, // Ajustar la imagen al contenedor
-                        //   ),
-                        // ),
-                        // Mostrar la imagen
-
-                        // Container(
-                        //   margin: EdgeInsets.all(8.0),
-                        //   child: foto != null
-                        //       ? Image.network(
-                        //           foto,
-                        //           width: 80.0, // Ancho de la imagen
-                        //           height: 80.0, // Alto de la imagen
-                        //           fit: BoxFit
-                        //               .cover, // Ajustar la imagen al contenedor
-                        //         )
-                        //       : Image.asset(
-                        //           'assets/nofoto.jpg', // Ruta de la imagen predeterminada en tus assets
-                        //           width: 80.0,
-                        //           height: 80.0,
-                        //           fit: BoxFit.cover,
-                        //         ),
-                        // ),
-                        Padding(
-                           padding: const EdgeInsets.all(10.0),
-                          child: Container(
-                            width: 80.0,
-                            height: 80.0,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle, // Forma circular
-                              border: Border.all(
-                                color: Colors.white, // Color del borde
-                                width: 3.0, // Ancho del borde
-                              ),
-                            ),
-                            clipBehavior: Clip
-                                .antiAlias, // Recorta el contenido al círculo
-                            child: CachedNetworkImage(
-                              imageUrl: item.containsKey('foto')
-                                  ? item['foto'].toString()
-                                  : 'assets/nofoto.jpg',
-                              placeholder: (context, url) =>
-                                  CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  Image.asset('assets/nofoto.jpg', width: 500.0),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ],
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: isSearching
+              ? TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Buscar Categorias',
+                    prefixIcon: IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () async {},
                     ),
                   ),
+                  style: TextStyle(color: HexColor("#060c22")),
+                )
+              : Text(
+                  'Lista de Categorias',
+                  style: TextStyle(color: HexColor("#060c22"), fontWeight: FontWeight.bold),
                 ),
+          iconTheme: IconThemeData(color: HexColor("#060c22")),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(isSearching ? Icons.close : Icons.search, color: HexColor("#060c22")),
+              onPressed: () {
+                setState(() {
+                  isSearching = !isSearching;
+                  if (!isSearching) {
+                    searchController.clear(); // Limpia el campo de búsqueda cuando se cancela la búsqueda.
+                  }
+                });
+              },
+            ),
+          ],
+        ),
+        drawer: MyDrawer(accountName: "Categoria"),
+        body: Column(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: AssetImage('assets/fondo3.jpg'), fit: BoxFit.cover),
+                ),
+                child: data.isEmpty ? Center(child: CircularProgressIndicator()) : ItemList(list: data, actualizarVista: actualizarVista, scaffoldContext: context),
+              ),
+            ),
+            Container(
+              height: 60.0, // Ajusta la altura deseada para el BottomNavBarFlex
+              child: BottomNavBarFlex2(
+                onPressedSpecialButtonItem: () {
+                  _navigateCrearCategoria(context);
+                },
+                onPressedSpecialButtonExel: () async {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Confirmar descarga"),
+                        content: Text("¿Seguro que quieres descargar este archivo?"),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text("Cancelar"),
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Cierra el modal
+                            },
+                          ),
+                          TextButton(
+                            child: Text("Descargar"),
+                            onPressed: () async {
+                              Navigator.of(context).pop(); // Cierra el modal
+                              try {
+                                await categoriaController.exportDataToExcel();
+                                print("Excel file saved and copied successfully");
+                                // await OpenFile.open(excelFile.path); // Abre el archivo
+                              } catch (e) {
+                                // Manejo de excepciones aquí
+                                print("Error al exportar o abrir el archivo Excel: $e");
+                             
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text("Error"),
+                                      content: Text("Ocurrió un error al exportar o abrir el archivo Excel."),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: Text("Aceptar"),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                onPressedSpecialButtonPdf: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Confirmar descarga"),
+                        content: Text("¿Seguro que quieres descargar este archivo PDF?"),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text("Cancelar"),
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Cierra el modal
+                            },
+                          ),
+                          TextButton(
+                            child: Text("Descargar"),
+                            onPressed: () async {
+                              Navigator.of(context).pop(); // Cierra el modal
+                              try {
+                                await categoriaController.exportDataToPDF();
+                                print("PDF file saved and copied successfully");
+                                // Puedes abrir el archivo PDF aquí si lo deseas
+                                // await OpenFile.open(pdfFile.path);
+                              } catch (e) {
+                                // Manejo de excepciones aquí
+                                print("Error al exportar o abrir el archivo PDF: $e");
+                            
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text("Error"),
+                                      content: Text("Ocurrió un error al exportar o abrir el archivo PDF."),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: Text("Aceptar"),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                buttonColor: HexColor("#F82249"),
               ),
             ),
           ],
-        );
-      },
-    );
-  }
+        ),
+      );
+}
+
+class ItemList extends StatelessWidget {
+  final Function(List<dynamic>) actualizarVista;
+  final List<dynamic> list;
+  final CategoriaController categoriaController = CategoriaController();
+  final BuildContext scaffoldContext; // Agrega un miembro para almacenar el contexto del Scaffold
+
+  ItemList({Key? key, required this.list, required this.actualizarVista, required this.scaffoldContext}) : super(key: key);
+
+  String truncateString(String text, int maxLength) => text.length <= maxLength ? text : text.substring(0, maxLength) + '...';
+
+  double left = 0.0;
+
+  @override
+  Widget build(BuildContext context) => ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (context, index) {
+          final item = list[index];
+          final titulo = truncateString(item['titulo']?.toString() ?? 'titulo no especificado', 15);
+          final descripccion = truncateString(item['descripccion']?.toString() ?? 'titulo no especificado', 13);
+          final created_at = item['created_at'] != null ? DateTime.parse(item['created_at'].toString()) : DateTime.now();
+          final fechaFormateada = DateFormat('yyyy-MM-dd').format(created_at);
+          final foto = item.containsKey('foto') && item['foto'] != null ? item['foto'].toString() : 'assets/nofoto.jpg';
+
+          return ChangeNotifierProvider<LeftNotifier>(
+            create: (context) => LeftNotifier(),
+            child: Consumer<LeftNotifier>(
+              builder: (context, leftNotifier, child) {
+                return SlideInUp(
+                  child: GestureDetector(
+                    onHorizontalDragUpdate: (details) {
+                      leftNotifier.left += details.delta.dx;
+                      leftNotifier.left = leftNotifier.left < -80 ? -80 : leftNotifier.left > 0 ? 0 : leftNotifier.left;
+                    },
+                    onHorizontalDragEnd: (details) {
+                      if (details.primaryVelocity! < 0) {
+                        leftNotifier.showButton = true; // Mostrar el botón al detener el deslizamiento hacia la izquierda
+                      }
+                    },
+                    child: Stack(
+                      children: [
+                        BounceInRight(
+                          child: Transform.translate(
+                            offset: Offset(leftNotifier.left, 0),
+                            child: Container(
+                              margin: EdgeInsets.all(10.0),
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: HexColor("#0e1b4d").withOpacity(0.5),
+                                    spreadRadius: 2,
+                                    blurRadius: 5,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: SlideInUp(
+                                child: Column(
+                                  children: [
+                                    ListTile(
+                                      leading: Stack(
+                                        children: [
+                                          if (foto.isEmpty) CircularProgressIndicator(),
+                                          if (foto.isNotEmpty)
+                                            CircleAvatar(
+                                              backgroundImage: CachedNetworkImageProvider(foto),
+                                            )
+                                          else
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(color: Colors.blue, width: 2.0),
+                                              ),
+                                              child: CircleAvatar(
+                                                backgroundImage: AssetImage('assets/nofoto.jpg'),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                      title: Text(
+                                        titulo,
+                                        style: TextStyle(color: HexColor("#060c22"), fontWeight: FontWeight.bold, fontSize: 18.0),
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Fecha: $fechaFormateada'),
+                                          Text('Descripcion: $descripccion'),
+                                        ],
+                                      ),
+                                      trailing: IconButton(
+                                        icon: Icon(Icons.visibility, color: HexColor("#0e1b4d")),
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (BuildContext context) => DetalleCategoria(list: list, index: index),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    Divider(color: HexColor("#F82249").withOpacity(0.8)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        if (leftNotifier.showButton)
+                          BounceInRight(
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                margin: EdgeInsets.all(10.0),
+                                padding: EdgeInsets.all(10.0),
+                                height: 120.0,
+                                width: 70.0,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: HexColor("#0e1b4d").withOpacity(0.5),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 2.0),
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.delete_outline_outlined,
+                                            size: 30,
+                                            color: Colors.red,
+                                          ),
+                                          onPressed: () {
+                                            showDialog(
+                                              context: scaffoldContext,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: Text("Confirmación"),
+                                                  content: Text("¿Seguro que quieres eliminar este item?"),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () => Navigator.of(context).pop(),
+                                                      child: Text("Cancelar"),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        final id = item['id'].toString();
+                                                        final fotoURL = item['foto'].toString();
+                                                        categoriaController.removerCategoria(id, fotoURL).then((response) async {
+                                                          if (response.statusCode == 200) {
+                                                            ScaffoldMessenger.of(scaffoldContext).showSnackBar(SnackBar(content: Text("Item eliminado con éxito.")));
+                                                            // actualizarVista([]);
+                                                              Navigator.of(scaffoldContext).pushNamed('/category');  // Navega a la otra ruta
+                                                            //  actualizarVista(newData);
+                                                          } else {
+                                                            ScaffoldMessenger.of(scaffoldContext).showSnackBar(SnackBar(content: Text("Error al eliminar el item.")));
+                                                          }
+                                                        });
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: Text("Eliminar"),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      );
 }

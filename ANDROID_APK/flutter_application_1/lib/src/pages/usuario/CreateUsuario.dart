@@ -1,6 +1,5 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/controller/UsuarioController.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_application_1/src/pages/usuario/UsuarioList.dart';
