@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PreUpdate;
 
 @Entity
 @Data
@@ -34,5 +35,10 @@ public class AuthUser {
     private String codigo;
     private LocalDateTime created_at = LocalDateTime.now();
     private LocalDateTime updated_at = LocalDateTime.now();
+
+    @PreUpdate
+    private void preUpdate() {
+        updated_at = LocalDateTime.now();
+    }
 
 }

@@ -24,21 +24,28 @@ public class AuthUserServiceImpl implements AuthUserService {
     @Autowired
     JwtProvider jwtProvider;
 
-    // @Override
-    // public AuthUser save(AuthUserDto authUserDto) {
-    // Optional<AuthUser> user = authRepository.findByEmail(authUserDto.getEmail());
-    // if (user.isPresent())
-    // return null;
-    // String password = passwordEncoder.encode(authUserDto.getPassword());
-    // AuthUser authUser = AuthUser.builder()
-    // .name(authUserDto.getName()) // Mapea el nombre
-    // .role(authUserDto.getRole()) // Mapea el rol
-    // .email(authUserDto.getEmail())
-    // .password(password)
-    // .build();
-
-    // return authRepository.save(authUser);
-    // }
+    @Override
+    public AuthUserDto getUserData(String email) {
+        Optional<AuthUser> user = authRepository.findByEmail(email);
+        if (user.isPresent()) {
+            AuthUserDto userDto = new AuthUserDto();
+            userDto.setId(user.get().getId());
+            userDto.setRole(user.get().getRole());
+            userDto.setName(user.get().getName());
+            userDto.setPassword(user.get().getPassword());
+            userDto.setFoto(user.get().getFoto());
+            userDto.setApellido_m(user.get().getApellido_m());
+            userDto.setApellido_p(user.get().getApellido_p());
+            userDto.setDni(user.get().getDni());
+            userDto.setCodigo(user.get().getCodigo());
+            userDto.setEmail(user.get().getEmail());
+            userDto.setCreated_at(user.get().getCreated_at());
+            userDto.setUpdated_at(user.get().getUpdated_at());
+            // Agregar más asignaciones de campos según sea necesario
+            return userDto;
+        }
+        return null;
+    }
 
     @Override
     public AuthUser save(AuthUserDto authUserDto) {
@@ -59,7 +66,7 @@ public class AuthUserServiceImpl implements AuthUserService {
                 .dni(authUserDto.getDni())
                 .codigo(authUserDto.getCodigo())
 
-                .foto(authUserDto.getFoto())
+                .foto(authUserDto.getFoto() != null ? authUserDto.getFoto() : "sin foto")
                 // .created_at(authUserDto.getCreated_at())
                 // .updated_at(authUserDto.getUpdated_at())
                 .created_at(currentDateTime) // Establece la fecha de creación actual
@@ -95,11 +102,6 @@ public class AuthUserServiceImpl implements AuthUserService {
     public List<AuthUser> listar() {
         return authRepository.findAll();
     }
-
-    // @Override
-    // public AuthUser actualizar(AuthUser authUser) {
-    // return authRepository.save(authUser);
-    // }
 
     @Override
     public AuthUser actualizar(AuthUser authUser) {

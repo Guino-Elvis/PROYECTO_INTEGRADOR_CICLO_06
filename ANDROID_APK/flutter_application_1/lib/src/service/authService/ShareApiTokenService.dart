@@ -45,50 +45,6 @@ class ShareApiTokenService {
   }
 
 
-//  static Future<bool> isAdmin() async {
-//     try {
-//       final response = await http.get(Uri.parse(ConfigApi.buildUrl('/auth/list')));
-//       if (response.statusCode == 200) {
-//         final data = json.decode(response.body);
-//         if (data is List) {
-//           // Suponiendo que la respuesta es una lista y contiene al menos un elemento
-//           final firstUser = data[0];
-//           // Suponiendo que el campo "role" indica el rol del usuario
-//           final userRole = firstUser['role'] as String;
-//           // Verificar si el usuario es un administrador
-//           return userRole == 'admin';
-//         }
-//         return false; // Si no se encontraron usuarios
-//       } else {
-//         // Manejar errores, por ejemplo, lanzar una excepción
-//         throw Exception('No se pudo obtener el estado de administrador');
-//       }
-//     } catch (e) {
-//       // Manejar errores, por ejemplo, lanzar una excepción
-//       throw Exception('Error en la solicitud HTTP: $e');
-//     }
-//   }
-
-
-Future<bool> hasRole(String role) async {
-  try {
-    final response = await http.get(Uri.parse(ConfigApi.buildUrl('/auth/list')));
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      if (data is List) {
-        final firstUser = data[0];
-        final userRole = firstUser['role'] as String;
-        return userRole == role;
-      }
-      return false;
-    } else {
-      throw Exception('No se pudo obtener el estado de $role');
-    }
-  } catch (e) {
-    throw Exception('Error en la solicitud HTTP: $e');
-  }
-}
-
 }
 
 

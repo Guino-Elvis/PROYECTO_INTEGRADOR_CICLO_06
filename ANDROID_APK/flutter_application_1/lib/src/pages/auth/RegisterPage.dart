@@ -23,24 +23,6 @@ class _RegisterPageState extends State<RegisterPage> {
   String? password;
   String? confirmPassword;
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return SafeArea(
-  //     child: Scaffold(
-  //       backgroundColor: HexColor("#283B71"),
-  //       body: ProgressHUD(
-  //         child: Form(
-  //           key: globalFormkey,
-  //           child: _registerUI(context),
-  //         ),
-  //         inAsyncCall: isAPIcallProcess,
-  //         opacity: 0.3,
-  //         key: UniqueKey(),
-  //       ),
-  //     ),
-  //   );
-  // }
-
    @override
   Widget build(BuildContext context) {
     return SafeArea(

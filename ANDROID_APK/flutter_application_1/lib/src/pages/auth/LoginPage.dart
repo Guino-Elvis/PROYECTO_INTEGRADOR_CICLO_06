@@ -21,25 +21,6 @@ class _LoginPageState extends State<LoginPage> {
 
   String? email;
   String? password;
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return SafeArea(
-  //     child: Scaffold(
-  //       backgroundColor: HexColor("#283B71"),
-  //       body: ProgressHUD(
-  //         child: Form(
-  //           key: globalFormkey,
-  //           child: _loginUI(context),
-  //         ),
-  //         inAsyncCall: isAPIcallProcess,
-  //         opacity: 0.3,
-  //         key: UniqueKey(),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(

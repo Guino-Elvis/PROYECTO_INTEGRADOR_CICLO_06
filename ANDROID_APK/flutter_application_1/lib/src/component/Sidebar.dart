@@ -23,13 +23,26 @@ class _MyDrawerState extends State<MyDrawer> {
     loadUserProfile();
   }
 
+  // Future<void> loadUserProfile() async {
+    
+  //   final profileData = await ApiService.getUserProfilee();
+  //   if (profileData.isNotEmpty) {
+  //     setState(() {
+  //       accountName = profileData["name"] ?? "";
+  //       accountEmail = profileData["email"] ?? "";
+  //       accountFoto = profileData["foto"] ?? "";
+  //     });
+  //   }
+  // }
+
   Future<void> loadUserProfile() async {
-    final profileData = await ApiService.getUserProfilee();
-    if (profileData.isNotEmpty) {
+    final loginDetails = await ShareApiTokenService.loginDetails();
+
+    if (loginDetails != null) {
       setState(() {
-        accountName = profileData.first["name"]!;
-        accountEmail = profileData.first["email"]!;
-        accountFoto = profileData.first["foto"]!;
+        accountName = loginDetails.user?.name ?? "";
+        accountEmail = loginDetails.user?.email ?? "";
+        accountFoto = loginDetails.user?.foto ?? "";
       });
     }
   }

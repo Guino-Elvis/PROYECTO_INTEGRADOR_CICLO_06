@@ -25,4 +25,6 @@ public interface AuthUserService {
     // confirmar contraseña
     public boolean isPasswordConfirmed(AuthUserDto authUserDto);
 
+    AuthUserDto getUserData(String email);
+
 }

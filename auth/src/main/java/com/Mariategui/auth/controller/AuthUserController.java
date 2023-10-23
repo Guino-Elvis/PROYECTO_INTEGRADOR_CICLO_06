@@ -1,7 +1,9 @@
 package com.Mariategui.auth.controller;
 
+import com.Mariategui.auth.dto.AuthResponseDto;
 import com.Mariategui.auth.dto.AuthUserDto;
 import com.Mariategui.auth.dto.CreateUserResponse;
+// import com.Mariategui.auth.dto.LoginResponse;
 import com.Mariategui.auth.entity.AuthUser;
 import com.Mariategui.auth.entity.TokenDto;
 import com.Mariategui.auth.service.AuthUserService;
@@ -24,12 +26,55 @@ public class AuthUserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // @PostMapping("/login")
+    // public ResponseEntity<TokenDto> login(@RequestBody AuthUserDto authUserDto) {
+    // TokenDto tokenDto = authUserService.login(authUserDto);
+    // if (tokenDto == null)
+    // return ResponseEntity.badRequest().build();
+    // return ResponseEntity.ok(tokenDto);
+    // }
+
+    // @PostMapping("/login")
+    // public ResponseEntity<AuthResponseDto> login(@RequestBody AuthUserDto
+    // authUserDto) {
+    // AuthResponseDto response = new AuthResponseDto();
+    // TokenDto token = authUserService.login(authUserDto);
+    // if (token == null) {
+    // return ResponseEntity.badRequest().build();
+    // }
+    // AuthUserDto authenticatedUser =
+    // authUserService.getUserData(authUserDto.getEmail()); // Obtener los datos del
+    // // usuario autenticado
+    // if (authenticatedUser == null) {
+    // // Manejar el caso en el que no se pueda obtener los datos del usuario
+    // return ResponseEntity.badRequest().build();
+    // }
+    // response.setToken(token);
+    // response.setUser(authenticatedUser);
+    // return ResponseEntity.ok(response);
+    // }
+
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody AuthUserDto authUserDto) {
-        TokenDto tokenDto = authUserService.login(authUserDto);
-        if (tokenDto == null)
+    public ResponseEntity<AuthResponseDto> login(@RequestBody AuthUserDto authUserDto) {
+        AuthResponseDto response = new AuthResponseDto();
+        TokenDto token = authUserService.login(authUserDto);
+
+        if (token == null) {
             return ResponseEntity.badRequest().build();
-        return ResponseEntity.ok(tokenDto);
+        }
+
+        AuthUserDto authenticatedUser = authUserService.getUserData(authUserDto.getEmail()); // Obtener los datos del
+                                                                                             // usuario autenticado
+
+        if (authenticatedUser == null) {
+            // Manejar el caso en el que no se pueda obtener los datos del usuario
+            return ResponseEntity.badRequest().build();
+        }
+
+        response.setToken(token.getToken()); // Establecer el token directamente
+        response.setUser(authenticatedUser);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/validate")
@@ -39,25 +84,6 @@ public class AuthUserController {
             return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(tokenDto);
     }
-
-    // @PostMapping("/create")
-    // public ResponseEntity<?> create(@RequestBody AuthUserDto authUserDto) {
-    // if (!authUserService.isPasswordConfirmed(authUserDto)) {
-    // return ResponseEntity.badRequest().body("Password and confirm password do not
-    // match.");
-    // }
-
-    // AuthUser authUser = authUserService.save(authUserDto);
-    // if (authUser == null) {
-    // return ResponseEntity.badRequest().build();
-    // }
-
-    // CreateUserResponse response = new CreateUserResponse();
-    // response.setMessage("User created successfully.");
-    // response.setUser(authUser);
-
-    // return ResponseEntity.ok(response);
-    // }
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody AuthUserDto authUserDto) {
@@ -82,24 +108,6 @@ public class AuthUserController {
         List<AuthUser> userList = authUserService.listar();
         return ResponseEntity.ok(userList);
     }
-
-    // @PutMapping("/update/{id}")
-    // public ResponseEntity<AuthUser> update(@PathVariable Integer id, @RequestBody
-    // AuthUserDto authUserDto) {
-    // Optional<AuthUser> existingUser = authUserService.listarPorId(id);
-    // if (!existingUser.isPresent())
-    // return ResponseEntity.notFound().build();
-
-    // AuthUser updatedUser = existingUser.get();
-    // updatedUser.setEmail(authUserDto.getEmail());
-    // updatedUser.setPassword(authUserDto.getPassword());
-    // updatedUser.setRole(authUserDto.getRole());
-    // updatedUser.setName(authUserDto.getName());
-    // updatedUser.setConfirmPassword(authUserDto.getConfirmPassword());
-
-    // AuthUser savedUser = authUserService.actualizar(updatedUser);
-    // return ResponseEntity.ok(savedUser);
-    // }
 
     @PutMapping()
     public ResponseEntity<AuthUser> update(@RequestBody AuthUserDto authUserDto) {
@@ -126,9 +134,6 @@ public class AuthUserController {
             String password = passwordEncoder.encode(authUserDto.getPassword());
             updatedUser.setPassword(password);
         }
-        // Actualiza la fecha updated_at con la fecha actual
-        // Actualiza la fecha updated_at con la fecha y hora actuales como LocalDateTime
-        // Actualiza la fecha updated_at con la fecha y hora actuales como LocalDateTime
         LocalDateTime currentDateTime = LocalDateTime.now();
         updatedUser.setUpdated_at(currentDateTime);
 
