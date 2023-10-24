@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     // Para ocultar las superposiciones de la interfaz de usuario (por ejemplo, la barra de estado y la barra de navegación)
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
+     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky, overlays: []);
 
     // Si deseas que las superposiciones de la interfaz de usuario sean visibles (por ejemplo, la barra de estado)
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: SystemUiOverlay.values);
@@ -28,8 +28,9 @@ class _HomePageState extends State<HomePage> {
  @override
 Widget build(BuildContext context) {
   return Scaffold(
-    key: _scaffoldKey,
+
     appBar: AppBar(
+   
       title: Text('Home Page h'),
       elevation: 0,
       actions: [

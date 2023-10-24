@@ -27,7 +27,11 @@ class _DetalleCategoriaState extends State<DetalleCategoria> {
   @override
   void initState() {
     super.initState();
+         // Ocultar los botones de navegación y hacer que la barra de notificaciones sea transparente
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky, overlays: []);
+    // Ocultar los botones de navegación después de 1 o 2 segundos
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
+
   }
 
   @override

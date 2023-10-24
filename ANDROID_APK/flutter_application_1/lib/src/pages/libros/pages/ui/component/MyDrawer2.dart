@@ -3,16 +3,16 @@ import 'package:flutter_application_1/src/service/authService/ApiService.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class MyDrawer extends StatefulWidget {
+class MyDrawer2 extends StatefulWidget {
   final String accountName;
 
-  MyDrawer({required this.accountName});
+  MyDrawer2({required this.accountName});
 
   @override
   _MyDrawerState createState() => _MyDrawerState();
 }
 
-class _MyDrawerState extends State<MyDrawer> {
+class _MyDrawerState extends State<MyDrawer2> {
   String accountEmail = ""; // Correo electrónico del usuario
   String accountName = ""; // Nombre del usuario
   String accountFoto = ""; // Nombre del usuario

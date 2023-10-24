@@ -91,7 +91,9 @@ class _CategoriaListtState extends State<CategoriaList> {
   Future<void> initializeAsyncState() async {
     final dir = await getApplicationDocumentsDirectory();
     excelFile = File('${dir.path}/data.xlsx');
-    // Para ocultar las superposiciones de la interfaz  (por ejemplo, la barra de estado y la barra de navegación)
+         // Ocultar los botones de navegación y hacer que la barra de notificaciones sea transparente
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky, overlays: []);
+    // Ocultar los botones de navegación después de 1 o 2 segundos
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
     getData().then((result) => setState(() => data = result));
   }

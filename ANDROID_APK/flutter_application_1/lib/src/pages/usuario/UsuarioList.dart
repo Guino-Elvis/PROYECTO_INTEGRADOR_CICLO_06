@@ -76,6 +76,7 @@ class _UsuarioListState extends State<UsuarioList> {
 
   @override
   void initState() {
+  
     super.initState();
     initializeAsyncState();
   }
@@ -84,7 +85,7 @@ class _UsuarioListState extends State<UsuarioList> {
     final dir = await getApplicationDocumentsDirectory();
     excelFile = File('${dir.path}/data.xlsx');
     // Para ocultar las superposiciones de la interfaz de usuario (por ejemplo, la barra de estado y la barra de navegación)
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky, overlays: []);
     getData().then((result) => setState(() => data = result));
   }
 

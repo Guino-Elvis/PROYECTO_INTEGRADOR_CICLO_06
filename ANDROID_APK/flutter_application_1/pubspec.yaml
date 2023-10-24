@@ -61,7 +61,14 @@ dependencies:
   flutter_downloader: ^1.11.4
   #pdf
   pdf: ^3.10.4
-
+  #libro
+  badges: ^3.1.2
+  flutter_windowmanager: ^0.2.0
+  fluttertoast: ^8.2.2
+  clippy_flutter: ^2.0.0-nullsafety.1
+  flutter_rating_bar: ^4.0.1
+  expandable_text: ^2.3.0
+  #flutter_overlay_window: ^0.4.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
