@@ -76,7 +76,7 @@ class _CreateAlumnoPageState extends State<CreateAlumnoPage> {
       appBar: AppBar(
         title: Text('Crear Alumno'),
       ),
-      drawer: MyDrawer(accountName: "Usuario"), //sidebar
+      drawer: MyDrawer(), //sidebar
 
       body: Padding(
         padding: const EdgeInsets.all(12.0),

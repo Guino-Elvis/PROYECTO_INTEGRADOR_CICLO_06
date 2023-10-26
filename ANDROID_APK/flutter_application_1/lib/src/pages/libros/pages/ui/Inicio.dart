@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/component/ButtombarWidgets.dart';
+import 'package:flutter_application_1/src/pages/libros/pages/ui/component/DrawerWidgets.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/categoria/CategoriesWidgets.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/component/AppbarlbWidgets.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/inicioItem/ItemWidgets0.dart';
@@ -11,16 +12,56 @@ import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/inicioIt
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/inicioItem/ItemWidgets2.dart';
 
 class Inicio extends StatelessWidget {
-  const Inicio({super.key});
- 
+   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  // const Inicio({super.key});
+  
   @override
   Widget build(BuildContext context) {
     
     return Scaffold(
-      
+      key: _scaffoldKey,
       body: ListView(
         children: [
-          AppbarlbWidgets(),
+          Container(
+      color: Colors.white,
+      padding: EdgeInsets.all(25),
+      child: Row(
+        children: [
+          InkWell(
+           onTap: () {
+                    _scaffoldKey.currentState?.openDrawer();
+                  },
+            child: Icon(
+              Icons.sort,
+              color: Color(0xFF4C53A5),
+              size: 30,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 20),
+            child: Text(
+              "Biblioteca",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF4C53A5),
+              ),
+            ),
+          ),
+          Spacer(),
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, "/favoritos");
+            },
+            child: Icon(
+              Icons.favorite_outline,
+              size: 25,
+              color: Color(0xFF4C53A5),
+            ),
+          ),
+        ],
+      ),
+    ),
           Container(
             // height: 500,
             padding: EdgeInsets.only(top: 15),
@@ -121,11 +162,13 @@ class Inicio extends StatelessWidget {
                   ),
                 ),
                 ItemWidgets2(),
+             
               ],
             ),
           ),
         ],
       ),
+      drawer: DrawerWidgets(),
       // bottomNavigationBar: ButtombarWidgets(),
     );
   }

@@ -59,7 +59,7 @@ class _DetalleCategoriaState extends State<DetalleCategoria> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(widget: widget),
-      drawer: MyDrawer(accountName: "Categoria"),
+      drawer: MyDrawer(),
       body: ProfilePage(widget: widget),
     );
   }

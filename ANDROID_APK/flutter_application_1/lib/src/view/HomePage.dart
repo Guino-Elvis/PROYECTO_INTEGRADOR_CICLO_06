@@ -3,8 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_application_1/src/component/BottomNavBarFlex.dart';
 import 'package:flutter_application_1/src/component/BottomNavBarFlex2.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/config/theme.dart';
 import 'package:flutter_application_1/src/service/authService/ApiService.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
+import 'package:provider/provider.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -27,6 +29,15 @@ class _HomePageState extends State<HomePage> {
   }
  @override
 Widget build(BuildContext context) {
+  final themeProvider = context.watch<ThemeProvider>();
+final themeColors = themeProvider.getThemeColors();
+Color iconColor;
+
+if (themeProvider.isDiurno) {
+  iconColor = themeProvider.getThemeColors()[themeProvider.getThemeColors().indexOf(ThemeProvider.colorwhite)];
+} else {
+  iconColor = themeProvider.getThemeColors()[themeProvider.getThemeColors().indexOf(ThemeProvider.colorblack)];
+}
   return Scaffold(
 
     appBar: AppBar(
@@ -34,19 +45,19 @@ Widget build(BuildContext context) {
       title: Text('Home Page h'),
       elevation: 0,
       actions: [
-        IconButton(
+        IconTheme(
+           data: IconThemeData(color: iconColor),
+          child:IconButton(
           onPressed: () {
             ShareApiTokenService.logout(context);
           },
-          icon: const Icon(
-            Icons.logout,
-            color: Colors.black,
+          icon: const Icon(Icons.logout),
           ),
         ),
       ],
     ),
-    drawer: MyDrawer(accountName: "Usuario"),
-    backgroundColor: Colors.grey[200],
+    drawer: MyDrawer(),
+    backgroundColor:themeProvider.isDiurno ? themeColors[0] : themeColors[3],
     body: Column(
       children: [
         Expanded(

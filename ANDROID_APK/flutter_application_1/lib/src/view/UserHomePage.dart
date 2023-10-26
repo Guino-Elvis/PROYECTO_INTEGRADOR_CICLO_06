@@ -43,7 +43,7 @@ Widget build(BuildContext context) {
         ),
       ],
     ),
-    drawer: MyDrawer(accountName: "Usuario"),
+    drawer: MyDrawer(),
     backgroundColor: Colors.grey[200],
     body: Column(
       children: [

@@ -66,7 +66,7 @@ public class AuthUserServiceImpl implements AuthUserService {
                 .dni(authUserDto.getDni())
                 .codigo(authUserDto.getCodigo())
 
-                .foto(authUserDto.getFoto() != null ? authUserDto.getFoto() : "sin foto")
+                .foto(authUserDto.getFoto())
                 // .created_at(authUserDto.getCreated_at())
                 // .updated_at(authUserDto.getUpdated_at())
                 .created_at(currentDateTime) // Establece la fecha de creación actual

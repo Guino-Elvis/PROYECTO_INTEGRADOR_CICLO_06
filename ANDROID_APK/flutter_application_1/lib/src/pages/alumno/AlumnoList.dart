@@ -85,7 +85,7 @@ class _AlumnoListState extends State<AlumnoList> {
           )
         ],
       ),
-      drawer: MyDrawer(accountName: "Usuario"),
+      drawer: MyDrawer(),
       // drawer: MyDrawer(accountName: "Nombre Usuario", accountEmail: "usuario@example.com"), // Aquí proporciona los datos necesarios
       // ignore: unnecessary_null_comparison
       body: data == null

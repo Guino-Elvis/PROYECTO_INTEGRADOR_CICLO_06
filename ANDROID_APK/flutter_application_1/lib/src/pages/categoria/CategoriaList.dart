@@ -134,7 +134,7 @@ class _CategoriaListtState extends State<CategoriaList> {
             ),
           ],
         ),
-        drawer: MyDrawer(accountName: "Categoria"),
+        drawer: MyDrawer(),
         body: Column(
           
           children: [

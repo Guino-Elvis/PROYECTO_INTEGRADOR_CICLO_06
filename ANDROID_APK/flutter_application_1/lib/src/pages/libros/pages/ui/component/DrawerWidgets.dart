@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/service/authService/ApiService.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
+class DrawerWidgets extends StatefulWidget {
+  // final String accountName;
 
-class MyDrawer2 extends StatefulWidget {
-  final String accountName;
-
-  MyDrawer2({required this.accountName});
+  // DrawerWidgets({required this.accountName});
 
   @override
-  _MyDrawerState createState() => _MyDrawerState();
+  _DrawerWidgetsState createState() => _DrawerWidgetsState();
 }
 
-class _MyDrawerState extends State<MyDrawer2> {
+class _DrawerWidgetsState extends State<DrawerWidgets> {
   String accountEmail = ""; // Correo electrónico del usuario
   String accountName = ""; // Nombre del usuario
   String accountFoto = ""; // Nombre del usuario
@@ -23,21 +21,10 @@ class _MyDrawerState extends State<MyDrawer2> {
     loadUserProfile();
   }
 
-  // Future<void> loadUserProfile() async {
-    
-  //   final profileData = await ApiService.getUserProfilee();
-  //   if (profileData.isNotEmpty) {
-  //     setState(() {
-  //       accountName = profileData["name"] ?? "";
-  //       accountEmail = profileData["email"] ?? "";
-  //       accountFoto = profileData["foto"] ?? "";
-  //     });
-  //   }
-  // }
 
   Future<void> loadUserProfile() async {
     final loginDetails = await ShareApiTokenService.loginDetails();
-
+    // print("accountName: $accountName");
     if (loginDetails != null) {
       setState(() {
         accountName = loginDetails.user?.name ?? "";
@@ -49,6 +36,7 @@ class _MyDrawerState extends State<MyDrawer2> {
 
   @override
   Widget build(BuildContext context) {
+  
     return Drawer(
       
       child: Container(
@@ -70,7 +58,7 @@ class _MyDrawerState extends State<MyDrawer2> {
                 ),
                 UserAccountsDrawerHeader(
                   accountName: Text(
-                      accountName.isEmpty ? widget.accountName : accountName),
+                      accountName),
                   accountEmail: Text(accountEmail),
                   currentAccountPicture: accountFoto.isEmpty
                       ? Container(

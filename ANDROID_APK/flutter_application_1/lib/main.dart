@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/src/component/Actualizar.dart';
+import 'package:flutter_application_1/src/config/theme.dart';
 import 'package:flutter_application_1/src/pages/alumno/AlumnoList.dart';
 import 'package:flutter_application_1/src/pages/auth/LoginPage.dart';
 import 'package:flutter_application_1/src/pages/auth/RegisterPage.dart';
@@ -43,6 +44,7 @@ final apiCacheDatabase = ApiCacheDatabase();
         measurementId: "G-MDZRF01NHQ"),
   );
   WidgetsFlutterBinding.ensureInitialized();
+  final themeProvider = ThemeProvider();
   bool _result = await ShareApiTokenService.isLoggedIn();
   if(_result){
     _defaultHome = HomePage();
@@ -50,7 +52,8 @@ final apiCacheDatabase = ApiCacheDatabase();
   runApp(
       MultiProvider(
       providers: [
-        ChangeNotifierProvider<Actualizar>(create: (_) => Actualizar()),
+        ChangeNotifierProvider<Actualizar>(create: (_) => Actualizar()  ),
+          ChangeNotifierProvider.value(value: themeProvider), // Proporciona la instancia de ThemeProvider
         // Otros providers si los tienes
       ],
       // ignore: prefer_const_constructors
@@ -89,7 +92,7 @@ class MyApp extends StatelessWidget {
         '/panadero_home': (context) => const UsuarioList(),
         '/user_home': (context) =>  UserHomePage(),
         //LIBRO RUTAS
-        '/librohome': (context) => const Inicio(),
+        '/librohome': (context) =>  Inicio(),
         '/favoritos': (context) => const Favoritos(),
         '/detalle': (context) => const Detalle(),
         },

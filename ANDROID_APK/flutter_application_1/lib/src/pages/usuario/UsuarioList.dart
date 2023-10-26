@@ -123,7 +123,7 @@ class _UsuarioListState extends State<UsuarioList> {
             ),
           ],
         ),
-        drawer: MyDrawer(accountName: "Usuario"),
+        drawer: MyDrawer(),
         body: Column(
           children: [
             Expanded(

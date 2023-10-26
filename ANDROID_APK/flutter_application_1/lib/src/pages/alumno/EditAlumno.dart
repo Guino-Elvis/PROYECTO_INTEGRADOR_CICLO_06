@@ -112,7 +112,7 @@ class _EditAlumnoState extends State<EditAlumno> {
       appBar: AppBar(
         title: Text("Editar alumno"),
       ),
-      drawer: MyDrawer(accountName: "Usuario"), //sidebar
+      drawer: MyDrawer(), //sidebar
       
       body: Form(
         child: ListView(

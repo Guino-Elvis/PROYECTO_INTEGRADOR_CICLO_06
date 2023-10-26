@@ -1,39 +1,37 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/service/authService/ApiService.dart';
+import 'package:flutter_application_1/src/config/theme.dart';
+
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
+import 'package:icons_flutter/icons_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
+// import 'package:flutter_icons/flutter_icons';
 class MyDrawer extends StatefulWidget {
-  final String accountName;
-
-  MyDrawer({required this.accountName});
-
   @override
   _MyDrawerState createState() => _MyDrawerState();
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  String accountEmail = ""; // Correo electrónico del usuario
-  String accountName = ""; // Nombre del usuario
-  String accountFoto = ""; // Nombre del usuario
+  // final ColorProvider colorProvider = ColorProvider();
+  // bool isDiurno = true;
+
+  String accountEmail = "";
+  String accountName = "";
+  String accountFoto = "";
+
+  // void toggleTheme() {
+  //   setState(() {
+  //     isDiurno = !isDiurno;
+  //   });
+  // }
 
   @override
   void initState() {
     super.initState();
     loadUserProfile();
   }
-
-  // Future<void> loadUserProfile() async {
-    
-  //   final profileData = await ApiService.getUserProfilee();
-  //   if (profileData.isNotEmpty) {
-  //     setState(() {
-  //       accountName = profileData["name"] ?? "";
-  //       accountEmail = profileData["email"] ?? "";
-  //       accountFoto = profileData["foto"] ?? "";
-  //     });
-  //   }
-  // }
 
   Future<void> loadUserProfile() async {
     final loginDetails = await ShareApiTokenService.loginDetails();
@@ -49,36 +47,41 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+    final themeColors = themeProvider.getThemeColors();
+    Color iconColor;
+
+if (themeProvider.isDiurno) {
+  iconColor = themeProvider.getThemeColors()[themeProvider.getThemeColors().indexOf(ThemeProvider.colorblack)];
+} else {
+  iconColor = themeProvider.getThemeColors()[themeProvider.getThemeColors().indexOf(ThemeProvider.colorwhite)];
+}
+
     return Drawer(
-      
       child: Container(
-         color: Colors.white, // Cambia el color de fondo del Drawer
-  
+        color: themeProvider.isDiurno ? themeColors[0] : themeColors[3],
         child: ListView(
           children: [
             Stack(
               children: [
                 Container(
-                  // Ajusta la altura a tu preferencia
                   height: 160,
                   width: 420,
-                  // Ancho adaptable para adaptarse al contenedor
                   child: Image.asset(
                     "assets/fondologin2.jpg",
                     fit: BoxFit.cover,
                   ),
                 ),
                 UserAccountsDrawerHeader(
-                  accountName: Text(
-                      accountName.isEmpty ? widget.accountName : accountName),
+                  accountName: Text(accountName),
                   accountEmail: Text(accountEmail),
                   currentAccountPicture: accountFoto.isEmpty
                       ? Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: Colors.white, // Color del borde
-                              width: 2.0, // Ancho del borde
+                              color: Colors.white,
+                              width: 2.0,
                             ),
                           ),
                           child: CircleAvatar(
@@ -90,8 +93,8 @@ class _MyDrawerState extends State<MyDrawer> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: Colors.white, // Color del borde
-                              width: 3.0, // Ancho del borde
+                              color: Colors.white,
+                              width: 3.0,
                             ),
                           ),
                           child: CircleAvatar(
@@ -102,13 +105,15 @@ class _MyDrawerState extends State<MyDrawer> {
                     color: HexColor("#0e1b4d").withOpacity(0.8),
                   ),
                   margin: EdgeInsets.all(0),
-                  // Elimina el margen predeterminado para evitar superposiciones
                 ),
               ],
             ),
             ListTile(
               title: Text('Home'),
-              leading: Icon(Icons.person),
+              leading: IconTheme(
+               data: IconThemeData(color: iconColor),
+                child: Icon(Icons.person)
+                ),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamedAndRemoveUntil(
@@ -151,8 +156,34 @@ class _MyDrawerState extends State<MyDrawer> {
                     context, '/librohome', (route) => false);
               },
             ),
-           
             Divider(),
+// ...
+
+            Container(
+              margin: EdgeInsets.only(left: 15),
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    themeProvider.isDiurno
+                        ? CupertinoIcons.sun_max
+                        : CupertinoIcons.moon_circle,
+
+                    size: 30,
+
+                    color: themeProvider.isDiurno
+                        ? Colors.black
+                        : Colors.white, // Color del sol y la luna
+                  ),
+                  Switch(
+                    value: themeProvider.isDiurno,
+                    onChanged: (value) {
+                      themeProvider.toggleTheme();
+                    },
+                  ),
+                ],
+              ),
+            ),
+
             ListTile(
               title: Text('Logout'),
               leading: Icon(Icons.logout),
@@ -160,7 +191,6 @@ class _MyDrawerState extends State<MyDrawer> {
                 ShareApiTokenService.logout(context);
               },
             ),
-            
           ],
         ),
       ),

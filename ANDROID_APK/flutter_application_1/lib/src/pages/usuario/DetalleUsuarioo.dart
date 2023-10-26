@@ -57,7 +57,7 @@ class _DetalleUsuariooState extends State<DetalleUsuarioo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(widget: widget),
-      drawer: MyDrawer(accountName: "Usuario"),
+      drawer: MyDrawer(),
       body: ProfilePage(widget: widget),
     );
   }

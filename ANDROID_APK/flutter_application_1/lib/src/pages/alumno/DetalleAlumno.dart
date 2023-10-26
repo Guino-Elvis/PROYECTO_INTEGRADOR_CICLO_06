@@ -68,7 +68,7 @@ void confirm() {
       appBar: AppBar(
         title: Text('Detalle Alumno'),
       ),
-      drawer: MyDrawer(accountName: "Usuario"),
+      drawer: MyDrawer(),
       body: new Container(
         height: 270.0,
         padding: const EdgeInsets.all(20.0),
