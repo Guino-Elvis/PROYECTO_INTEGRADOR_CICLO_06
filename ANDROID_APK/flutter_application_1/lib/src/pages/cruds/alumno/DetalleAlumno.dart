@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/controller/AlumnoController.dart';
-import 'package:flutter_application_1/src/pages/alumno/AlumnoList.dart';
-import 'package:flutter_application_1/src/pages/alumno/EditAlumno.dart';
+import 'package:flutter_application_1/src/pages/cruds/alumno/AlumnoList.dart';
+import 'package:flutter_application_1/src/pages/cruds/alumno/EditAlumno.dart';
 
 
 // ignore: must_be_immutable

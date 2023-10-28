@@ -2,7 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/controller/UsuarioController.dart';
-import 'package:flutter_application_1/src/pages/usuario/UsuarioList.dart';
+import 'package:flutter_application_1/src/pages/cruds/usuario/UsuarioList.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';

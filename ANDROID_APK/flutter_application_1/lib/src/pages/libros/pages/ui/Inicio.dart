@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/component/ButtombarWidgets.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/component/DrawerWidgets.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/categoria/CategoriesWidgets.dart';
@@ -168,7 +169,7 @@ class Inicio extends StatelessWidget {
           ),
         ],
       ),
-      drawer: DrawerWidgets(),
+      drawer: NavigationDrawerWidget(),
       // bottomNavigationBar: ButtombarWidgets(),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
 
 class ThemeProvider extends ChangeNotifier {
   bool _isDiurno = true;
@@ -10,7 +11,7 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  static Color color1 = Colors.red;
+  static Color color1 = HexColor("#0e1b4d");
   static Color color2 = Colors.blue;
   static Color color3 = Colors.green;
   static Color color4 = Colors.orange;

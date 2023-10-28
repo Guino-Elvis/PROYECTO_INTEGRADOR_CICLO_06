@@ -2,7 +2,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/controller/AlumnoController.dart';
-import 'package:flutter_application_1/src/pages/alumno/AlumnoList.dart';
+import 'package:flutter_application_1/src/pages/cruds/alumno/AlumnoList.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';

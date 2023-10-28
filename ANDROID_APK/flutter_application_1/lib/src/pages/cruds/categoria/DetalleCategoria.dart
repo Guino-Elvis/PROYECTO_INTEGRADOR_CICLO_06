@@ -7,10 +7,10 @@ import 'dart:math' as math;
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/controller/CategoriaController.dart';
 import 'package:flutter_application_1/src/controller/UsuarioController.dart';
-import 'package:flutter_application_1/src/pages/categoria/CategoriaList.dart';
-import 'package:flutter_application_1/src/pages/categoria/EditCategoria.dart';
-import 'package:flutter_application_1/src/pages/usuario/EditUsuario.dart';
-import 'package:flutter_application_1/src/pages/usuario/UsuarioList.dart';
+import 'package:flutter_application_1/src/pages/cruds/categoria/CategoriaList.dart';
+import 'package:flutter_application_1/src/pages/cruds/categoria/EditCategoria.dart';
+import 'package:flutter_application_1/src/pages/cruds/usuario/EditUsuario.dart';
+import 'package:flutter_application_1/src/pages/cruds/usuario/UsuarioList.dart';
 import 'package:intl/intl.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 

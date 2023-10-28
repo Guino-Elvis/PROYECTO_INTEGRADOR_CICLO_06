@@ -2,7 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/controller/CategoriaController.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_application_1/src/pages/categoria/CategoriaList.dart';
+import 'package:flutter_application_1/src/pages/cruds/categoria/CategoriaList.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 

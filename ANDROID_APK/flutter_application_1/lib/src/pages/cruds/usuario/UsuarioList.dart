@@ -1,4 +1,3 @@
-// ignore: file_names
 import 'dart:convert';
 import 'dart:io';
 import 'package:animate_do/animate_do.dart';
@@ -8,34 +7,35 @@ import 'package:flutter_application_1/src/component/Actualizar.dart';
 import 'package:flutter_application_1/src/component/BottomNavBarFlex2.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/config/ConfigApi.dart';
-import 'package:flutter_application_1/src/controller/CategoriaController.dart';
-import 'package:flutter_application_1/src/pages/categoria/CreateCategoria.dart';
-import 'package:flutter_application_1/src/pages/categoria/DetalleCategoria.dart';
+import 'package:flutter_application_1/src/controller/UsuarioController.dart';
+import 'package:flutter_application_1/src/pages/cruds/usuario/CreateUsuario.dart';
 import 'package:flutter_application_1/src/component/LeftNotifier.dart';
+import 'package:flutter_application_1/src/pages/cruds/usuario/DetalleUsuarioo.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:open_file/open_file.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 
-class CategoriaList extends StatefulWidget {
+class UsuarioList extends StatefulWidget {
   
-  const CategoriaList({Key? key}) : super(key: key);
+  const UsuarioList({Key? key}) : super(key: key);
   
   @override
-  State<CategoriaList> createState() => _CategoriaListtState();
+  State<UsuarioList> createState() => _UsuarioListState();
 }
 
-class _CategoriaListtState extends State<CategoriaList> {
+class _UsuarioListState extends State<UsuarioList> {
   
   late List<dynamic> data = [];
-  CategoriaController categoriaController = CategoriaController();
+  UsuarioController usuarioController = UsuarioController();
   late File excelFile;
 
   Future<List<dynamic>> getData() async {
-    final response = await http.get(Uri.parse(ConfigApi.buildUrl('/categoriablog')));
+    final response = await http.get(Uri.parse(ConfigApi.buildUrl('/auth/list')));
     final responseData = json.decode(response.body);
 
     // Itera sobre los elementos y convierte las fechas de cadenas a objetos DateTime
@@ -64,8 +64,8 @@ class _CategoriaListtState extends State<CategoriaList> {
   });
 }
 
-  Future<void> _navigateCrearCategoria(BuildContext context) async {
-    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateCategoria()));
+  Future<void> _navigateCrearUsuario(BuildContext context) async {
+    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateUsuario()));
     if (result != null) {
       setState(() {});
     }
@@ -76,38 +76,27 @@ class _CategoriaListtState extends State<CategoriaList> {
 
   @override
   void initState() {
+  
     super.initState();
     initializeAsyncState();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-
-    // Asegúrate de restaurar el comportamiento predeterminado al salir de la pantalla
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
-        overlays: SystemUiOverlay.values);
-  }
   Future<void> initializeAsyncState() async {
     final dir = await getApplicationDocumentsDirectory();
     excelFile = File('${dir.path}/data.xlsx');
-         // Ocultar los botones de navegación y hacer que la barra de notificaciones sea transparente
+    // Para ocultar las superposiciones de la interfaz de usuario (por ejemplo, la barra de estado y la barra de navegación)
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky, overlays: []);
-    // Ocultar los botones de navegación después de 1 o 2 segundos
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
     getData().then((result) => setState(() => data = result));
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    
         appBar: AppBar(
-          
           title: isSearching
               ? TextField(
                   controller: searchController,
                   decoration: InputDecoration(
-                    hintText: 'Buscar Categorias',
+                    hintText: 'Buscar usuarios',
                     prefixIcon: IconButton(
                       icon: Icon(Icons.search),
                       onPressed: () async {},
@@ -116,7 +105,7 @@ class _CategoriaListtState extends State<CategoriaList> {
                   style: TextStyle(color: HexColor("#060c22")),
                 )
               : Text(
-                  'Lista de Categorias',
+                  'Lista de Usuarios',
                   style: TextStyle(color: HexColor("#060c22"), fontWeight: FontWeight.bold),
                 ),
           iconTheme: IconThemeData(color: HexColor("#060c22")),
@@ -136,7 +125,6 @@ class _CategoriaListtState extends State<CategoriaList> {
         ),
         drawer: MyDrawer(),
         body: Column(
-          
           children: [
             Expanded(
               child: Container(
@@ -147,11 +135,10 @@ class _CategoriaListtState extends State<CategoriaList> {
               ),
             ),
             Container(
-           
               height: 60.0, // Ajusta la altura deseada para el BottomNavBarFlex
               child: BottomNavBarFlex2(
                 onPressedSpecialButtonItem: () {
-                  _navigateCrearCategoria(context);
+                  _navigateCrearUsuario(context);
                 },
                 onPressedSpecialButtonExel: () async {
                   showDialog(
@@ -172,13 +159,13 @@ class _CategoriaListtState extends State<CategoriaList> {
                             onPressed: () async {
                               Navigator.of(context).pop(); // Cierra el modal
                               try {
-                                await categoriaController.exportDataToExcel();
+                                await usuarioController.exportDataToExcel();
                                 print("Excel file saved and copied successfully");
                                 // await OpenFile.open(excelFile.path); // Abre el archivo
                               } catch (e) {
                                 // Manejo de excepciones aquí
                                 print("Error al exportar o abrir el archivo Excel: $e");
-                             
+                                // Puedes mostrar un mensaje al usuario si lo deseas
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -223,14 +210,14 @@ class _CategoriaListtState extends State<CategoriaList> {
                             onPressed: () async {
                               Navigator.of(context).pop(); // Cierra el modal
                               try {
-                                await categoriaController.exportDataToPDF();
+                                await usuarioController.exportDataToPDF();
                                 print("PDF file saved and copied successfully");
                                 // Puedes abrir el archivo PDF aquí si lo deseas
                                 // await OpenFile.open(pdfFile.path);
                               } catch (e) {
                                 // Manejo de excepciones aquí
                                 print("Error al exportar o abrir el archivo PDF: $e");
-                            
+                                // Puedes mostrar un mensaje al usuario si lo deseas
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -267,7 +254,7 @@ class _CategoriaListtState extends State<CategoriaList> {
 class ItemList extends StatelessWidget {
   final Function(List<dynamic>) actualizarVista;
   final List<dynamic> list;
-  final CategoriaController categoriaController = CategoriaController();
+  final UsuarioController usuarioController = UsuarioController();
   final BuildContext scaffoldContext; // Agrega un miembro para almacenar el contexto del Scaffold
 
   ItemList({Key? key, required this.list, required this.actualizarVista, required this.scaffoldContext}) : super(key: key);
@@ -281,8 +268,8 @@ class ItemList extends StatelessWidget {
         itemCount: list.length,
         itemBuilder: (context, index) {
           final item = list[index];
-          final titulo = truncateString(item['titulo']?.toString() ?? 'titulo no especificado', 15);
-          final descripccion = truncateString(item['descripccion']?.toString() ?? 'titulo no especificado', 13);
+          final role = truncateString(item['role']?.toString() ?? 'Role no especificado', 15);
+          final email = truncateString(item['email']?.toString() ?? 'Email no especificado', 15);
           final created_at = item['created_at'] != null ? DateTime.parse(item['created_at'].toString()) : DateTime.now();
           final fechaFormateada = DateFormat('yyyy-MM-dd').format(created_at);
           final foto = item.containsKey('foto') && item['foto'] != null ? item['foto'].toString() : 'assets/nofoto.jpg';
@@ -346,14 +333,14 @@ class ItemList extends StatelessWidget {
                                         ],
                                       ),
                                       title: Text(
-                                        titulo,
+                                        email,
                                         style: TextStyle(color: HexColor("#060c22"), fontWeight: FontWeight.bold, fontSize: 18.0),
                                       ),
                                       subtitle: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text('Fecha: $fechaFormateada'),
-                                          Text('Descripcion: $descripccion'),
+                                          Text('Rol: $role'),
                                         ],
                                       ),
                                       trailing: IconButton(
@@ -361,7 +348,7 @@ class ItemList extends StatelessWidget {
                                         onPressed: () {
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
-                                              builder: (BuildContext context) => DetalleCategoria(list: list, index: index),
+                                              builder: (BuildContext context) => DetalleUsuarioo(list: list, index: index),
                                             ),
                                           );
                                         },
@@ -424,11 +411,11 @@ class ItemList extends StatelessWidget {
                                                       onPressed: () {
                                                         final id = item['id'].toString();
                                                         final fotoURL = item['foto'].toString();
-                                                        categoriaController.removerCategoria(id, fotoURL).then((response) async {
+                                                        usuarioController.removerUsuario(id, fotoURL).then((response) async {
                                                           if (response.statusCode == 200) {
                                                             ScaffoldMessenger.of(scaffoldContext).showSnackBar(SnackBar(content: Text("Item eliminado con éxito.")));
                                                             // actualizarVista([]);
-                                                              Navigator.of(scaffoldContext).pushNamed('/category');  // Navega a la otra ruta
+                                                              Navigator.of(scaffoldContext).pushNamed('/usuario');  // Navega a la otra ruta
                                                             //  actualizarVista(newData);
                                                           } else {
                                                             ScaffoldMessenger.of(scaffoldContext).showSnackBar(SnackBar(content: Text("Error al eliminar el item.")));
