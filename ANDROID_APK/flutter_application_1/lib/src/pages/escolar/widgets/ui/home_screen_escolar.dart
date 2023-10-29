@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/component/grafico_torta_escolar.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/component/opciones_seccion2.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/component/opciones_seccion3.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
@@ -63,19 +64,12 @@ class HomeScreenEscolar extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Container(
-                        padding: EdgeInsets.all(23),
-                      child: Text(
-                        "Grafico de torta ",
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          letterSpacing: 1,
-                          wordSpacing: 2,
-                        ),
-                      ),
+                    Center(
+                      child: Container(
+                          height: 200, // Define un alto fijo para el gráfico
+                          width: 480,
+                          padding: EdgeInsets.all(13),
+                          child: GraficoTorta()),
                     ),
                   ],
                 ),

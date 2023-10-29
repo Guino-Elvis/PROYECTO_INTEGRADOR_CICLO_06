@@ -6,23 +6,19 @@ import 'package:flutter_application_1/src/config/theme.dart';
 import 'package:flutter_application_1/src/pages/cruds/alumno/AlumnoList.dart';
 import 'package:flutter_application_1/src/pages/auth/LoginPage.dart';
 import 'package:flutter_application_1/src/pages/auth/RegisterPage.dart';
-import 'package:flutter_application_1/src/pages/escolar/widgets/ui/Inicio_escolar.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/ui/home_screen_escolar.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Detalle.dart';
-
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Inicio.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Favoritos.dart';
-
 import 'package:flutter_application_1/src/pages/cruds/usuario/UsuarioList.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:flutter_application_1/src/pages/cruds/categoria/CategoriaList.dart';
 import 'package:flutter_application_1/src/sql/ApiCacheDatabase.dart';
 import 'package:flutter_application_1/src/view/AdminHomePage.dart';
 import 'package:flutter_application_1/src/view/HomePage.dart';
-
 import 'package:flutter_application_1/src/view/UserHomePage.dart';
-
 import 'package:provider/provider.dart';
+
 
 Widget _defaultHome = const LoginPage();
 
@@ -69,8 +65,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Ocultar los botones de navegación y hacer que la barra de notificaciones sea transparente
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
-        overlays: []);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,overlays: []);
     // Ocultar los botones de navegación después de 1 o 2 segundos
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
     return MaterialApp(

@@ -8,7 +8,6 @@ import 'package:flutter_application_1/src/service/authService/ApiService.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:provider/provider.dart';
 
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -16,92 +15,88 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState();
+
   @override
   void initState() {
     super.initState();
-
-    // Para ocultar las superposiciones de la interfaz de usuario (por ejemplo, la barra de estado y la barra de navegación)
-     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky, overlays: []);
-
-    // Si deseas que las superposiciones de la interfaz de usuario sean visibles (por ejemplo, la barra de estado)
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+        overlays: []);
   }
- @override
-Widget build(BuildContext context) {
-  final themeProvider = context.watch<ThemeProvider>();
-final themeColors = themeProvider.getThemeColors();
-Color iconColor;
 
-if (themeProvider.isDiurno) {
-  iconColor = themeProvider.getThemeColors()[themeProvider.getThemeColors().indexOf(ThemeProvider.colorwhite)];
-} else {
-  iconColor = themeProvider.getThemeColors()[themeProvider.getThemeColors().indexOf(ThemeProvider.colorblack)];
-}
-  return Scaffold(
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+    final themeColors = themeProvider.getThemeColors();
+    Color iconColor;
 
-    appBar: AppBar(
-   
-      title: Text('Home Page h'),
-      elevation: 0,
-      actions: [
-        IconTheme(
-           data: IconThemeData(color: iconColor),
-          child:IconButton(
-          onPressed: () {
-            ShareApiTokenService.logout(context);
-          },
-          icon: const Icon(Icons.logout),
+    if (themeProvider.isDiurno) {
+      iconColor = themeProvider.getThemeColors()[
+          themeProvider.getThemeColors().indexOf(ThemeProvider.colorwhite)];
+    } else {
+      iconColor = themeProvider.getThemeColors()[
+          themeProvider.getThemeColors().indexOf(ThemeProvider.colorblack)];
+    }
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Home Page h'),
+        elevation: 0,
+        actions: [
+          IconTheme(
+            data: IconThemeData(color: iconColor),
+            child: IconButton(
+              onPressed: () {
+                ShareApiTokenService.logout(context);
+              },
+              icon: const Icon(Icons.logout),
+            ),
           ),
-        ),
-      ],
-    ),
-    drawer: MyDrawer(),
-    backgroundColor:themeProvider.isDiurno ? themeColors[0] : themeColors[3],
-    body: Column(
-      children: [
-        Expanded(
-          child: userProfile(),
-        ),
-        Container(
-          height: 60.0, // Ajusta la altura deseada para el BottomNavBarFlex
-          child: BottomNavBarFlex2(
-            onPressedSpecialButtonItem: () {},
-            onPressedSpecialButtonExel: () {},
-            onPressedSpecialButtonPdf: () {},
-            buttonColor: Colors.green,
+        ],
+      ),
+      drawer: MyDrawer(),
+      backgroundColor: themeProvider.isDiurno ? themeColors[0] : themeColors[3],
+      body: Column(
+        children: [
+          Expanded(
+            child: userProfile(),
           ),
-        ),
-      ],
-    ),
-  );
-}
+          Container(
+            height: 60.0, // Ajusta la altura deseada para el BottomNavBarFlex
+            child: BottomNavBarFlex2(
+              onPressedSpecialButtonItem: () {},
+              onPressedSpecialButtonExel: () {},
+              onPressedSpecialButtonPdf: () {},
+              buttonColor: Colors.green,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
+  Widget userProfile() {
+    return FutureBuilder<List<String>>(
+      future: ApiService.getUserProfile(),
+      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            final emailList = snapshot.data!;
 
-Widget userProfile() {
-  return FutureBuilder<List<String>>(
-    future: ApiService.getUserProfile(),
-    builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-      if (snapshot.connectionState == ConnectionState.done) {
-        if (snapshot.hasData) {
-          final emailList = snapshot.data!;
-
-          return ListView.builder(
-            itemCount: emailList.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(emailList[index], style: TextStyle(fontSize: 16)),
-              );
-            },
-          );
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error.toString()}'));
+            return ListView.builder(
+              itemCount: emailList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(emailList[index], style: TextStyle(fontSize: 16)),
+                );
+              },
+            );
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error.toString()}'));
+          }
         }
-      }
 
-      return Center(child: CircularProgressIndicator());
-    },
-  );
-}
-
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+  }
 }

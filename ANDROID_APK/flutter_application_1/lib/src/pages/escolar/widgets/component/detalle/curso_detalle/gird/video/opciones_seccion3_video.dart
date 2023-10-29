@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/cuadricula_escolar.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/curso_detalle/gird/video/lista_detalle_escolar.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/curso_detalle/gird/video/video_cuadricula.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/lista_detalle_escolar.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/component/grid/cuadricula_escolar.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/component/grid/lista_escolar.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/ui/Detalle_screen_escolar.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class Seccion3Escolar extends StatefulWidget {
-  const Seccion3Escolar({Key? key}) : super(key: key);
+class Seccion3EscolarDetalleVideo extends StatefulWidget {
+  const Seccion3EscolarDetalleVideo({Key? key}) : super(key: key);
 
   @override
-  State<Seccion3Escolar> createState() => _Seccion3EscolarState();
+  State<Seccion3EscolarDetalleVideo> createState() => _Seccion3EscolarDetalleVideoState();
 }
 
-class _Seccion3EscolarState extends State<Seccion3Escolar> {
+class _Seccion3EscolarDetalleVideoState extends State<Seccion3EscolarDetalleVideo> {
   bool isGrid = false; // Controla la visualización inicial
 
   Widget _buildTitleSection() {
@@ -37,7 +41,7 @@ class _Seccion3EscolarState extends State<Seccion3Escolar> {
       child: Column(
         children: [
           Text(
-            "Courses",
+            "Videos",
             style: TextStyle(
               color: HexColor("#0e1b4d"),
               fontSize: 22,
@@ -73,11 +77,11 @@ class _Seccion3EscolarState extends State<Seccion3Escolar> {
   }
 
   Widget _buildGridView(BuildContext context) {
-    return GridViewEscolar();
+    return GridViewEscolarDetalleVideo();
   }
 
   Widget _buildListView(BuildContext context) {
-    return ListViewEscolar();
+    return ListViewEscolarDetalleVideo();
   }
 
   Widget _buildBody(BuildContext context) {

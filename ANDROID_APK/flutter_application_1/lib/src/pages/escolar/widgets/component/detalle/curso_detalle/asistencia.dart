@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/appe_bar_option.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/barra_progreso.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/curso_detalle/gird/asistencia/Item_asistencia.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/curso_detalle/gird/video/opciones_seccion3_video.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/opciones_seccion3.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/ui/Detalle_screen_escolar.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/ui/home_screen_escolar.dart';
 
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class DetalleEscolar extends StatelessWidget {
-  const DetalleEscolar({super.key});
+class AsistenciaEscolar extends StatelessWidget {
+  const AsistenciaEscolar({super.key});
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
- 
       body: ListView(
         children: [
           Container(
@@ -34,7 +36,7 @@ class DetalleEscolar extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HomeScreenEscolar()),
+                                    builder: (context) => DetalleEscolar()),
                               );
                             },
                             child: Icon(
@@ -143,7 +145,7 @@ class DetalleEscolar extends StatelessWidget {
               ],
             ),
           ),
-          Seccion3EscolarDetalle(),
+          Seccion3EscolarDetalleAsistencia(),
         ],
       ),
 

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/cuadricula_escolar.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/lista_detalle_escolar.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/component/grid/cuadricula_escolar.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/component/grid/lista_escolar.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/ui/Detalle_screen_escolar.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class Seccion3Escolar extends StatefulWidget {
-  const Seccion3Escolar({Key? key}) : super(key: key);
+class Seccion3EscolarDetalle extends StatefulWidget {
+  const Seccion3EscolarDetalle({Key? key}) : super(key: key);
 
   @override
-  State<Seccion3Escolar> createState() => _Seccion3EscolarState();
+  State<Seccion3EscolarDetalle> createState() => _Seccion3EscolarDetalleState();
 }
 
-class _Seccion3EscolarState extends State<Seccion3Escolar> {
+class _Seccion3EscolarDetalleState extends State<Seccion3EscolarDetalle> {
   bool isGrid = false; // Controla la visualización inicial
 
   Widget _buildTitleSection() {
@@ -37,7 +39,7 @@ class _Seccion3EscolarState extends State<Seccion3Escolar> {
       child: Column(
         children: [
           Text(
-            "Courses",
+            "Unidades",
             style: TextStyle(
               color: HexColor("#0e1b4d"),
               fontSize: 22,
@@ -73,11 +75,11 @@ class _Seccion3EscolarState extends State<Seccion3Escolar> {
   }
 
   Widget _buildGridView(BuildContext context) {
-    return GridViewEscolar();
+    return GridViewEscolarDetalle();
   }
 
   Widget _buildListView(BuildContext context) {
-    return ListViewEscolar();
+    return ListViewEscolarDetalle();
   }
 
   Widget _buildBody(BuildContext context) {

@@ -69,7 +69,9 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   expandable_text: ^2.3.0
   icons_flutter: ^0.0.4
-  #flutter_overlay_window: ^0.4.3
+  #colegio
+  fl_chart: ^0.64.0
+  d_chart: ^2.6.2
 
   #claro y oscuro 
   flutter_riverpod: ^2.3.6

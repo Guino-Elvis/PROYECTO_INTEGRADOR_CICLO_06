@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/pages/escolar/widgets/component/grid/cuadricula_escolar.dart';
-import 'package:flutter_application_1/src/pages/escolar/widgets/component/grid/lista_escolar.dart';
-import 'package:flutter_application_1/src/pages/escolar/widgets/ui/Detalle_screen_escolar.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/curso_detalle/gird/asistencia/vista_asistencia.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/curso_detalle/gird/video/lista_detalle_escolar.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class Seccion3Escolar extends StatefulWidget {
-  const Seccion3Escolar({Key? key}) : super(key: key);
+class Seccion3EscolarDetalleAsistencia extends StatefulWidget {
+  const Seccion3EscolarDetalleAsistencia({Key? key}) : super(key: key);
 
   @override
-  State<Seccion3Escolar> createState() => _Seccion3EscolarState();
+  State<Seccion3EscolarDetalleAsistencia> createState() => _Seccion3EscolarDetalleAsistenciaState();
 }
 
-class _Seccion3EscolarState extends State<Seccion3Escolar> {
+class _Seccion3EscolarDetalleAsistenciaState extends State<Seccion3EscolarDetalleAsistencia> {
   bool isGrid = false; // Controla la visualización inicial
 
   Widget _buildTitleSection() {
@@ -37,7 +36,7 @@ class _Seccion3EscolarState extends State<Seccion3Escolar> {
       child: Column(
         children: [
           Text(
-            "Courses",
+            "Asistencia",
             style: TextStyle(
               color: HexColor("#0e1b4d"),
               fontSize: 22,
@@ -62,26 +61,21 @@ class _Seccion3EscolarState extends State<Seccion3Escolar> {
       padding: EdgeInsets.only(left: 50),
       child: InkWell(
         onTap: () {
-          setState(() {
-            // Cambia entre la visualización de cuadrícula y lista
-            isGrid = !isGrid;
-          });
+        
         },
-        child: Icon(isGrid ? Icons.grid_on : Icons.list), // Cambia los íconos según el estado
+        child: Icon(Icons.list), // Cambia los íconos según el estado
       ),
     );
   }
 
-  Widget _buildGridView(BuildContext context) {
-    return GridViewEscolar();
-  }
+
 
   Widget _buildListView(BuildContext context) {
-    return ListViewEscolar();
+    return ListViewEscolarDetalleAsistencia();
   }
 
   Widget _buildBody(BuildContext context) {
-    return isGrid ? _buildGridView(context) : _buildListView(context);
+    return  _buildListView(context);
   }
 
   @override
