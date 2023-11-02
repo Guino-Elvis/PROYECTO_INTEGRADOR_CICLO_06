@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/config/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
 
 class CartAppBar extends StatelessWidget {
   const CartAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
+        final themeProvider = context.watch<ThemeProvider>();
+    final themeColors = themeProvider.getThemeColors();
     return Container(
-      color: Colors.white,
+      color: themeProvider.isDiurno ? Colors.white: Colors.transparent,
       padding: EdgeInsets.all(25),
       child: Row(
         children: [
@@ -17,7 +22,7 @@ class CartAppBar extends StatelessWidget {
             child: Icon(
               Icons.arrow_back,
               size: 30,
-              color: Color(0xFF4C53A5),
+              color: themeProvider.isDiurno ? HexColor("#0e1b4d"): themeColors[7],
             ),
           ),
           Padding(
@@ -27,14 +32,14 @@ class CartAppBar extends StatelessWidget {
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF4C53A5),
+                color: themeProvider.isDiurno ? HexColor("#0e1b4d"): themeColors[7],
               ),
             ),
           ),
           Spacer(),
           Icon(Icons.more_vert,
           size: 30,
-          color: Color(0xFF4C53A5),)
+          color: themeProvider.isDiurno ? HexColor("#0e1b4d"): themeColors[7],)
         ],
       ),
     );

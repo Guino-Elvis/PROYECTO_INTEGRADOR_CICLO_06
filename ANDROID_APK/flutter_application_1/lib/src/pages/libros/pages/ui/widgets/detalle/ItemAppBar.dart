@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/config/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 
@@ -7,8 +9,11 @@ class ItemAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+       final themeProvider = context.watch<ThemeProvider>();
+    final themeColors = themeProvider.getThemeColors();
     return Container(
-      color: HexColor("#0e1b4d"),
+      color: themeProvider.isDiurno ? HexColor("#0e1b4d"): Colors.transparent,
+      //color: HexColor("#0e1b4d"),
       padding: EdgeInsets.all(25),
       child: Row(
         children: [
@@ -33,9 +38,17 @@ class ItemAppbar extends StatelessWidget {
             ),),
           ),
           Spacer(),
-          Icon(Icons.favorite_border,
-          color: HexColor('#F82249'),
-          size: 30,)
+          
+           InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, "/favoritos");
+                  },
+                  child: Icon(
+                    Icons.favorite_outline,
+                    size: 25,
+                    color: themeProvider.isDiurno ? HexColor("#F82249"): themeColors[7],
+                  ),
+                ),
         ],
       ),
     );

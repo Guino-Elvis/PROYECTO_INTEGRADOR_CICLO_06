@@ -121,9 +121,11 @@ class Inicio extends StatelessWidget {
                         height: 50,
                         width: 300,
                         child: TextFormField(
+                          style: TextStyle(color: themeProvider.isDiurno ? Colors.black : Colors.white,),
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: "Busca lo que quieras...",
+                            hintStyle: TextStyle(color: Colors.grey),
                           ),
                         ),
                       ),

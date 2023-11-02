@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/config/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
 
 class ItemCategoriaSeccion extends StatelessWidget {
   const ItemCategoriaSeccion({Key? key});
 
   @override
   Widget build(BuildContext context) {
+       final themeProvider = context.watch<ThemeProvider>();
+    final themeColors = themeProvider.getThemeColors();
     return Container(
       child: Column(
         children: [
           Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black12),
+              border: Border.all(
+                color: themeProvider.isDiurno ? Colors.black12: themeColors[7],
+                //color: Colors.black12
+                ),
               borderRadius: BorderRadius.circular(10)
               
             ),
@@ -23,7 +31,8 @@ class ItemCategoriaSeccion extends StatelessWidget {
                    width: 100,
                   margin: EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    
+                     borderRadius: BorderRadius.circular(10)
                  
                   ),
                   child: InkWell(
@@ -50,7 +59,7 @@ class ItemCategoriaSeccion extends StatelessWidget {
                       children: [
                         Text(
                           'Título del libro o descripción',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(fontWeight: FontWeight.bold,color: themeProvider.isDiurno ? HexColor("#0e1b4d"): themeColors[7],),
                         ),
                         Text(
                           'Autor o información adicional',
