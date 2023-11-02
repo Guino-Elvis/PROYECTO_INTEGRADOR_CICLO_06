@@ -86,9 +86,8 @@ class AsistenciaEscolar extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Container(
-                            padding: EdgeInsets.only(left: 20,right: 50),
-                              child: BarraProgreso()
-                          ),
+                              padding: EdgeInsets.only(left: 20, right: 50),
+                              child: BarraProgreso()),
                         ),
                         OptionBarEscuela(),
                       ],
@@ -145,10 +144,12 @@ class AsistenciaEscolar extends StatelessWidget {
               ],
             ),
           ),
-          Seccion3EscolarDetalleAsistencia(),
+          Container(
+            color: Colors.white,
+            child: Seccion3EscolarDetalleAsistencia(),
+          ),
         ],
       ),
-
     );
   }
 }

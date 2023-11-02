@@ -12,7 +12,6 @@ class DetalleEscolar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
- 
       body: ListView(
         children: [
           Container(
@@ -84,9 +83,8 @@ class DetalleEscolar extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Container(
-                            padding: EdgeInsets.only(left: 20,right: 50),
-                              child: BarraProgreso()
-                          ),
+                              padding: EdgeInsets.only(left: 20, right: 50),
+                              child: BarraProgreso()),
                         ),
                         OptionBarEscuela(),
                       ],
@@ -143,10 +141,12 @@ class DetalleEscolar extends StatelessWidget {
               ],
             ),
           ),
-          Seccion3EscolarDetalle(),
+          Container(
+            color: Colors.white,
+            child: Seccion3EscolarDetalle(),
+          ),
         ],
       ),
-
     );
   }
 }

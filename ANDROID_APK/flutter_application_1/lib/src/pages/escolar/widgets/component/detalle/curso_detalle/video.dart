@@ -14,7 +14,6 @@ class VideoEscolar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
- 
       body: ListView(
         children: [
           Container(
@@ -86,9 +85,8 @@ class VideoEscolar extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Container(
-                            padding: EdgeInsets.only(left: 20,right: 50),
-                              child: BarraProgreso()
-                          ),
+                              padding: EdgeInsets.only(left: 20, right: 50),
+                              child: BarraProgreso()),
                         ),
                         OptionBarEscuela(),
                       ],
@@ -145,10 +143,12 @@ class VideoEscolar extends StatelessWidget {
               ],
             ),
           ),
-          Seccion3EscolarDetalleVideo(),
+          Container(
+            color: Colors.white,
+            child: Seccion3EscolarDetalleVideo(),
+          ),
         ],
       ),
-
     );
   }
 }

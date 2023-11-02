@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/detalle/ItemAppBar.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/inicioItem/ItemWidgets2.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
 
 class Detalle extends StatelessWidget {
   const Detalle({super.key});
@@ -12,29 +13,29 @@ class Detalle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEDECF2),
+      backgroundColor: HexColor("#0e1b4d"),
       body: ListView(
         children: [
           ItemAppbar(),
           Padding(
             padding: EdgeInsets.all(2),
             child: Container(
-              margin: EdgeInsets.only(left: 80,right: 80,top: 20),
-               padding: EdgeInsets.all(3),
+              margin: EdgeInsets.only(left: 80, right: 80, top: 20),
+              // padding: EdgeInsets.all(3),
               decoration: BoxDecoration(
                 color: Colors.white,
                 // borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withOpacity(0.8),
                     spreadRadius: 0,
-                    blurRadius: 10,
-                    offset: Offset(5, 5),
+                    // blurRadius: 10,
+                    offset: Offset(5, 6),
                   )
                 ],
               ),
               child: Image.asset(
-                "assets/lib1.jfif",
+                "assets/lib2.jfif",
                 fit: BoxFit.cover,
                 height: 300,
               ),
@@ -61,7 +62,7 @@ class Detalle extends StatelessWidget {
                           Text(
                             "Libro titulo",
                             style: TextStyle(
-                                color: Color(0xFF4C53A5),
+                                color: HexColor("#0e1b4d"),
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold),
                           )
@@ -82,7 +83,7 @@ class Detalle extends StatelessWidget {
                             itemPadding: EdgeInsets.symmetric(horizontal: 5),
                             itemBuilder: (context, _) => Icon(
                               Icons.favorite,
-                              color: Color(0xFF4C53A5),
+                              color: HexColor('#F82249'),
                               size: 20,
                             ),
                             onRatingUpdate: (index) {},
@@ -92,7 +93,7 @@ class Detalle extends StatelessWidget {
                               Container(
                                 padding: EdgeInsets.all(5),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: HexColor('#F82249'),
                                   borderRadius: BorderRadius.circular(20),
                                   boxShadow: [
                                     BoxShadow(
@@ -105,7 +106,7 @@ class Detalle extends StatelessWidget {
                                 ),
                                 child: Icon(
                                   Icons.download,
-                                  color: Colors.red,
+                                  color: Colors.white,
                                 ),
                               ),
                             ],
@@ -118,7 +119,7 @@ class Detalle extends StatelessWidget {
                       child: ExpandableText(
                         "Este código creará un texto expandible que mostrará  al principio y, cuando el usuario haga clic en él, se expandirá para mostrar el texto completo. También mostrará  para que el usuario pueda volver a contraer el texto si lo desea. Puedes ajustar el número de líneas maxLines según tus preferencias. ",
                         expandText: 'Leer más',
-                        linkColor: Colors.red,
+                        linkColor: HexColor('#F82249'),
                         collapseText: 'Leer menos',
                         maxLines:
                             2, // Número de líneas a mostrar antes de mostrar "Leer más".
@@ -139,7 +140,7 @@ class Detalle extends StatelessWidget {
                                 'Online:',
                                 style: TextStyle(
                                   fontSize: 17,
-                                  color: Color(0xFF4C53A5),
+                                  color: HexColor("#0e1b4d"),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -152,7 +153,7 @@ class Detalle extends StatelessWidget {
                                     alignment: Alignment.center,
                                     margin: EdgeInsets.symmetric(horizontal: 5),
                                     decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color:  HexColor('#F82249'),
                                         borderRadius: BorderRadius.circular(30),
                                         boxShadow: [
                                           BoxShadow(
@@ -164,7 +165,7 @@ class Detalle extends StatelessWidget {
                                     child: Text(
                                       "Si",
                                       style: TextStyle(
-                                          fontSize: 18, color: Colors.grey),
+                                          fontSize: 15, color: Colors.white,fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ],
@@ -178,7 +179,7 @@ class Detalle extends StatelessWidget {
                                 'Category:',
                                 style: TextStyle(
                                   fontSize: 17,
-                                  color: Color(0xFF4C53A5),
+                                  color: HexColor("#0e1b4d"),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -193,7 +194,7 @@ class Detalle extends StatelessWidget {
                                       margin:
                                           EdgeInsets.symmetric(horizontal: 5),
                                       decoration: BoxDecoration(
-                                          color: Colors.white,
+                                           color:  HexColor('#F82249'),
                                           borderRadius:
                                               BorderRadius.circular(30),
                                           boxShadow: [
@@ -205,9 +206,9 @@ class Detalle extends StatelessWidget {
                                             )
                                           ]),
                                       child: Text(
-                                        "terror",
+                                        "Terror",
                                         style: TextStyle(
-                                            fontSize: 18, color: Colors.grey),
+                                            fontSize: 15, color: Colors.white,fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                 ],
@@ -222,22 +223,35 @@ class Detalle extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            alignment: Alignment.centerLeft,
-            margin: EdgeInsets.symmetric(
-              vertical: 20,
-              horizontal: 10,
-            ),
-            child: Text(
-              "Best Stilling",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF4C53A5),
-              ),
-            ),
+          Column(
+            children: [
+              Container(
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 10,
+                      ),
+                      child: Text(
+                        "Best Stilling",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: HexColor("#0e1b4d"),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: ItemWidgets2(),
+                    )
+                  ],
+                ),
+              )
+            ],
           ),
-          ItemWidgets2(),
         ],
       ),
     );

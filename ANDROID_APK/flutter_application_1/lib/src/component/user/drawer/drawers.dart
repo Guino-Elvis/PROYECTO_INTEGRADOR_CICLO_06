@@ -11,13 +11,6 @@ class NavigationDrawerWidget extends StatelessWidget {
     //drawertheme
     final themeProvider = context.watch<ThemeProvider>();
     final themeColors = themeProvider.getThemeColors();
-    // Color iconColor;
-    //   if (themeProvider.isDiurno) {
-    //     iconColor = themeProvider.getThemeColors()[themeProvider.getThemeColors().indexOf(ThemeProvider.colorblack)];
-    //   } else {
-    //     iconColor = themeProvider.getThemeColors()[themeProvider.getThemeColors().indexOf(ThemeProvider.colorwhite)];
-    //   }
-    //drawertheme
 
     final name = 'Sarah Abs';
     final email = 'sarah@abs.com';
@@ -26,7 +19,7 @@ class NavigationDrawerWidget extends StatelessWidget {
 
     return Drawer(
       child: Material(
-        color: themeProvider.isDiurno ? themeColors[0] : themeColors[3],
+        color: themeProvider.isDiurno ? themeColors[0] : themeColors[6],
         child: ListView(
           children: <Widget>[
             buildHeader(
@@ -51,11 +44,11 @@ class NavigationDrawerWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Favourites',
-                    icon: Icons.favorite_border,
+                    text: 'Libros',
+                    icon: CupertinoIcons.book,
                     onTap: () {
                       // Redirige a la ruta 'favourites' o la ruta que desees.
-                      Navigator.of(context).pushNamed('/favourites');
+                      Navigator.of(context).pushNamed('/librohome');
                     },
                   ),
                   const SizedBox(height: 16),
@@ -80,29 +73,29 @@ class NavigationDrawerWidget extends StatelessWidget {
                   Divider(color: Colors.white70),
                   const SizedBox(height: 24),
                   Container(
-             margin: EdgeInsets.only(left: 15),
-              child: Row(
-                children: <Widget>[
-                  Icon(
-                    themeProvider.isDiurno
-                        ? CupertinoIcons.sun_max
-                        : CupertinoIcons.moon_circle,
+                    margin: EdgeInsets.only(left: 15),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          themeProvider.isDiurno
+                              ? CupertinoIcons.sun_max
+                              : CupertinoIcons.moon_circle,
 
-                    size: 30,
+                          size: 30,
 
-                    color: themeProvider.isDiurno
-                        ? Colors.white
-                        : Colors.white, // Color del sol y la luna
+                          color: themeProvider.isDiurno
+                              ? Colors.white
+                              : Colors.white, // Color del sol y la luna
+                        ),
+                        Switch(
+                          value: themeProvider.isDiurno,
+                          onChanged: (value) {
+                            themeProvider.toggleTheme();
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  Switch(
-                    value: themeProvider.isDiurno,
-                    onChanged: (value) {
-                      themeProvider.toggleTheme();
-                    },
-                  ),
-                ],
-              ),
-            ), 
                   const SizedBox(height: 24),
                   buildMenuItem(
                     text: 'Plugins',
@@ -130,7 +123,6 @@ class NavigationDrawerWidget extends StatelessWidget {
                       Navigator.of(context).pushNamed('/notifications');
                     },
                   ),
-                  
                 ],
               ),
             ),
@@ -169,7 +161,7 @@ class NavigationDrawerWidget extends StatelessWidget {
             CircleAvatar(
               radius: 24,
               backgroundColor: Color.fromRGBO(30, 60, 168, 1),
-              child: Icon(Icons.add_comment_outlined, color: Colors.white),
+              child: Icon(Icons.edit, color: Colors.white),
             )
           ],
         ),

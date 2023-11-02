@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
 
 
 class ItemAppbar extends StatelessWidget {
@@ -7,7 +8,7 @@ class ItemAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: HexColor("#0e1b4d"),
       padding: EdgeInsets.all(25),
       child: Row(
         children: [
@@ -18,7 +19,7 @@ class ItemAppbar extends StatelessWidget {
             },
             child: Icon(
               Icons.arrow_back,
-            color: Color(0xFF4C53A5),
+            color: Colors.white,
             size: 30,
             ),
           ),
@@ -26,14 +27,14 @@ class ItemAppbar extends StatelessWidget {
           child: Text(
             "Terror",
             style: TextStyle(
-              color: Color(0xFF4C53A5),
+              color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 23,
             ),),
           ),
           Spacer(),
           Icon(Icons.favorite_border,
-          color: Colors.red,
+          color: HexColor('#F82249'),
           size: 30,)
         ],
       ),

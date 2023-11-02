@@ -19,6 +19,9 @@ class ThemeProvider extends ChangeNotifier {
   static Color color6 = Colors.yellow;
   static Color color7 = Colors.black;
   static Color color8 = Colors.white;
+  static Color color9 = Colors.transparent;
+  static Color color10 = Colors.white12;
+  static Color color11 = Colors.black12;
   //iconos 
   static Color colorwhite = Colors.white;
   static Color colorblack = Colors.black;
@@ -27,7 +30,7 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   List<Color> nochetheme() {
-    return [color4, color5, color6, color7,colorwhite]; // Define los colores para el tema nocturno
+    return [color1, color2, color3,color4, color5, color6, color7,color8,color9,color10,color11]; // Define los colores para el tema nocturno
   }
 
   List<Color> getThemeColors() {

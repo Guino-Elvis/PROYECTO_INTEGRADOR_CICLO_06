@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/config/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:snippet_coder_utils/hex_color.dart';
 
 class ItemWidgets2 extends StatelessWidget {
   const ItemWidgets2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+    final themeColors = themeProvider.getThemeColors();
     return Column(
       children: [
         for (int i = 1; i < 8; i++)
@@ -13,7 +18,7 @@ class ItemWidgets2 extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white,
+               color: themeProvider.isDiurno ? Colors.white: themeColors[9],
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                   BoxShadow(
@@ -48,7 +53,7 @@ class ItemWidgets2 extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF4C53A5),
+                           color: themeProvider.isDiurno ? HexColor("#0e1b4d"): themeColors[7],
                         ),
                       ),
                     ),
@@ -57,7 +62,7 @@ class ItemWidgets2 extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,
-                          child: Text("write description of product")),
+                          child: Text("write description of product",style: TextStyle(color: themeProvider.isDiurno ? Colors.black87: Colors.grey,),)),
                       height: 50,
                     ),
                     Row(
@@ -68,11 +73,11 @@ class ItemWidgets2 extends StatelessWidget {
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(2),
                             decoration: BoxDecoration(
-                                color: Colors.red,
+                                  color: themeProvider.isDiurno ? HexColor("#F82249"): themeColors[0],
                                 borderRadius: BorderRadius.circular(20),
                                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
+                    color: themeProvider.isDiurno ? Colors.black.withOpacity(0.5): themeColors[0],
                     spreadRadius: 1,
                     blurRadius: 2,
                     offset: Offset(0, 2),
@@ -92,11 +97,11 @@ class ItemWidgets2 extends StatelessWidget {
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(2),
                             decoration: BoxDecoration(
-                                color: Colors.red,
+                                  color: themeProvider.isDiurno ? HexColor("#F82249"): themeColors[0],
                                 borderRadius: BorderRadius.circular(20),
                                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
+                     color: themeProvider.isDiurno ? Colors.black.withOpacity(0.5): themeColors[0],
                     spreadRadius: 1,
                     blurRadius: 2,
                     offset: Offset(0, 2),
@@ -123,7 +128,7 @@ class ItemWidgets2 extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.favorite_border,
-                        color: Colors.red,
+                        color: themeProvider.isDiurno ? HexColor("#F82249"): themeColors[7],
                       ),
                       Row(
                         children: [

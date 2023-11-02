@@ -123,8 +123,14 @@ class HomeScreenEscolar extends StatelessWidget {
               ],
             ),
           ),
-          Seccion2Escolar(),
-          Seccion3Escolar(),
+          Container(
+            color: Colors.white,
+            child: Seccion2Escolar(),
+          ),
+          Container(
+            color: Colors.white,
+            child: Seccion3Escolar(),
+          ),
         ],
       ),
       drawer: NavigationDrawerWidget(),

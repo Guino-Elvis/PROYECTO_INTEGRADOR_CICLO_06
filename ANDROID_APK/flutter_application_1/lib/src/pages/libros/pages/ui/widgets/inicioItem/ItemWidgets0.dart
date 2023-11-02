@@ -11,7 +11,7 @@ class ItemWidgets0 extends StatelessWidget {
         for (int i = 1; i < 8; i++)
           Container(
             margin: EdgeInsets.all(10),
-            padding: EdgeInsets.all(3),
+            // padding: EdgeInsets.all(1),
             decoration: BoxDecoration(
               color: Colors.white,
               // borderRadius: BorderRadius.circular(10),
@@ -29,7 +29,7 @@ class ItemWidgets0 extends StatelessWidget {
                 Navigator.pushNamed(context, "/detalle");
               },
               child: Image.asset(
-                "assets/lib1.jfif",
+                "assets/lib2.jfif",
                 fit: BoxFit.cover,
                 height: 200,
               ),

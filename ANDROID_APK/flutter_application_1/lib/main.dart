@@ -7,6 +7,7 @@ import 'package:flutter_application_1/src/pages/cruds/alumno/AlumnoList.dart';
 import 'package:flutter_application_1/src/pages/auth/LoginPage.dart';
 import 'package:flutter_application_1/src/pages/auth/RegisterPage.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/ui/home_screen_escolar.dart';
+import 'package:flutter_application_1/src/pages/libros/pages/ui/Categories_libro.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Detalle.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Inicio.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Favoritos.dart';
@@ -90,6 +91,7 @@ class MyApp extends StatelessWidget {
         '/user_home': (context) => UserHomePage(),
         //LIBRO RUTAS
         '/librohome': (context) => Inicio(),
+        '/librocategory': (context) => const CategoriView(),
         '/favoritos': (context) => const Favoritos(),
         '/detalle': (context) => const Detalle(),
         //COLEGIO RUTAS 
