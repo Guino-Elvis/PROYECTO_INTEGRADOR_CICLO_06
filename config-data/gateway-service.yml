@@ -63,7 +63,13 @@ spring:
         - id: auth-service
           uri: lb://auth-service
           predicates:
-            - Path=/auth/**       
+            - Path=/auth/**
+        - id: biblioteca-service
+          uri: lb://biblioteca-service
+          predicates:
+            - Path=/categorialib/**,/libro/**,/prestamo/**,/reserva/**
+          filters:
+            - AuthFilter       
 
    
 
