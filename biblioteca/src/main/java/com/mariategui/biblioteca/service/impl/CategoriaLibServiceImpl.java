@@ -12,6 +12,7 @@ import com.mariategui.biblioteca.service.CategoriaLibService;
 
 @Service
 public class CategoriaLibServiceImpl implements CategoriaLibService {
+
     @Autowired
     private CategoriaLibRepository categoriaLibRepository;
 

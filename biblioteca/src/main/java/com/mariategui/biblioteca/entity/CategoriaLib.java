@@ -14,7 +14,7 @@ public class CategoriaLib {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String nombre;
+    private String titulo;
     private String descripcion;
     private String foto;
     private LocalDateTime created_at = LocalDateTime.now();

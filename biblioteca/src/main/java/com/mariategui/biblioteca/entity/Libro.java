@@ -2,10 +2,14 @@ package com.mariategui.biblioteca.entity;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.Data;
 
@@ -23,13 +27,23 @@ public class Libro {
     private String formato;
     private String estado;
     private String foto;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categorialib_id")
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private CategoriaLib categorialib;
-    private LocalDateTime created_at = LocalDateTime.now();
-    private LocalDateTime updated_at = LocalDateTime.now();
+
+    private LocalDateTime created_at;
+    private LocalDateTime updated_at;
+
+    @PrePersist
+    protected void onCreate() {
+        created_at = LocalDateTime.now();
+    }
 
     @PreUpdate
-    private void preUpdate() {
+    protected void onUpdate() {
         updated_at = LocalDateTime.now();
     }
+
 }

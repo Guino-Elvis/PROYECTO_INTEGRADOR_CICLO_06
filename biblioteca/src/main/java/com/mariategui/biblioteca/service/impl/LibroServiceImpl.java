@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import com.mariategui.biblioteca.entity.CategoriaLib;
 import com.mariategui.biblioteca.entity.Libro;
 import com.mariategui.biblioteca.repository.LibroRepository;
-import com.mariategui.biblioteca.service.CategoriaLibService;
 import com.mariategui.biblioteca.service.LibroService;
 
 @Service
@@ -45,7 +44,7 @@ public class LibroServiceImpl implements LibroService {
             categoriaOptional.ifPresent(categoriaLib -> {
                 System.out.println("Después de la petición");
                 System.out.println(categoriaLib.toString());
-                System.out.println(categoriaLib.getNombre());
+                System.out.println(categoriaLib.getTitulo());
                 System.out.println(categoriaLib.getId());
                 libro.setCategorialib(categoriaLib);
             });
