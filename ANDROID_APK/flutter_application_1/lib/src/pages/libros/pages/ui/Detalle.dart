@@ -15,28 +15,30 @@ class Detalle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      final themeProvider = context.watch<ThemeProvider>();
+    final themeProvider = context.watch<ThemeProvider>();
     final themeColors = themeProvider.getThemeColors();
     return Stack(
       children: [
-         if (!themeProvider.isDiurno) // Condición para mostrar la imagen y el color encima
-            Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/fondonegro1.jfif'),
-                  fit: BoxFit.cover,
-                ),
+        if (!themeProvider
+            .isDiurno) // Condición para mostrar la imagen y el color encima
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/fondonegro1.jfif'),
+                fit: BoxFit.cover,
               ),
             ),
-         if (!themeProvider.isDiurno) // Condición para mostrar el color encima de la imagen
-            Positioned.fill(
-              child: Container(
-                color: Colors.black.withOpacity(0.5), // Color encima de la imagen
-              ),
+          ),
+        if (!themeProvider
+            .isDiurno) // Condición para mostrar el color encima de la imagen
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withOpacity(0.5), // Color encima de la imagen
             ),
+          ),
         Scaffold(
-            backgroundColor: themeProvider.isDiurno ? HexColor("#0e1b4d"): Colors.transparent,
-         
+          backgroundColor:
+              themeProvider.isDiurno ? HexColor("#0e1b4d") : Colors.transparent,
           body: ListView(
             children: [
               ItemAppbar(),
@@ -70,7 +72,7 @@ class Detalle extends StatelessWidget {
                 height: 30,
                 child: Container(
                   width: double.infinity,
-                     color: themeProvider.isDiurno ? Colors.white: Colors.black45,
+                  color: themeProvider.isDiurno ? Colors.white : Colors.black45,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
@@ -85,7 +87,9 @@ class Detalle extends StatelessWidget {
                               Text(
                                 "Libro titulo",
                                 style: TextStyle(
-                                    color: themeProvider.isDiurno ? HexColor("#0e1b4d"): Colors.white,
+                                    color: themeProvider.isDiurno
+                                        ? HexColor("#0e1b4d")
+                                        : Colors.white,
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold),
                               )
@@ -103,10 +107,13 @@ class Detalle extends StatelessWidget {
                                 direction: Axis.horizontal,
                                 itemCount: 5,
                                 itemSize: 20,
-                                itemPadding: EdgeInsets.symmetric(horizontal: 5),
+                                itemPadding:
+                                    EdgeInsets.symmetric(horizontal: 5),
                                 itemBuilder: (context, _) => Icon(
                                   Icons.favorite,
-                                 color: themeProvider.isDiurno ? HexColor("#F82249"): Colors.white,
+                                  color: themeProvider.isDiurno
+                                      ? HexColor("#F82249")
+                                      : Colors.white,
                                   size: 20,
                                 ),
                                 onRatingUpdate: (index) {},
@@ -116,7 +123,9 @@ class Detalle extends StatelessWidget {
                                   Container(
                                     padding: EdgeInsets.all(5),
                                     decoration: BoxDecoration(
-                                      color: themeProvider.isDiurno ? HexColor("#F82249"): themeColors[0],
+                                      color: themeProvider.isDiurno
+                                          ? HexColor("#F82249")
+                                          : themeColors[0],
                                       borderRadius: BorderRadius.circular(20),
                                       boxShadow: [
                                         BoxShadow(
@@ -132,6 +141,32 @@ class Detalle extends StatelessWidget {
                                       color: Colors.white,
                                     ),
                                   ),
+                                  InkWell(
+                                    onTap: (){
+                                        Navigator.pushNamed(context, "/reserbalibro");
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(5),
+                                      margin: EdgeInsets.only(left: 20),
+                                      decoration: BoxDecoration(
+                                        color: themeProvider.isDiurno
+                                            ? HexColor("#F82249")
+                                            : themeColors[0],
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 3,
+                                            blurRadius: 10,
+                                            offset: Offset(0, 3),
+                                          )
+                                        ],
+                                      ),
+                                      child: Text('Reserbar',style: TextStyle(
+                                        color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16
+                                      )),
+                                    ),
+                                  ),
                                 ],
                               )
                             ],
@@ -142,7 +177,9 @@ class Detalle extends StatelessWidget {
                           child: ExpandableText(
                             "Este código creará un texto expandible que mostrará  al principio y, cuando el usuario haga clic en él, se expandirá para mostrar el texto completo. También mostrará  para que el usuario pueda volver a contraer el texto si lo desea. Puedes ajustar el número de líneas maxLines según tus preferencias. ",
                             expandText: 'Leer más',
-                            linkColor: themeProvider.isDiurno ? HexColor("#F82249"): Colors.white,
+                            linkColor: themeProvider.isDiurno
+                                ? HexColor("#F82249")
+                                : Colors.white,
                             //linkColor: HexColor('#F82249'),
                             collapseText: 'Leer menos',
                             maxLines:
@@ -164,7 +201,9 @@ class Detalle extends StatelessWidget {
                                     'Online:',
                                     style: TextStyle(
                                       fontSize: 17,
-                                       color: themeProvider.isDiurno ? HexColor("#0e1b4d"): Colors.white,
+                                      color: themeProvider.isDiurno
+                                          ? HexColor("#0e1b4d")
+                                          : Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -175,13 +214,20 @@ class Detalle extends StatelessWidget {
                                         height: 30,
                                         width: 30,
                                         alignment: Alignment.center,
-                                        margin: EdgeInsets.symmetric(horizontal: 5),
+                                        margin:
+                                            EdgeInsets.symmetric(horizontal: 5),
                                         decoration: BoxDecoration(
-                                            color: themeProvider.isDiurno ? HexColor("#F82249"): themeColors[0],
-                                            borderRadius: BorderRadius.circular(30),
+                                            color: themeProvider.isDiurno
+                                                ? HexColor("#F82249")
+                                                : themeColors[0],
+                                            borderRadius:
+                                                BorderRadius.circular(30),
                                             boxShadow: [
                                               BoxShadow(
-                                              color: themeProvider.isDiurno ? Colors.grey.withOpacity(0.5): Colors.transparent,
+                                                color: themeProvider.isDiurno
+                                                    ? Colors.grey
+                                                        .withOpacity(0.5)
+                                                    : Colors.transparent,
                                                 spreadRadius: 2,
                                                 blurRadius: 8,
                                               )
@@ -189,7 +235,9 @@ class Detalle extends StatelessWidget {
                                         child: Text(
                                           "Si",
                                           style: TextStyle(
-                                              fontSize: 15, color: Colors.white,fontWeight: FontWeight.bold),
+                                              fontSize: 15,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ],
@@ -203,7 +251,9 @@ class Detalle extends StatelessWidget {
                                     'Category:',
                                     style: TextStyle(
                                       fontSize: 17,
-                                       color: themeProvider.isDiurno ? HexColor("#0e1b4d"): Colors.white,
+                                      color: themeProvider.isDiurno
+                                          ? HexColor("#0e1b4d")
+                                          : Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -215,16 +265,20 @@ class Detalle extends StatelessWidget {
                                           height: 30,
                                           width: 60,
                                           alignment: Alignment.center,
-                                          margin:
-                                              EdgeInsets.symmetric(horizontal: 5),
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 5),
                                           decoration: BoxDecoration(
-                                               color: themeProvider.isDiurno ? HexColor("#F82249"): themeColors[0],
+                                              color: themeProvider.isDiurno
+                                                  ? HexColor("#F82249")
+                                                  : themeColors[0],
                                               borderRadius:
                                                   BorderRadius.circular(30),
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: themeProvider.isDiurno ? Colors.grey.withOpacity(0.5): Colors.transparent,
-                                               
+                                                  color: themeProvider.isDiurno
+                                                      ? Colors.grey
+                                                          .withOpacity(0.5)
+                                                      : Colors.transparent,
                                                   spreadRadius: 2,
                                                   blurRadius: 8,
                                                 )
@@ -232,7 +286,9 @@ class Detalle extends StatelessWidget {
                                           child: Text(
                                             "Terror",
                                             style: TextStyle(
-                                                fontSize: 15, color: Colors.white,fontWeight: FontWeight.bold),
+                                                fontSize: 15,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                         ),
                                     ],
@@ -250,7 +306,7 @@ class Detalle extends StatelessWidget {
               Column(
                 children: [
                   Container(
-                   color: themeProvider.isDiurno ? Colors.white: Colors.black,
+                    color: themeProvider.isDiurno ? Colors.white : Colors.black,
                     child: Column(
                       children: [
                         Container(
@@ -264,8 +320,9 @@ class Detalle extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                               color: themeProvider.isDiurno ? HexColor("#0e1b4d"): Colors.white,
-                           
+                              color: themeProvider.isDiurno
+                                  ? HexColor("#0e1b4d")
+                                  : Colors.white,
                             ),
                           ),
                         ),

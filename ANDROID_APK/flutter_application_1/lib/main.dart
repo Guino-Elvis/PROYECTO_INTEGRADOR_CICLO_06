@@ -12,6 +12,8 @@ import 'package:flutter_application_1/src/pages/libros/pages/ui/Detalle.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Inicio.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Favoritos.dart';
 import 'package:flutter_application_1/src/pages/cruds/usuario/UsuarioList.dart';
+import 'package:flutter_application_1/src/pages/libros/pages/ui/Libro_fisico.dart';
+import 'package:flutter_application_1/src/pages/libros/pages/ui/Reserva_libro.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:flutter_application_1/src/pages/cruds/categoria/CategoriaList.dart';
 import 'package:flutter_application_1/src/sql/ApiCacheDatabase.dart';
@@ -86,12 +88,14 @@ class MyApp extends StatelessWidget {
         '/alumno': (context) => const AlumnoList(),
         '/usuario': (context) => const UsuarioList(),
         '/admin_home': (context) => AdminHomePage(),
-        '/docente_home': (context) => const UsuarioList(),
-        '/panadero_home': (context) => const UsuarioList(),
+        // '/docente_home': (context) => const UsuarioList(),
+        // '/panadero_home': (context) => const UsuarioList(),
         '/user_home': (context) => UserHomePage(),
         //LIBRO RUTAS
         '/librohome': (context) => Inicio(),
         '/librocategory': (context) => const CategoriView(),
+        '/librofisico': (context) => const LibroFisico(),
+        '/reserbalibro': (context) => const ReservaLibro(),
         '/favoritos': (context) => const Favoritos(),
         '/detalle': (context) => const Detalle(),
         //COLEGIO RUTAS 

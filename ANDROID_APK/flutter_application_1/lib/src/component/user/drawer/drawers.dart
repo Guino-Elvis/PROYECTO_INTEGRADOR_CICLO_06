@@ -1,10 +1,37 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/config/theme.dart';
+import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:provider/provider.dart';
 
-class NavigationDrawerWidget extends StatelessWidget {
+class NavigationDrawerWidget extends StatefulWidget {
+  @override
+  State<NavigationDrawerWidget> createState() => _NavigationDrawerWidgetState();
+}
+
+class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   final padding = EdgeInsets.symmetric(horizontal: 20);
+  String accountEmail = "";
+  String accountName = "";
+  String accountFoto = "";
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserProfile();
+  }
+
+  Future<void> loadUserProfile() async {
+    final loginDetails = await ShareApiTokenService.loginDetails();
+
+    if (loginDetails != null) {
+      setState(() {
+        accountName = loginDetails.user?.name ?? "";
+        accountEmail = loginDetails.user?.email ?? "";
+        accountFoto = loginDetails.user?.foto ?? "";
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +147,8 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.logout,
                     onTap: () {
                       // Redirige a la ruta 'notifications' o la ruta que desees.
-                      Navigator.of(context).pushNamed('/notifications');
+
+                      ShareApiTokenService.logout(context);
                     },
                   ),
                 ],

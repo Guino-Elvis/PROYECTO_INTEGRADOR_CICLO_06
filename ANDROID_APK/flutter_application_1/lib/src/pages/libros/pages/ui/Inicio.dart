@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
 import 'package:flutter_application_1/src/config/theme.dart';
+import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/inicioItem/navBarInicio.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/categoria/CategoriesWidgets.dart';
 
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/inicioItem/ItemWidgets0.dart';
@@ -24,7 +25,8 @@ class Inicio extends StatelessWidget {
       key: _scaffoldKey,
       body: Stack(
         children: [
-          if (!themeProvider.isDiurno) // Condición para mostrar la imagen y el color encima
+          if (!themeProvider
+              .isDiurno) // Condición para mostrar la imagen y el color encima
             Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -33,61 +35,166 @@ class Inicio extends StatelessWidget {
                 ),
               ),
             ),
-         if (!themeProvider.isDiurno) // Condición para mostrar el color encima de la imagen
+          if (!themeProvider
+              .isDiurno) // Condición para mostrar el color encima de la imagen
             Positioned.fill(
               child: Container(
-                color: Colors.black.withOpacity(0.5), // Color encima de la imagen
+                color:
+                    Colors.black.withOpacity(0.5), // Color encima de la imagen
               ),
             ),
           ListView(
             children: [
               Container(
-                color: themeProvider.isDiurno ? Colors.white: themeColors[8],
-                padding: EdgeInsets.all(25),
-                child: Row(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: themeProvider.isDiurno
+                        ? AssetImage('assets/libdia.jfif')
+                        : AssetImage('assets/libnoche2.jfif'),
+                    // image: AssetImage('assets/lib2.jfif'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                height: 280,
+                child: Stack(
                   children: [
-                  InkWell(
-                  onTap: () {
-                    _scaffoldKey.currentState?.openDrawer();
-                  },
-                  child: Icon(
-                    Icons.sort,
-                    color: themeProvider.isDiurno ? HexColor("#0e1b4d"): themeColors[7],
-                   // color: HexColor("#0e1b4d"),
-                    size: 30,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    "Biblioteca",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: themeProvider.isDiurno ? HexColor("#0e1b4d"): themeColors[7],
+                    Positioned.fill(
+                      child: Container(
+                        color: themeProvider.isDiurno
+                            ? HexColor("#0e1b4d").withOpacity(0.8)
+                            : Colors.black.withOpacity(0.5),
+                      ),
                     ),
-                  ),
-                ),
-                Spacer(),
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, "/favoritos");
-                  },
-                  child: Icon(
-                    Icons.favorite_outline,
-                    size: 25,
-                    color: themeProvider.isDiurno ? HexColor("#0e1b4d"): themeColors[7],
-                  ),
-                ),
+                    Column(
+                      children: [
+                        Container(
+                          padding:
+                              EdgeInsets.only(top: 25, left: 25, bottom: 25),
+                          child: Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  _scaffoldKey.currentState?.openDrawer();
+                                },
+                                child: Icon(
+                                  Icons.sort,
+                                  color: themeProvider.isDiurno
+                                      ? Colors.white
+                                      : themeColors[7],
+                                  // color: HexColor("#0e1b4d"),
+                                  size: 30,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 15),
+                                padding: EdgeInsets.symmetric(horizontal: 14),
+                                height: 35,
+                                decoration: BoxDecoration(
+                                  color: themeProvider.isDiurno
+                                      ? Colors.white
+                                      : themeColors[9],
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.search,
+                                        color: themeProvider.isDiurno
+                                            ? Colors.black
+                                            : Colors.white),
+                                    SizedBox(
+                                        width:
+                                            5), // Espacio entre el icono y el campo de texto
+                                    Container(
+                                      width: 220,
+                                      padding: EdgeInsets.only(top: 14),
+                                      child: TextFormField(
+                                        style: TextStyle(
+                                          color: themeProvider.isDiurno
+                                              ? Colors.black
+                                              : Colors.white,
+                                        ),
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: "Busca lo que quieras...",
+                                          hintStyle:
+                                              TextStyle(color: Colors.grey),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            
+                            ],
+                          ),
+                        ),
+                        NavBarInicio(),
+                      ],
+                    ),
                   ],
                 ),
               ),
               Container(
-                
-                padding: EdgeInsets.only(top: 15),
+                color: themeProvider.isDiurno ? HexColor("#F82249"): themeColors[0],
+                height: 70,
+                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '¡Explora Nuestra Colección Física!',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Container(
+                          width: 220,
+                          child: Text(
+                            'Descubre nuestros libros en papel y disfruta de la lectura tradicional.',
+                            style: TextStyle(color: Colors.white, fontSize: 10),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: 15,),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, "/librofisico");
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(left: 22,right: 22,top: 8,bottom: 8),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.white)),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Explorar",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
                 decoration: BoxDecoration(
-                  color: themeProvider.isDiurno ? Colors.white: themeColors[8],
-               
+                  color: themeProvider.isDiurno ? Colors.white : themeColors[8],
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(35),
                     topRight: Radius.circular(35),
@@ -95,102 +202,66 @@ class Inicio extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                     Container(
-                 
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  padding: EdgeInsets.symmetric(horizontal: 14,),
-                  height: 50,
-                  decoration: BoxDecoration(
-                    
-                     color: themeProvider.isDiurno ? Colors.white: themeColors[9],
-                    //color: Colors.white,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 0,
-                        blurRadius: 10,
-                        offset: Offset(5, 5),
-                      )
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(left: 5),
-                        height: 50,
-                        width: 300,
-                        child: TextFormField(
-                          style: TextStyle(color: themeProvider.isDiurno ? Colors.black : Colors.white,),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Busca lo que quieras...",
-                            hintStyle: TextStyle(color: Colors.grey),
-                          ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    ItemWidgets0(),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 10,
+                      ),
+                      child: Text(
+                        "Categorias",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: themeProvider.isDiurno
+                              ? HexColor("#0e1b4d")
+                              : themeColors[7],
                         ),
                       ),
-                      Spacer(),
-                      Icon(
-                        Icons.search,
-                        color: themeProvider.isDiurno ? HexColor("#0e1b4d"): themeColors[7],
-                        size: 27,
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 15,),
-                ItemWidgets0(),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 10,
-                  ),
-                  child: Text(
-                    "Categorias",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: themeProvider.isDiurno ? HexColor("#0e1b4d"): themeColors[7],
                     ),
-                  ),
-                ),
-                Categoriesview(),
-                //seccion2 categoria
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 10,
-                  ),
-                  child: Text(
-                    "Best Stilling",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: themeProvider.isDiurno ? HexColor("#0e1b4d"): themeColors[7],
+                    Categoriesview(),
+                    //seccion2 categoria
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 10,
+                      ),
+                      child: Text(
+                        "Best Stilling",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: themeProvider.isDiurno
+                              ? HexColor("#0e1b4d")
+                              : themeColors[7],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                ItemWidgets1(),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 10,
-                  ),
-                  child: Text(
-                    "Best Stilling",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: themeProvider.isDiurno ? HexColor("#0e1b4d"): themeColors[7],
+                    ItemWidgets1(),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 10,
+                      ),
+                      child: Text(
+                        "Best Stilling",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: themeProvider.isDiurno
+                              ? HexColor("#0e1b4d")
+                              : themeColors[7],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                ItemWidgets2(),
-              ],
-               
+                    ItemWidgets2(),
+                  ],
                 ),
               ),
             ],
@@ -201,7 +272,3 @@ class Inicio extends StatelessWidget {
     );
   }
 }
-
-
-
-
