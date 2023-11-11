@@ -2,7 +2,6 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/config/theme.dart';
 import 'package:flutter_application_1/src/controller/setup/Biblioteca/Categoria_Lib_Controller.dart';
-import 'package:flutter_application_1/src/model/setup/CategoriaLibModel.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Categories_libro.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:provider/provider.dart';
@@ -41,26 +40,19 @@ class _CategoriItem1State extends State<CategoriItem1> {
       setState(() {
         item = categoriesData;
       });
+        print('Data fetched successfully. Number of items: ${item.length}');
     } catch (error) {
       // Manejar errores, por ejemplo, mostrando un mensaje al usuario
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text('Login expirado. Vuelva a iniciar sesión por favor.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  ShareApiTokenService.logout(context);
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
+   
     }
+  }
+   void _navigateToCategoryView(int categoryId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CategoriView(categoryId: categoryId),
+      ),
+    );
   }
 
   @override
@@ -91,17 +83,8 @@ class _CategoriItem1State extends State<CategoriItem1> {
                 ],
               ),
               child: InkWell(
-               
                   onTap: () {
-                     // Crear una instancia de la clase de modelo y pasarla a CategoriView
-                  CategoriaLibModel categoriaLibModel = CategoriaLibModel(categoria: items);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      
-                      builder: (context) => CategoriView(categoria: items),
-                    ),
-                  );
+                  _navigateToCategoryView(items['id']); // Pasa el ID de la categoría seleccionada
                 },
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,

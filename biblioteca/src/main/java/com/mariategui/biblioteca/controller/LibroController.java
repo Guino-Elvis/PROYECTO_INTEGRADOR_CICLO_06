@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mariategui.biblioteca.entity.Libro;
 import com.mariategui.biblioteca.service.LibroService;
@@ -17,6 +16,12 @@ import org.springframework.web.bind.annotation.*;
 public class LibroController {
     @Autowired
     private LibroService libroService;
+
+    @GetMapping("/libroPorCategoria/{idCategoria}")
+    public ResponseEntity<List<Libro>> listarLibrosPorCategoria(@PathVariable Integer idCategoria) {
+        List<Libro> libros = libroService.listarPorCategoria(idCategoria);
+        return ResponseEntity.ok(libros);
+    }
 
     @GetMapping()
     public ResponseEntity<List<Libro>> list() {

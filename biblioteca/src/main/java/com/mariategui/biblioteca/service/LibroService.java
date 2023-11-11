@@ -15,4 +15,8 @@ public interface LibroService {
     public Optional<Libro> listarPorId(Integer id);
 
     public void eliminarPorId(Integer id);
+
+    // Otros métodos existentes
+    List<Libro> listarPorCategoria(Integer idCategoria);
+
 }

@@ -93,7 +93,10 @@ class MyApp extends StatelessWidget {
         '/user_home': (context) => UserHomePage(),
         //LIBRO RUTAS
         '/librohome': (context) => Inicio(),
-        '/librocategory': (context) => const CategoriView(categoria: null,),
+        '/librocategory': (context) {
+  final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+  return CategoriView(categoryId: args['categoryId']);
+},
         '/librofisico': (context) => const LibroFisico(),
         '/reserbalibro': (context) => const ReservaLibro(),
         '/favoritos': (context) => const Favoritos(),

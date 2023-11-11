@@ -28,13 +28,17 @@ class CategorialibControllerLib {
   }
 
 Future<List<dynamic>> getDataLibroPorIdCategoria({
-  
-  String formato = ''}) async {
+  required int categoriaId,
+  String formato = '',
+}) async {
   final authResponse = await ShareApiTokenService.loginDetails();
   if (authResponse != null) {
     final token = authResponse.token;
     if (token != null && token.isNotEmpty) {
-      final url = Uri.parse(ConfigApi.buildUrl('/libro'));
+      final url = categoriaId != null
+          ? Uri.parse(ConfigApi.buildUrl('/libro/libroPorCategoria/$categoriaId'))
+          : Uri.parse(ConfigApi.buildUrl('/libro'));
+
       final response = await http.get(
         url,
         headers: {
@@ -46,7 +50,7 @@ Future<List<dynamic>> getDataLibroPorIdCategoria({
         final List<dynamic> libros = json.decode(response.body);
 
         // Filtrar libros por formato si se proporciona el parámetro
-        if (formato != null) {
+        if (formato != null && formato.isNotEmpty) {
           return libros.where((libro) => libro['formato'] == formato).toList();
         }
 
@@ -61,7 +65,6 @@ Future<List<dynamic>> getDataLibroPorIdCategoria({
 
   return []; // Otra acción que consideres apropiada si el token no está disponible.
 }
-
 
 
   Future<http.Response> CrearCategorialib(

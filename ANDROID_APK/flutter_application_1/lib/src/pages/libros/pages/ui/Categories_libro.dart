@@ -13,9 +13,9 @@ import 'package:provider/provider.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 class CategoriView extends StatefulWidget {
-   final dynamic categoria;
+    final int categoryId; // Cambiado el tipo de dynamic a int
   // const CategoriView({Key? key, required categoria}) : super(key: key);
-   const CategoriView({super.key,this.categoria});
+    const CategoriView({Key? key, required this.categoryId}) : super(key: key);
 
   @override
   State<CategoriView> createState() => _CategoriViewState();
@@ -31,42 +31,35 @@ class _CategoriViewState extends State<CategoriView> {
     super.initState();
      _getData();
   }
+Future<void> _getData() async {
+  try {
+    print('Fetching data for categoryId: ${widget.categoryId}');
+    final librosCategoriaData =
+        await categorialibControllerLib.getDataLibroPorIdCategoria(
+      categoriaId: widget.categoryId,
+      formato: 'online', // Agrega el formato aquí
+    );
 
-  Future<void> _getData() async {
-    try {
-      final librosData = await categorialibControllerLib.getDataLibroPorIdCategoria(formato: 'online');
-      
-  
-      setState(() {
-        item = librosData;
-      });
-    } catch (error) {
-      // Manejar errores, por ejemplo, mostrando un mensaje al usuario
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content:
-                Text('Login expirado . Vuelva a iniciar secion por favor .'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  ShareApiTokenService.logout(context);
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }
+    setState(() {
+      item = librosCategoriaData;
+    });
+
+   // print('Data fetched successfully. Number of items: ${item.length}');
+  } catch (error) {
+    print('Error al obtener libros de la categoría: $error');
+    // Aquí puedes mostrar un mensaje de error más detallado si es necesario
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
-    
-    final dynamic categoria = widget.categoria;
+    print('Building CategoriView for categoryId: ${widget.categoryId}');
+      print('Items in the list: $item');
+     //  print('Number of items in the list: ${item.length}');
+  // item.forEach((element) {
+  //   print('Item: $element');
+  // });
     final themeProvider = context.watch<ThemeProvider>();
     final themeColors = themeProvider.getThemeColors();
 
@@ -95,17 +88,16 @@ class _CategoriViewState extends State<CategoriView> {
             children: [
               Container(
                 height: 565,
-                decoration: BoxDecoration(
+                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: themeProvider.isDiurno
-                        ? categoria['foto'] != null
-                            ? CachedNetworkImageProvider(
-                                categoria['foto'].toString()) as ImageProvider
-                            : AssetImage('assets/lib2.jfif')
-                        : AssetImage('assets/fondonegro1.jfif'),
+                     image: themeProvider.isDiurno
+              ? AssetImage('assets/lib2.jfif')
+              : AssetImage('assets/fondonegro1.jfif'),
+                    // image: AssetImage('assets/lib2.jfif'),
                     fit: BoxFit.cover,
                   ),
                 ),
+                  
                 child: Stack(
                   children: [
                     Positioned.fill(
@@ -163,7 +155,7 @@ class _CategoriViewState extends State<CategoriView> {
                           child: Column(
                             children: [
                               Text(
-                                'Categoria: ${categoria['titulo']?.toString() ?? 'no se encontró la categoria'}',
+                                'Categoria: terror',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -221,7 +213,7 @@ class _CategoriViewState extends State<CategoriView> {
                               SearchItem(),
                               SizedBox(height: 15),
                               _itemWidgets0Categoria(),
-                            // ItemWidgets0Categoria(categoria: null,),
+                          
                             ],
                           ),
                         ),
@@ -248,20 +240,10 @@ class _CategoriViewState extends State<CategoriView> {
                               ),
                             ],
                           ),
-                          child: CachedNetworkImage(
-                            imageUrl: categoria.containsKey('foto')
-                                ? categoria['foto'].toString()
-                                : 'assets/nofoto.jpg',
-                            placeholder: (context, url) => Container(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator()),
-                            errorWidget: (context, url, error) => Image.asset(
-                              'assets/nofoto.jpg',
+                          child:  Image.asset(
+                              "assets/lib2.jfif",
                               fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
-                          ),
                         ),
                       ),
                     ),
@@ -279,61 +261,67 @@ class _CategoriViewState extends State<CategoriView> {
     );
   }
 
- Widget _itemWidgets0Categoria() {
-    return SlideInRight(
-      duration: Duration(milliseconds: 900),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: item.map<Widget>((items) {
-            return Container(
-              margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
-                    spreadRadius: 0,
-                    blurRadius: 2,
-                    offset: Offset(5, 5),
-                  )
-                ],
-              ),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Detalle(libro: items),
-                    ),
-                  );
-                },
-
-                child: CachedNetworkImage(
-                  imageUrl: items.containsKey('foto')
-                      ? items['foto'].toString()
-                      : 'assets/nofoto.jpg',
-                  placeholder: (context, url) => Container(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) => Image.asset(
-                    'assets/nofoto.jpg',
-                    height: 200,
-                    width: 138,
-                    fit: BoxFit.cover,
-                  ),
-                  fit: BoxFit.cover,
-                  height: 200,
-                  width: 138,
-                ),
-              
-              ),
-            );
-          }).toList(),
-        ),
+Widget _itemWidgets0Categoria() {
+ // print('Number of items in _itemWidgets0Categoria: ${item.length}');
+  return SlideInRight(
+    duration: Duration(milliseconds: 900),
+    child: SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: item.map<Widget>((libroData) {
+        //  print('Mapping libroData: $libroData');
+          return _buildLibroContainer(libroData);
+        }).toList(),
       ),
-    );
-  }
+    ),
+  );
+}
+
+Widget _buildLibroContainer(Map<String, dynamic> libroData) {
+  //print('Building container for libro: $libroData');
+  return Container(
+    margin: EdgeInsets.all(10),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.5),
+          spreadRadius: 0,
+          blurRadius: 2,
+          offset: Offset(5, 5),
+        ),
+      ],
+    ),
+    child: InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Detalle(libro: libroData),
+          ),
+        );
+      },
+      child: CachedNetworkImage(
+        imageUrl: libroData.containsKey('foto')
+            ? libroData['foto'].toString()
+            : 'assets/nofoto.jpg',
+        placeholder: (context, url) => Container(
+          width: 20,
+          height: 20,
+          child: CircularProgressIndicator(),
+        ),
+        errorWidget: (context, url, error) => Image.asset(
+          'assets/nofoto.jpg',
+          height: 200,
+          width: 138,
+          fit: BoxFit.cover,
+        ),
+        fit: BoxFit.cover,
+        height: 200,
+        width: 138,
+      ),
+    ),
+  );
+}
 
 }

@@ -57,4 +57,11 @@ public class LibroServiceImpl implements LibroService {
     public void eliminarPorId(Integer id) {
         libroRepository.deleteById(id);
     }
+
+    @Override
+    public List<Libro> listarPorCategoria(Integer idCategoria) {
+        // Obtener la lista de libros por categoría directamente desde el repositorio
+        return libroRepository.findByCategorialibId(idCategoria);
+    }
+
 }
