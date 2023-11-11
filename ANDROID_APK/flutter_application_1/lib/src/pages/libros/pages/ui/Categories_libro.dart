@@ -1,25 +1,80 @@
+import 'package:animate_do/animate_do.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/component/search_component.dart';
 import 'package:flutter_application_1/src/config/theme.dart';
-import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/opciones_seccion3.dart';
-import 'package:flutter_application_1/src/pages/escolar/widgets/ui/home_screen_escolar.dart';
+import 'package:flutter_application_1/src/controller/setup/Biblioteca/Categoria_Lib_Controller.dart';
+import 'package:flutter_application_1/src/pages/libros/pages/ui/Detalle.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Inicio.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/categoria/Item_categoria_seccion.dart';
-import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/inicioItem/ItemWidgets0.dart';
+import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
+
 import 'package:provider/provider.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class CategoriView extends StatelessWidget {
-  const CategoriView({super.key});
+class CategoriView extends StatefulWidget {
+   final dynamic categoria;
+  // const CategoriView({Key? key, required categoria}) : super(key: key);
+   const CategoriView({super.key,this.categoria});
+
+  @override
+  State<CategoriView> createState() => _CategoriViewState();
+}
+
+class _CategoriViewState extends State<CategoriView> {
+    List<dynamic> item = []; // Lista para almacenar los libros
+  CategorialibControllerLib categorialibControllerLib = CategorialibControllerLib();
+    
+
+  @override
+  void initState() {
+    super.initState();
+     _getData();
+  }
+
+  Future<void> _getData() async {
+    try {
+      final librosData = await categorialibControllerLib.getDataLibroPorIdCategoria(formato: 'online');
+      
+  
+      setState(() {
+        item = librosData;
+      });
+    } catch (error) {
+      // Manejar errores, por ejemplo, mostrando un mensaje al usuario
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content:
+                Text('Login expirado . Vuelva a iniciar secion por favor .'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  ShareApiTokenService.logout(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    
+    final dynamic categoria = widget.categoria;
     final themeProvider = context.watch<ThemeProvider>();
     final themeColors = themeProvider.getThemeColors();
+
     return Scaffold(
       body: Stack(
         children: [
-           if (!themeProvider.isDiurno) // Condición para mostrar la imagen y el color encima
+          if (!themeProvider
+              .isDiurno) // Condición para mostrar la imagen y el color encima
             Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -28,32 +83,36 @@ class CategoriView extends StatelessWidget {
                 ),
               ),
             ),
-         if (!themeProvider.isDiurno) // Condición para mostrar el color encima de la imagen
+          if (!themeProvider
+              .isDiurno) // Condición para mostrar el color encima de la imagen
             Positioned.fill(
               child: Container(
-                color: Colors.black.withOpacity(0.5), // Color encima de la imagen
+                color:
+                    Colors.black.withOpacity(0.5), // Color encima de la imagen
               ),
             ),
           ListView(
             children: [
-            
               Container(
                 height: 565,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                     image: themeProvider.isDiurno
-              ? AssetImage('assets/lib2.jfif')
-              : AssetImage('assets/fondonegro1.jfif'),
-                    // image: AssetImage('assets/lib2.jfif'),
+                    image: themeProvider.isDiurno
+                        ? categoria['foto'] != null
+                            ? CachedNetworkImageProvider(
+                                categoria['foto'].toString()) as ImageProvider
+                            : AssetImage('assets/lib2.jfif')
+                        : AssetImage('assets/fondonegro1.jfif'),
                     fit: BoxFit.cover,
                   ),
                 ),
-                  
                 child: Stack(
                   children: [
                     Positioned.fill(
                       child: Container(
-                           color: themeProvider.isDiurno ?HexColor("#0e1b4d").withOpacity(0.8): Colors.black.withOpacity(0.5),
+                        color: themeProvider.isDiurno
+                            ? HexColor("#0e1b4d").withOpacity(0.8)
+                            : Colors.black.withOpacity(0.5),
                         // color: HexColor("#0e1b4d").withOpacity(0.8),
                         //  color: Colors.black.withOpacity(0.5),
                       ),
@@ -61,7 +120,7 @@ class CategoriView extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                       Container(
+                        Container(
                           padding: EdgeInsets.all(23),
                           child: Row(
                             children: [
@@ -75,69 +134,73 @@ class CategoriView extends StatelessWidget {
                                 },
                                 child: Icon(
                                   Icons.arrow_back,
-                                      color: themeProvider.isDiurno ? HexColor('#F82249'): Colors.white,
+                                  color: themeProvider.isDiurno
+                                      ? HexColor('#F82249')
+                                      : Colors.white,
                                   size: 30,
                                 ),
                               ),
                               Spacer(),
                               InkWell(
                                 onTap: () {
-                                 Navigator.pushNamed(context, "/favoritos");
+                                  Navigator.pushNamed(context, "/favoritos");
                                 },
                                 child: Icon(
                                   Icons.favorite_outline,
                                   size: 25,
                                   //color: HexColor('#F82249'),
-                                  color: themeProvider.isDiurno ? HexColor('#F82249'): Colors.white,
+                                  color: themeProvider.isDiurno
+                                      ? HexColor('#F82249')
+                                      : Colors.white,
                                 ),
                               ),
-                               
                             ],
                           ),
                         ),
-                         Container(
+                        Container(
                           padding: EdgeInsets.only(left: 25),
                           alignment: Alignment.centerLeft,
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Categoria: Terror',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      ),
-                                  textAlign: TextAlign.start,
+                          child: Column(
+                            children: [
+                              Text(
+                                'Categoria: ${categoria['titulo']?.toString() ?? 'no se encontró la categoria'}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
                                 ),
-                              ],
-                            ),
-                         ),
-                         SizedBox(height: 20,),
-                         Container(
+                                textAlign: TextAlign.start,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
                           padding: EdgeInsets.only(left: 25),
                           alignment: Alignment.centerLeft,
                           width: 170,
-                            child: Column(
-                              children: [
-                               Text(
-                                  'Total de libros',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 17,
-                                     ),
-                                  textAlign: TextAlign.start,
+                          child: Column(
+                            children: [
+                              Text(
+                                'Total de libros',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
                                 ),
-                                Text(
-                                  '20',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                         ),
-                       
+                                textAlign: TextAlign.start,
+                              ),
+                              Text(
+                                '20',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                     Positioned(
@@ -149,13 +212,16 @@ class CategoriView extends StatelessWidget {
                             BorderRadius.only(topLeft: Radius.circular(40)),
                         child: Container(
                           padding: EdgeInsets.only(top: 15),
-                            color: themeProvider.isDiurno ? Colors.white: Colors.white10,
+                          color: themeProvider.isDiurno
+                              ? Colors.white
+                              : Colors.white10,
                           child: Column(
                             children: [
                               SizedBox(height: 30),
                               SearchItem(),
                               SizedBox(height: 15),
-                              ItemWidgets0(),
+                              _itemWidgets0Categoria(),
+                            // ItemWidgets0Categoria(categoria: null,),
                             ],
                           ),
                         ),
@@ -182,8 +248,18 @@ class CategoriView extends StatelessWidget {
                               ),
                             ],
                           ),
-                          child: Image.asset(
-                            "assets/lib2.jfif",
+                          child: CachedNetworkImage(
+                            imageUrl: categoria.containsKey('foto')
+                                ? categoria['foto'].toString()
+                                : 'assets/nofoto.jpg',
+                            placeholder: (context, url) => Container(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/nofoto.jpg',
+                              fit: BoxFit.cover,
+                            ),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -193,7 +269,7 @@ class CategoriView extends StatelessWidget {
                 ),
               ),
               Container(
-                   color: themeProvider.isDiurno ? Colors.white: Colors.white10,
+                color: themeProvider.isDiurno ? Colors.white : Colors.white10,
                 child: ItemCategoriaSeccion(),
               ),
             ],
@@ -202,4 +278,62 @@ class CategoriView extends StatelessWidget {
       ),
     );
   }
+
+ Widget _itemWidgets0Categoria() {
+    return SlideInRight(
+      duration: Duration(milliseconds: 900),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: item.map<Widget>((items) {
+            return Container(
+              margin: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.5),
+                    spreadRadius: 0,
+                    blurRadius: 2,
+                    offset: Offset(5, 5),
+                  )
+                ],
+              ),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Detalle(libro: items),
+                    ),
+                  );
+                },
+
+                child: CachedNetworkImage(
+                  imageUrl: items.containsKey('foto')
+                      ? items['foto'].toString()
+                      : 'assets/nofoto.jpg',
+                  placeholder: (context, url) => Container(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => Image.asset(
+                    'assets/nofoto.jpg',
+                    height: 200,
+                    width: 138,
+                    fit: BoxFit.cover,
+                  ),
+                  fit: BoxFit.cover,
+                  height: 200,
+                  width: 138,
+                ),
+              
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
 }

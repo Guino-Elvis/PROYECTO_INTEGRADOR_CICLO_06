@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
 import 'package:flutter_application_1/src/controller/AlumnoController.dart';
 import 'package:flutter_application_1/src/pages/cruds/alumno/AlumnoList.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -76,7 +77,7 @@ class _CreateAlumnoPageState extends State<CreateAlumnoPage> {
       appBar: AppBar(
         title: Text('Crear Alumno'),
       ),
-      drawer: MyDrawer(), //sidebar
+      drawer: NavigationDrawerWidget(), //sidebar
 
       body: Padding(
         padding: const EdgeInsets.all(12.0),

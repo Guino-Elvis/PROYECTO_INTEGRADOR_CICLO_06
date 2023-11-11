@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_application_1/src/component/Actualizar.dart';
 import 'package:flutter_application_1/src/component/BottomNavBarFlex2.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
 import 'package:flutter_application_1/src/config/ConfigApi.dart';
 import 'package:flutter_application_1/src/controller/CategoriaController.dart';
 import 'package:flutter_application_1/src/pages/cruds/categoria/CreateCategoria.dart';
@@ -134,7 +135,7 @@ class _CategoriaListtState extends State<CategoriaList> {
             ),
           ],
         ),
-        drawer: MyDrawer(),
+        drawer: NavigationDrawerWidget(),
         body: Column(
           
           children: [

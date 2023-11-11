@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
 import 'package:flutter_application_1/src/controller/AlumnoController.dart';
 import 'package:flutter_application_1/src/pages/cruds/alumno/AlumnoList.dart';
 import 'package:flutter_application_1/src/pages/cruds/alumno/EditAlumno.dart';
@@ -68,7 +69,7 @@ void confirm() {
       appBar: AppBar(
         title: Text('Detalle Alumno'),
       ),
-      drawer: MyDrawer(),
+      drawer: NavigationDrawerWidget(),
       body: new Container(
         height: 270.0,
         padding: const EdgeInsets.all(20.0),

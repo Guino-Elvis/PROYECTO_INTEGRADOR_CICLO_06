@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/src/component/BottomNavBarFlex2.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
 import 'package:flutter_application_1/src/service/authService/ApiService.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 
@@ -43,7 +44,7 @@ Widget build(BuildContext context) {
         ),
       ],
     ),
-    drawer: MyDrawer(),
+    drawer: NavigationDrawerWidget(),
     backgroundColor: Colors.grey[200],
     body: Column(
       children: [

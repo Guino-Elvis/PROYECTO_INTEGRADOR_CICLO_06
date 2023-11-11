@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
 import 'package:flutter_application_1/src/config/ConfigApi.dart';
 import 'package:flutter_application_1/src/pages/cruds/alumno/CreateAlumnoPage.dart';
 import 'package:flutter_application_1/src/pages/cruds/alumno/DetalleAlumno.dart';
@@ -85,7 +86,7 @@ class _AlumnoListState extends State<AlumnoList> {
           )
         ],
       ),
-      drawer: MyDrawer(),
+      drawer: NavigationDrawerWidget(),
       // drawer: MyDrawer(accountName: "Nombre Usuario", accountEmail: "usuario@example.com"), // Aquí proporciona los datos necesarios
       // ignore: unnecessary_null_comparison
       body: data == null

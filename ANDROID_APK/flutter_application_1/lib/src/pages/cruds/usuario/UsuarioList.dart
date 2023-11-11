@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_application_1/src/component/Actualizar.dart';
 import 'package:flutter_application_1/src/component/BottomNavBarFlex2.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
 import 'package:flutter_application_1/src/config/ConfigApi.dart';
 import 'package:flutter_application_1/src/controller/UsuarioController.dart';
 import 'package:flutter_application_1/src/pages/cruds/usuario/CreateUsuario.dart';
@@ -123,7 +124,7 @@ class _UsuarioListState extends State<UsuarioList> {
             ),
           ],
         ),
-        drawer: MyDrawer(),
+        drawer: NavigationDrawerWidget(),
         body: Column(
           children: [
             Expanded(

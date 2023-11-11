@@ -14,6 +14,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   String accountEmail = "";
   String accountName = "";
   String accountFoto = "";
+  String accountRole = "";
 
   @override
   void initState() {
@@ -21,15 +22,36 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
     loadUserProfile();
   }
 
+  // Future<void> loadUserProfile() async {
+  //   final loginDetails = await ShareApiTokenService.loginDetails();
+
+  //   if (loginDetails != null) {
+  //     setState(() {
+  //       accountName = truncateText(loginDetails.user?.name ?? "", 10);
+  //       accountEmail = truncateText(loginDetails.user?.email ?? "", 15);
+  //       accountFoto = loginDetails.user?.foto ?? "";
+  //     });
+  //   }
+  // }
+
   Future<void> loadUserProfile() async {
     final loginDetails = await ShareApiTokenService.loginDetails();
 
     if (loginDetails != null) {
       setState(() {
-        accountName = loginDetails.user?.name ?? "";
-        accountEmail = loginDetails.user?.email ?? "";
+        accountName = truncateText(loginDetails.user?.name ?? "", 10);
+        accountEmail = truncateText(loginDetails.user?.email ?? "", 15);
         accountFoto = loginDetails.user?.foto ?? "";
+        accountRole = loginDetails.user?.role ?? "";
       });
+    }
+  }
+
+  String truncateText(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    } else {
+      return text.substring(0, maxLength) + "...";
     }
   }
 
@@ -39,10 +61,9 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
     final themeProvider = context.watch<ThemeProvider>();
     final themeColors = themeProvider.getThemeColors();
 
-    final name = 'Sarah Abs';
-    final email = 'sarah@abs.com';
-    final urlImage =
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80';
+    final name = '$accountName';
+    final email = '$accountEmail';
+    final urlImage = '$accountFoto';
 
     return Drawer(
       child: Material(
@@ -61,41 +82,78 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                   const SizedBox(height: 12),
                   buildSearchField(),
                   const SizedBox(height: 24),
+                  // Opciones comunes para ambos roles
+                  buildMenuItem(
+                    text: 'Home',
+                    icon: Icons.home,
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        accountRole == 'user' ? '/user_home' : '/admin_home',
+                      );
+                    },
+                  ),
+                 
+                  const SizedBox(height: 16),
+                  if (accountRole == 'user') ...[
+
+                    buildMenuItem(
+                      text: 'Libros',
+                      icon: CupertinoIcons.book,
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/librohome');
+                      },
+                    ),
+                     const SizedBox(height: 16),
                   buildMenuItem(
                     text: 'Portal',
                     icon: Icons.school_outlined,
                     onTap: () {
-                      // Redirige a la ruta 'people' o la ruta que desees.
                       Navigator.of(context).pushNamed('/colegiohome');
                     },
                   ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Libros',
-                    icon: CupertinoIcons.book,
-                    onTap: () {
-                      // Redirige a la ruta 'favourites' o la ruta que desees.
-                      Navigator.of(context).pushNamed('/librohome');
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Workflow',
-                    icon: Icons.workspaces_outline,
-                    onTap: () {
-                      // Redirige a la ruta 'workflow' o la ruta que desees.
-                      Navigator.of(context).pushNamed('/workflow');
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Updates',
-                    icon: Icons.update,
-                    onTap: () {
-                      // Redirige a la ruta 'updates' o la ruta que desees.
-                      Navigator.of(context).pushNamed('/updates');
-                    },
-                  ),
+                    const SizedBox(height: 16),
+                    buildMenuItem(
+                      text: 'Workflow',
+                      icon: Icons.workspaces_outline,
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/workflow');
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    buildMenuItem(
+                      text: 'Updates',
+                      icon: Icons.update,
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/updates');
+                      },
+                    ),
+                  ],
+                  if (accountRole == 'admin') ...[
+                    // Opciones específicas para el rol de administrador
+                    buildMenuItem(
+                      text: 'Usuarios_Crud',
+                      icon: Icons.person,
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/usuario');
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    buildMenuItem(
+                      text: 'Categorias_Crud',
+                      icon: Icons.person,
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/category');
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    buildMenuItem(
+                      text: 'Alumnos_Crud',
+                      icon: Icons.person,
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/alumno');
+                      },
+                    ),
+                  ],
                   const SizedBox(height: 24),
                   Divider(color: Colors.white70),
                   const SizedBox(height: 24),
@@ -107,12 +165,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                           themeProvider.isDiurno
                               ? CupertinoIcons.sun_max
                               : CupertinoIcons.moon_circle,
-
                           size: 30,
-
                           color: themeProvider.isDiurno
                               ? Colors.white
-                              : Colors.white, // Color del sol y la luna
+                              : Colors.white,
                         ),
                         Switch(
                           value: themeProvider.isDiurno,
@@ -128,26 +184,14 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     text: 'Plugins',
                     icon: Icons.account_tree_outlined,
                     onTap: () {
-                      // Redirige a la ruta 'plugins' o la ruta que desees.
                       Navigator.of(context).pushNamed('/plugins');
                     },
                   ),
-                  // const SizedBox(height: 16),
-                  // buildMenuItem(
-                  //   text: 'Notifications',
-                  //   icon: Icons.notifications_outlined,
-                  //   onTap: () {
-                  //     // Redirige a la ruta 'notifications' o la ruta que desees.
-                  //     Navigator.of(context).pushNamed('/notifications');
-                  //   },
-                  // ),
                   const SizedBox(height: 16),
                   buildMenuItem(
                     text: 'Logout',
                     icon: Icons.logout,
                     onTap: () {
-                      // Redirige a la ruta 'notifications' o la ruta que desees.
-
                       ShareApiTokenService.logout(context);
                     },
                   ),

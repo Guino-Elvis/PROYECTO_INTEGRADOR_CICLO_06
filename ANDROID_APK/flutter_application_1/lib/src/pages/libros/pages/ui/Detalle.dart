@@ -1,20 +1,28 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clippy_flutter/arc.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/controller/setup/Biblioteca/LibroController.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/detalle/ItemAppBar.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/inicioItem/ItemWidgets2.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
-
 import '../../../../config/theme.dart';
 
-class Detalle extends StatelessWidget {
-  const Detalle({super.key});
+class Detalle extends StatefulWidget {
+  final dynamic libro;
+  // const Detalle({super.key});
+  const Detalle({Key? key, required this.libro}) : super(key: key);
+  @override
+  State<Detalle> createState() => _DetalleState();
+}
 
+class _DetalleState extends State<Detalle> {
   @override
   Widget build(BuildContext context) {
+    final dynamic libro = widget.libro;
     final themeProvider = context.watch<ThemeProvider>();
     final themeColors = themeProvider.getThemeColors();
     return Stack(
@@ -59,10 +67,19 @@ class Detalle extends StatelessWidget {
                       )
                     ],
                   ),
-                  child: Image.asset(
-                    "assets/lib2.jfif",
+                  child: CachedNetworkImage(
+                    imageUrl: libro.containsKey('foto')
+                        ? libro['foto'].toString()
+                        : 'assets/nofoto.jpg',
+                    placeholder: (context, url) => Container(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) => Image.asset(
+                      'assets/nofoto.jpg',
+                      fit: BoxFit.cover,
+                    ),
                     fit: BoxFit.cover,
-                    height: 300,
                   ),
                 ),
               ),
@@ -84,14 +101,19 @@ class Detalle extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              Text(
-                                "Libro titulo",
-                                style: TextStyle(
-                                    color: themeProvider.isDiurno
-                                        ? HexColor("#0e1b4d")
-                                        : Colors.white,
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold),
+                              Container(
+                                width: 350,
+                                child: Text(
+                                  libro['titulo']?.toString() ??
+                                      'no se encontró la categoria',
+                                  // libro.containsKey('titulo') ? libro['titulo'] : 'Libro sin título',
+                                  style: TextStyle(
+                                      color: themeProvider.isDiurno
+                                          ? HexColor("#0e1b4d")
+                                          : Colors.white,
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               )
                             ],
                           ),
@@ -120,34 +142,9 @@ class Detalle extends StatelessWidget {
                               ),
                               Row(
                                 children: [
-                                  Container(
-                                    padding: EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: themeProvider.isDiurno
-                                          ? HexColor("#F82249")
-                                          : themeColors[0],
-                                      borderRadius: BorderRadius.circular(20),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 3,
-                                          blurRadius: 10,
-                                          offset: Offset(0, 3),
-                                        )
-                                      ],
-                                    ),
-                                    child: Icon(
-                                      Icons.download,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: (){
-                                        Navigator.pushNamed(context, "/reserbalibro");
-                                    },
-                                    child: Container(
+                                  if (libro['formato']?.toString() == 'online')
+                                    Container(
                                       padding: EdgeInsets.all(5),
-                                      margin: EdgeInsets.only(left: 20),
                                       decoration: BoxDecoration(
                                         color: themeProvider.isDiurno
                                             ? HexColor("#F82249")
@@ -162,11 +159,43 @@ class Detalle extends StatelessWidget {
                                           )
                                         ],
                                       ),
-                                      child: Text('Reserbar',style: TextStyle(
-                                        color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16
-                                      )),
+                                      child: Icon(
+                                        Icons.download,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
+                                  if (libro['formato']?.toString() == 'fisico')
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                            context, "/reserbalibro");
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.all(5),
+                                        margin: EdgeInsets.only(left: 20),
+                                        decoration: BoxDecoration(
+                                          color: themeProvider.isDiurno
+                                              ? HexColor("#F82249")
+                                              : themeColors[0],
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                              spreadRadius: 3,
+                                              blurRadius: 10,
+                                              offset: Offset(0, 3),
+                                            )
+                                          ],
+                                        ),
+                                        child: Text('Reserbar',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16)),
+                                      ),
+                                    ),
                                 ],
                               )
                             ],
@@ -211,8 +240,11 @@ class Detalle extends StatelessWidget {
                                   Row(
                                     children: [
                                       Container(
-                                        height: 30,
-                                        width: 30,
+                                        padding: EdgeInsets.only(
+                                            left: 8,
+                                            right: 8,
+                                            top: 6,
+                                            bottom: 6),
                                         alignment: Alignment.center,
                                         margin:
                                             EdgeInsets.symmetric(horizontal: 5),
@@ -233,7 +265,16 @@ class Detalle extends StatelessWidget {
                                               )
                                             ]),
                                         child: Text(
-                                          "Si",
+                                          libro['formato']
+                                                      ?.toString()
+                                                      .isNotEmpty ??
+                                                  false
+                                              ? libro['formato'].toString() ==
+                                                      'online'
+                                                  ? 'Sí'
+                                                  : 'No'
+                                              : 'No se encontró el formato',
+                                          // libro['formato']?.toString() ??'no se encontro el formato',
                                           style: TextStyle(
                                               fontSize: 15,
                                               color: Colors.white,
@@ -260,80 +301,92 @@ class Detalle extends StatelessWidget {
                                   SizedBox(),
                                   Row(
                                     children: [
-                                      for (int i = 5; i < 8; i++)
-                                        Container(
-                                          height: 30,
-                                          width: 60,
-                                          alignment: Alignment.center,
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          decoration: BoxDecoration(
-                                              color: themeProvider.isDiurno
-                                                  ? HexColor("#F82249")
-                                                  : themeColors[0],
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: themeProvider.isDiurno
-                                                      ? Colors.grey
-                                                          .withOpacity(0.5)
-                                                      : Colors.transparent,
-                                                  spreadRadius: 2,
-                                                  blurRadius: 8,
-                                                )
-                                              ]),
-                                          child: Text(
-                                            "Terror",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            left: 8,
+                                            right: 8,
+                                            top: 6,
+                                            bottom: 6),
+                                        alignment: Alignment.center,
+                                        margin:
+                                            EdgeInsets.symmetric(horizontal: 5),
+                                        decoration: BoxDecoration(
+                                            color: themeProvider.isDiurno
+                                                ? HexColor("#F82249")
+                                                : themeColors[0],
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: themeProvider.isDiurno
+                                                    ? Colors.grey
+                                                        .withOpacity(0.5)
+                                                    : Colors.transparent,
+                                                spreadRadius: 2,
+                                                blurRadius: 8,
+                                              )
+                                            ]),
+                                        child: Text(
+                                          libro['categorialib']['titulo']
+                                                  ?.toString() ??
+                                              'no se encontró la categoria',
+                                          //libro.containsKey('titulo') ? libro['titulo'] : 'Libro sin título',
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
                                         ),
+                                      ),
                                     ],
                                   ),
                                 ],
                               ),
                             ],
                           ),
+                        ),
+                        if (libro['formato']?.toString() == 'fisico')
+                        Container(
+                          height: 60,
+                          color: Colors.white,
                         )
                       ],
                     ),
                   ),
                 ),
               ),
-              Column(
-                children: [
-                  Container(
-                    color: themeProvider.isDiurno ? Colors.white : Colors.black,
-                    child: Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          margin: EdgeInsets.symmetric(
-                            vertical: 20,
-                            horizontal: 10,
-                          ),
-                          child: Text(
-                            "Best Stilling",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: themeProvider.isDiurno
-                                  ? HexColor("#0e1b4d")
-                                  : Colors.white,
+              if (libro['formato']?.toString() == 'online')
+                Column(
+                  children: [
+                    Container(
+                      color:
+                          themeProvider.isDiurno ? Colors.white : Colors.black,
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.symmetric(
+                              vertical: 20,
+                              horizontal: 10,
+                            ),
+                            child: Text(
+                              "Best Stilling",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: themeProvider.isDiurno
+                                    ? HexColor("#0e1b4d")
+                                    : Colors.white,
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          child: ItemWidgets2(),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                          Container(
+                            child: ItemWidgets2(),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
             ],
           ),
         ),

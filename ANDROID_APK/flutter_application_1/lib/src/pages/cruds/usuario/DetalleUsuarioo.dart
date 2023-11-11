@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'dart:math' as math;
 
 import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
 import 'package:flutter_application_1/src/controller/UsuarioController.dart';
 import 'package:flutter_application_1/src/pages/cruds/usuario/EditUsuario.dart';
 import 'package:flutter_application_1/src/pages/cruds/usuario/UsuarioList.dart';
@@ -57,7 +58,7 @@ class _DetalleUsuariooState extends State<DetalleUsuarioo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(widget: widget),
-      drawer: MyDrawer(),
+      drawer: NavigationDrawerWidget(),
       body: ProfilePage(widget: widget),
     );
   }

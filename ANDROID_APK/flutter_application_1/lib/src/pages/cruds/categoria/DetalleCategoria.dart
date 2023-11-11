@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'dart:math' as math;
 
 import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
 import 'package:flutter_application_1/src/controller/CategoriaController.dart';
 import 'package:flutter_application_1/src/controller/UsuarioController.dart';
 import 'package:flutter_application_1/src/pages/cruds/categoria/CategoriaList.dart';
@@ -59,7 +60,7 @@ class _DetalleCategoriaState extends State<DetalleCategoria> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(widget: widget),
-      drawer: MyDrawer(),
+      drawer: NavigationDrawerWidget(),
       body: ProfilePage(widget: widget),
     );
   }

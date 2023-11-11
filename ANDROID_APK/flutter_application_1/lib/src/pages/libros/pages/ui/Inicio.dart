@@ -1,4 +1,5 @@
 // ignore_for_file: file_names
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -141,55 +142,58 @@ class Inicio extends StatelessWidget {
                 color: themeProvider.isDiurno ? HexColor("#F82249"): themeColors[0],
                 height: 70,
                 padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '¡Explora Nuestra Colección Física!',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                child: FadeInDown(
+                  duration: Duration(milliseconds: 500),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '¡Explora Nuestra Colección Física!',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        Container(
-                          width: 220,
-                          child: Text(
-                            'Descubre nuestros libros en papel y disfruta de la lectura tradicional.',
-                            style: TextStyle(color: Colors.white, fontSize: 10),
+                          Container(
+                            width: 220,
+                            child: Text(
+                              'Descubre nuestros libros en papel y disfruta de la lectura tradicional.',
+                              style: TextStyle(color: Colors.white, fontSize: 10),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: 15,),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, "/librofisico");
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(left: 22,right: 22,top: 8,bottom: 8),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.white)),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Explorar",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: Colors.white,
-                              ),
-                            )
-                          ],
+                        ],
+                      ),
+                      SizedBox(width: 15,),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, "/librofisico");
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(left: 22,right: 22,top: 8,bottom: 8),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.white)),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Explorar",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Container(
@@ -223,7 +227,7 @@ class Inicio extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Categoriesview(),
+                    CategoriItem1(),
                     //seccion2 categoria
                     Container(
                       alignment: Alignment.centerLeft,

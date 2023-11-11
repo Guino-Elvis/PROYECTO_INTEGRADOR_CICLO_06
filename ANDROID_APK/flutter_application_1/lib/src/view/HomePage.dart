@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/src/component/BottomNavBarFlex.dart';
-import 'package:flutter_application_1/src/component/BottomNavBarFlex2.dart';
-import 'package:flutter_application_1/src/component/Sidebar.dart';
-import 'package:flutter_application_1/src/config/theme.dart';
-import 'package:flutter_application_1/src/service/authService/ApiService.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_application_1/src/view/AdminHomePage.dart';
+import 'package:flutter_application_1/src/view/UserHomePage.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,88 +12,53 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String accountEmail = "";
+  String accountName = "";
+  String accountFoto = "";
+  String accountRole = "";
 
   @override
   void initState() {
+    loadUserProfile();
     super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
-        overlays: []);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky, overlays: []);
+  }
+
+  Future<void> loadUserProfile() async {
+    final loginDetails = await ShareApiTokenService.loginDetails();
+
+    if (loginDetails != null) {
+      setState(() {
+        accountName = truncateText(loginDetails.user?.name ?? "", 10);
+        accountEmail = truncateText(loginDetails.user?.email ?? "", 15);
+        accountFoto = loginDetails.user?.foto ?? "";
+        accountRole = loginDetails.user?.role ?? "";
+      });
+    }
+  }
+
+  String truncateText(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    } else {
+      return text.substring(0, maxLength) + "...";
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = context.watch<ThemeProvider>();
-    final themeColors = themeProvider.getThemeColors();
-    Color iconColor;
-
-    if (themeProvider.isDiurno) {
-      iconColor = themeProvider.getThemeColors()[
-          themeProvider.getThemeColors().indexOf(ThemeProvider.colorwhite)];
-    } else {
-      iconColor = themeProvider.getThemeColors()[
-          themeProvider.getThemeColors().indexOf(ThemeProvider.colorblack)];
-    }
-    
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Page h'),
-        elevation: 0,
-        actions: [
-          IconTheme(
-            data: IconThemeData(color: iconColor),
-            child: IconButton(
-              onPressed: () {
-                ShareApiTokenService.logout(context);
-              },
-              icon: const Icon(Icons.logout),
-            ),
-          ),
-        ],
-      ),
-      drawer: MyDrawer(),
-      backgroundColor: themeProvider.isDiurno ? themeColors[0] : themeColors[3],
-      body: Column(
-        children: [
-          Expanded(
-            child: userProfile(),
-          ),
-          Container(
-            height: 60.0, // Ajusta la altura deseada para el BottomNavBarFlex
-            child: BottomNavBarFlex2(
-              onPressedSpecialButtonItem: () {},
-              onPressedSpecialButtonExel: () {},
-              onPressedSpecialButtonPdf: () {},
-              buttonColor: Colors.green,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget userProfile() {
-    return FutureBuilder<List<String>>(
-      future: ApiService.getUserProfile(),
-      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            final emailList = snapshot.data!;
-
-            return ListView.builder(
-              itemCount: emailList.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(emailList[index], style: TextStyle(fontSize: 16)),
-                );
-              },
-            );
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error.toString()}'));
-          }
-        }
-
-        return Center(child: CircularProgressIndicator());
-      },
+    return Stack(
+      children: [
+         if (accountRole == 'admin') 
+        Container(
+         
+          child: AdminHomePage(),
+        ),
+        if (accountRole == 'user') 
+        Container(
+          child: UserHomePage(),
+        ),
+      ],
     );
   }
 }

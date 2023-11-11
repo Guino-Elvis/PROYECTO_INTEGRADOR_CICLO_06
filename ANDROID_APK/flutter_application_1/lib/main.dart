@@ -93,11 +93,11 @@ class MyApp extends StatelessWidget {
         '/user_home': (context) => UserHomePage(),
         //LIBRO RUTAS
         '/librohome': (context) => Inicio(),
-        '/librocategory': (context) => const CategoriView(),
+        '/librocategory': (context) => const CategoriView(categoria: null,),
         '/librofisico': (context) => const LibroFisico(),
         '/reserbalibro': (context) => const ReservaLibro(),
         '/favoritos': (context) => const Favoritos(),
-        '/detalle': (context) => const Detalle(),
+        '/detalle': (context) => const Detalle(libro: null,),
         //COLEGIO RUTAS 
         '/colegiohome': (context) => HomeScreenEscolar(),
       },

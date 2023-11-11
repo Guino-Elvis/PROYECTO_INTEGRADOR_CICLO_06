@@ -1,8 +1,10 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/component/search_component.dart';
 import 'package:flutter_application_1/src/config/theme.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Inicio.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/inicioItem/ItemWidgets0.dart';
+import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/librofisico/ItemWidgets0_libfisico.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/librofisico/Item_libro_fisico_seccion.dart';
 import 'package:provider/provider.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
@@ -114,47 +116,53 @@ class LibroFisico extends StatelessWidget {
                             ],
                           ),
                         ),
-                         Container(
-                          padding: EdgeInsets.only(left: 25),
-                          alignment: Alignment.centerLeft,
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Libro: Fisico',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      ),
-                                  textAlign: TextAlign.start,
-                                ),
-                              ],
-                            ),
+                         FadeInLeft(
+                          duration: Duration(milliseconds: 600),
+                           child: Container(
+                            padding: EdgeInsets.only(left: 25),
+                            alignment: Alignment.centerLeft,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Libro: Fisico',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ],
+                              ),
+                           ),
                          ),
                          SizedBox(height: 20,),
-                         Container(
-                          padding: EdgeInsets.only(left: 25),
-                          alignment: Alignment.centerLeft,
-                          width: 170,
-                            child: Column(
-                              children: [
-                               Text(
-                                  'Total de libros',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 17,
-                                     ),
-                                  textAlign: TextAlign.start,
-                                ),
-                                Text(
-                                  '20',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
+                         FadeInLeft(
+                          duration: Duration(milliseconds: 600),
+                           child: Container(
+                            padding: EdgeInsets.only(left: 25),
+                            alignment: Alignment.centerLeft,
+                            width: 170,
+                              child: Column(
+                                children: [
+                                 Text(
+                                    'Total de libros',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                       ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  Text(
+                                    '20',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                           ),
                          ),
                        
                       ],
@@ -174,36 +182,39 @@ class LibroFisico extends StatelessWidget {
                               SizedBox(height: 30),
                               SearchItem(),
                               SizedBox(height: 15),
-                              ItemWidgets0(),
+                              ItemWidgets0LibFisico(),
                             ],
                           ),
                         ),
                       ),
                     ),
-                    Transform.translate(
-                      offset: Offset(230, 70),
-                      child: Transform(
-                        transform: Matrix4.identity()
-                          ..setEntry(3, 2,
-                              0.004) // Establecer un valor para la perspectiva
-                          ..rotateY(0.3), // Girar en el eje Y
-                        alignment: FractionalOffset.center,
-                        child: Container(
-                          width: 130,
-                          height: 180,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.5),
-                                spreadRadius: 0,
-                                blurRadius: 2,
-                                offset: Offset(5, 5),
-                              ),
-                            ],
-                          ),
-                          child: Image.asset(
-                            "assets/lib2.jfif",
-                            fit: BoxFit.cover,
+                     FadeInRight(
+                       duration: Duration(milliseconds: 600),
+                      child: Transform.translate(
+                        offset: Offset(230, 70),
+                        child: Transform(
+                          transform: Matrix4.identity()
+                            ..setEntry(3, 2,
+                                0.004) // Establecer un valor para la perspectiva
+                            ..rotateY(0.3), // Girar en el eje Y
+                          alignment: FractionalOffset.center,
+                          child: Container(
+                            width: 130,
+                            height: 180,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  spreadRadius: 0,
+                                  blurRadius: 2,
+                                  offset: Offset(5, 5),
+                                ),
+                              ],
+                            ),
+                            child: Image.asset(
+                              "assets/lib2.jfif",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),

@@ -1,6 +1,7 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
+import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
 import 'package:flutter_application_1/src/controller/AlumnoController.dart';
 import 'package:flutter_application_1/src/pages/cruds/alumno/AlumnoList.dart';
 import 'package:image_picker/image_picker.dart';
@@ -112,7 +113,7 @@ class _EditAlumnoState extends State<EditAlumno> {
       appBar: AppBar(
         title: Text("Editar alumno"),
       ),
-      drawer: MyDrawer(), //sidebar
+      drawer: NavigationDrawerWidget(), //sidebar
       
       body: Form(
         child: ListView(
