@@ -193,6 +193,48 @@ class _ItemWidgets2State extends State<ItemWidgets2> {
                       ],
                     ),
                   ),
+                  SizedBox(height: 10,),
+                   Container(
+                    alignment: Alignment.bottomLeft,
+                    child: Row(
+                      children: [
+                        Text('formato:',style: TextStyle(
+                          color: themeProvider.isDiurno
+                          ? HexColor("#0e1b4d")
+                          : themeColors[7],
+                        ),),
+                        SizedBox(width: 10,),
+                        Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              color: themeProvider.isDiurno
+                                  ? HexColor("#F82249")
+                                  : themeColors[0],
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: themeProvider.isDiurno
+                                      ? Colors.black.withOpacity(0.5)
+                                      : themeColors[0],
+                                  spreadRadius: 1,
+                                  blurRadius: 2,
+                                  offset: Offset(0, 2),
+                                )
+                              ],
+                            ),
+                            child: Text(
+                             truncateText(items['formato']?.toString() ?? 'no se encontró formato',27),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                                color: Colors.white,
+                              ),
+                            )),
+                      
+                      ],
+                    ),
+                  ),
                 ],
               ),
               Spacer(),

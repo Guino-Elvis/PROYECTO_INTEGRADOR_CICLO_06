@@ -13,53 +13,78 @@ import 'package:provider/provider.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 class CategoriView extends StatefulWidget {
-    final int categoryId; // Cambiado el tipo de dynamic a int
+  final int categoryId; // Cambiado el tipo de dynamic a int
   // const CategoriView({Key? key, required categoria}) : super(key: key);
-    const CategoriView({Key? key, required this.categoryId}) : super(key: key);
+  const CategoriView({Key? key, required this.categoryId}) : super(key: key);
 
   @override
   State<CategoriView> createState() => _CategoriViewState();
 }
 
 class _CategoriViewState extends State<CategoriView> {
-    List<dynamic> item = []; // Lista para almacenar los libros
-  CategorialibControllerLib categorialibControllerLib = CategorialibControllerLib();
-    
+  late ThemeProvider themeProvider;
+  late List<Color> themeColors;
+  String categoryName = '';
+  List<dynamic> item = []; // Lista para almacenar los libros
+  CategorialibControllerLib categorialibControllerLib =
+      CategorialibControllerLib();
+  Map<String, dynamic>? categoriaData;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Accede a los valores de Provider en didChangeDependencies
+    themeProvider = Provider.of<ThemeProvider>(context);
+    themeColors = themeProvider.getThemeColors();
+  }
 
   @override
   void initState() {
     super.initState();
-     _getData();
+
+    _getData();
   }
-Future<void> _getData() async {
-  try {
-    print('Fetching data for categoryId: ${widget.categoryId}');
-    final librosCategoriaData =
-        await categorialibControllerLib.getDataLibroPorIdCategoria(
-      categoriaId: widget.categoryId,
-      formato: 'online', // Agrega el formato aquí
-    );
 
-    setState(() {
-      item = librosCategoriaData;
-    });
-
-   // print('Data fetched successfully. Number of items: ${item.length}');
-  } catch (error) {
-    print('Error al obtener libros de la categoría: $error');
-    // Aquí puedes mostrar un mensaje de error más detallado si es necesario
+  String truncateText(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    } else {
+      return text.substring(0, maxLength) + "...";
+    }
   }
-}
 
+  Future<void> _getData() async {
+    try {
+      print('Fetching data for categoryId: ${widget.categoryId}');
+      final librosCategoriaData =
+          await categorialibControllerLib.getDataLibroPorIdCategoria(
+        categoriaId: widget.categoryId,
+        formato: 'online', // Agrega el formato aquí
+      );
+
+      // Nuevo: Obtener información de la categoría
+      final categoriaResponse =
+          await categorialibControllerLib.getCategoriaPorId(widget.categoryId);
+      setState(() {
+        item = librosCategoriaData;
+        categoriaData = categoriaResponse;
+      });
+
+      // print('Data fetched successfully. Number of items: ${item.length}');
+    } catch (error) {
+      print('Error al obtener libros de la categoría: $error');
+      // Aquí puedes mostrar un mensaje de error más detallado si es necesario
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     print('Building CategoriView for categoryId: ${widget.categoryId}');
-      print('Items in the list: $item');
-     //  print('Number of items in the list: ${item.length}');
-  // item.forEach((element) {
-  //   print('Item: $element');
-  // });
+    print('Items in the list: $item');
+    //  print('Number of items in the list: ${item.length}');
+    // item.forEach((element) {
+    //   print('Item: $element');
+    // });
     final themeProvider = context.watch<ThemeProvider>();
     final themeColors = themeProvider.getThemeColors();
 
@@ -88,16 +113,19 @@ Future<void> _getData() async {
             children: [
               Container(
                 height: 565,
-                 decoration: BoxDecoration(
+                decoration: BoxDecoration(
                   image: DecorationImage(
-                     image: themeProvider.isDiurno
-              ? AssetImage('assets/lib2.jfif')
-              : AssetImage('assets/fondonegro1.jfif'),
-                    // image: AssetImage('assets/lib2.jfif'),
+                    image: themeProvider.isDiurno
+                        ? (categoriaData != null &&
+                                categoriaData!['foto'] != null)
+                            ? CachedNetworkImageProvider(
+                                    categoriaData!['foto']!.toString())
+                                as ImageProvider
+                            : AssetImage('assets/lib2.jfif')
+                        : AssetImage('assets/fondonegro1.jfif'),
                     fit: BoxFit.cover,
                   ),
                 ),
-                  
                 child: Stack(
                   children: [
                     Positioned.fill(
@@ -155,7 +183,7 @@ Future<void> _getData() async {
                           child: Column(
                             children: [
                               Text(
-                                'Categoria: terror',
+                                'Categoría: ${categoriaData?['titulo'] ?? 'No encontrado'}',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -183,7 +211,7 @@ Future<void> _getData() async {
                                 textAlign: TextAlign.start,
                               ),
                               Text(
-                                '20',
+                                '${item.length}',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 25,
@@ -213,7 +241,6 @@ Future<void> _getData() async {
                               SearchItem(),
                               SizedBox(height: 15),
                               _itemWidgets0Categoria(),
-                          
                             ],
                           ),
                         ),
@@ -240,10 +267,22 @@ Future<void> _getData() async {
                               ),
                             ],
                           ),
-                          child:  Image.asset(
-                              "assets/lib2.jfif",
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                categoriaData?.containsKey('foto') ?? false
+                                    ? categoriaData!['foto'].toString()
+                                    : 'assets/nofoto.jpg',
+                            placeholder: (context, url) => Container(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(),
+                            ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/nofoto.jpg',
                               fit: BoxFit.cover,
                             ),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
@@ -252,7 +291,7 @@ Future<void> _getData() async {
               ),
               Container(
                 color: themeProvider.isDiurno ? Colors.white : Colors.white10,
-                child: ItemCategoriaSeccion(),
+                child: _itemCategoriaSeccion(),
               ),
             ],
           ),
@@ -261,67 +300,264 @@ Future<void> _getData() async {
     );
   }
 
-Widget _itemWidgets0Categoria() {
- // print('Number of items in _itemWidgets0Categoria: ${item.length}');
-  return SlideInRight(
-    duration: Duration(milliseconds: 900),
-    child: SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
+  Widget _itemCategoriaSeccion() {
+    return Container(
+      child: Column(
         children: item.map<Widget>((libroData) {
-        //  print('Mapping libroData: $libroData');
-          return _buildLibroContainer(libroData);
+          //  print('Mapping libroData: $libroData');
+          return _itemCategoriaSeccionComponent(libroData);
         }).toList(),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget _buildLibroContainer(Map<String, dynamic> libroData) {
-  //print('Building container for libro: $libroData');
-  return Container(
-    margin: EdgeInsets.all(10),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.5),
-          spreadRadius: 0,
-          blurRadius: 2,
-          offset: Offset(5, 5),
-        ),
-      ],
-    ),
-    child: InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Detalle(libro: libroData),
+  Widget _itemCategoriaSeccionComponent(Map<String, dynamic> libroData) {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(
+            color: themeProvider.isDiurno ? Colors.black12 : themeColors[7],
+            //color: Colors.black12
           ),
-        );
-      },
-      child: CachedNetworkImage(
-        imageUrl: libroData.containsKey('foto')
-            ? libroData['foto'].toString()
-            : 'assets/nofoto.jpg',
-        placeholder: (context, url) => Container(
-          width: 20,
-          height: 20,
-          child: CircularProgressIndicator(),
+          borderRadius: BorderRadius.circular(10)),
+      margin: EdgeInsets.all(10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.all(10),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Detalle(libro: libroData),
+                  ),
+                );
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: libroData.containsKey('foto')
+                      ? libroData['foto'].toString()
+                      : 'assets/nofoto.jpg',
+                  placeholder: (context, url) => Container(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => Image.asset(
+                    'assets/nofoto.jpg',
+                    height: 200,
+                    width: 138,
+                    fit: BoxFit.cover,
+                  ),
+                  fit: BoxFit.cover,
+                  height: 130,
+                  width: 85,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: 10), // Espacio entre la imagen y el texto
+          Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              padding: EdgeInsets.only(top: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    truncateText(
+                        libroData['titulo']?.toString() ??
+                            'no se encontró el titulo',
+                        27),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: themeProvider.isDiurno
+                          ? HexColor("#0e1b4d")
+                          : themeColors[7],
+                    ),
+                  ),
+                  Container(
+                    width: 180,
+                    child: Text(
+                      truncateText(
+                          libroData['descripcion']?.toString() ??
+                              'no se encontró el descripcion',
+                          70),
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.bottomLeft,
+                    child: Row(
+                      children: [
+                        Text(
+                          'categoria:',
+                          style: TextStyle(
+                            color: themeProvider.isDiurno
+                                ? HexColor("#0e1b4d")
+                                : themeColors[7],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              color: themeProvider.isDiurno
+                                  ? HexColor("#F82249")
+                                  : themeColors[0],
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: themeProvider.isDiurno
+                                      ? Colors.black.withOpacity(0.5)
+                                      : themeColors[0],
+                                  spreadRadius: 1,
+                                  blurRadius: 2,
+                                  offset: Offset(0, 2),
+                                )
+                              ],
+                            ),
+                            child: Text(
+                              truncateText(
+                                  libroData['categorialib']['titulo']
+                                          ?.toString() ??
+                                      'no se encontró la categoria',
+                                  27),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                                color: Colors.white,
+                              ),
+                            )),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    alignment: Alignment.bottomLeft,
+                    child: Row(
+                      children: [
+                        Text(
+                          'formato:',
+                          style: TextStyle(
+                            color: themeProvider.isDiurno
+                                ? HexColor("#0e1b4d")
+                                : themeColors[7],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              color: themeProvider.isDiurno
+                                  ? HexColor("#F82249")
+                                  : themeColors[0],
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: themeProvider.isDiurno
+                                      ? Colors.black.withOpacity(0.5)
+                                      : themeColors[0],
+                                  spreadRadius: 1,
+                                  blurRadius: 2,
+                                  offset: Offset(0, 2),
+                                )
+                              ],
+                            ),
+                            child: Text(
+                              truncateText(
+                                  libroData['formato']
+                                          ?.toString() ??
+                                      'no se encontró formato',
+                                  27),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                                color: Colors.white,
+                              ),
+                            )),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _itemWidgets0Categoria() {
+    // print('Number of items in _itemWidgets0Categoria: ${item.length}');
+    return SlideInRight(
+      duration: Duration(milliseconds: 900),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: item.map<Widget>((libroData) {
+            //  print('Mapping libroData: $libroData');
+            return _buildLibroContainer(libroData);
+          }).toList(),
         ),
-        errorWidget: (context, url, error) => Image.asset(
-          'assets/nofoto.jpg',
+      ),
+    );
+  }
+
+  Widget _buildLibroContainer(Map<String, dynamic> libroData) {
+    //print('Building container for libro: $libroData');
+    return Container(
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.5),
+            spreadRadius: 0,
+            blurRadius: 2,
+            offset: Offset(5, 5),
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Detalle(libro: libroData),
+            ),
+          );
+        },
+        child: CachedNetworkImage(
+          imageUrl: libroData.containsKey('foto')
+              ? libroData['foto'].toString()
+              : 'assets/nofoto.jpg',
+          placeholder: (context, url) => Container(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(),
+          ),
+          errorWidget: (context, url, error) => Image.asset(
+            'assets/nofoto.jpg',
+            height: 200,
+            width: 138,
+            fit: BoxFit.cover,
+          ),
+          fit: BoxFit.cover,
           height: 200,
           width: 138,
-          fit: BoxFit.cover,
         ),
-        fit: BoxFit.cover,
-        height: 200,
-        width: 138,
       ),
-    ),
-  );
-}
-
+    );
+  }
 }

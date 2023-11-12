@@ -1,23 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/component/search_component.dart';
 import 'package:flutter_application_1/src/config/theme.dart';
-import 'package:flutter_application_1/src/pages/libros/pages/ui/Inicio.dart';
+import 'package:flutter_application_1/src/controller/setup/Biblioteca/Reserba_lib_Controller.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Libro_fisico.dart';
-import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/categoria/Item_categoria_seccion.dart';
-import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/inicioItem/ItemWidgets0.dart';
+import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/reversalibro/vista_reserva.dart';
+import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 class ReservaLibro extends StatefulWidget {
-  const ReservaLibro({super.key});
+  final dynamic libro;
+  const ReservaLibro({super.key, required this.libro});
 
   @override
   State<ReservaLibro> createState() => _ReservaLibroState();
 }
 
 class _ReservaLibroState extends State<ReservaLibro> {
+    bool mostrarBoton = false;
+
   late ThemeProvider themeProvider;
   late List<Color> themeColors;
+  DateTime? selectedDate;
+  //traendo ususario
+  String accountId = "";
+  String accountName = "";
+  String accountEmail = "";
+  String accountApellido_P = "";
+  String accountApellido_M = "";
+  String accountCodigo = "";
+  dynamic libro;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now()
+          .add(Duration(days: 365)), // Limitar a 1 año en el futuro
+    );
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked; // Actualizar la fecha seleccionada
+      });
+    }
+  }
+
+  Future<void> loadUserProfile() async {
+    final loginDetails = await ShareApiTokenService.loginDetails();
+
+    if (loginDetails != null) {
+      setState(() {
+        accountId = (loginDetails.user?.id ?? "ID no encontrado").toString();
+        accountEmail = loginDetails.user?.email ?? "email no encontrado";
+        accountName = loginDetails.user?.name ?? "name no encontrado";
+        accountApellido_P =
+            loginDetails.user?.apellidoP ?? "apellidoP no encontrado";
+        accountApellido_M =
+            loginDetails.user?.apellidoM ?? "apellidoM no encontrado";
+        accountCodigo = loginDetails.user?.codigo ?? "codigo no encontrado";
+      });
+    }
+  }
+
+  //end traendo ususario
+  @override
+  void initState() {
+    super.initState();
+    loadUserProfile();
+    libro = widget.libro;
+  }
 
   @override
   void didChangeDependencies() {
@@ -27,10 +80,63 @@ class _ReservaLibroState extends State<ReservaLibro> {
     themeColors = themeProvider.getThemeColors();
   }
 
+  Future<void> _realizarReserva(String nombre, String correo) async {
+    final dynamic libro = widget.libro;
+
+    final userIdController =
+        accountId; // Reemplaza con la lógica para obtener el ID de usuario
+    //final fechaReservaController = DateTime.now().toUtc().toIso8601String();
+
+    final fechaReservaController =
+        selectedDate?.toIso8601String() ?? DateTime.now().toIso8601String();
+    final estado_reservaController = 'P';
+
+    try {
+      // Verificar si el ID de usuario es válido
+      if (userIdController.isNotEmpty) {
+        // Construir el cuerpo de la reserva con la información del formulario
+        Map data = {
+          'userId': '$userIdController',
+          'libro': {
+            'id': (libro is Map) ? libro['id'] : libro.toString(),
+          },
+          'fecha_reserva': '$fechaReservaController',
+          'estado_reserva': '$estado_reservaController',
+        };
+        final response = await ReservaLibController().CrearReservaLib(
+          userIdController,
+          libro,
+          fechaReservaController,
+          estado_reservaController,
+        );
+
+        if (response.statusCode == 201) {
+          print("Reserva exitosa");
+             setState(() {
+          mostrarBoton = estado_reservaController == 'A';
+        });
+        } else {
+          print(
+              "Error al realizar la reserva. Código de estado: ${response.statusCode}");
+        }
+      } else {
+        print("ID de usuario no válido");
+      }
+    } catch (e) {
+      print("Error al realizar la reserva: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final themeProvider = context.watch<ThemeProvider>();
-    // final themeColors = themeProvider.getThemeColors();
+    final dynamic libro = widget.libro;
+    final id = '$accountId';
+    final email = '$accountEmail';
+    final name = '$accountName';
+    final apellido_m = '$accountApellido_M';
+    final apellido_p = '$accountApellido_P';
+    final codigo = '$accountCodigo';
+
     return Scaffold(
       body: Stack(
         children: [
@@ -105,8 +211,9 @@ class _ReservaLibroState extends State<ReservaLibro> {
                                   PopupMenuItem<int>(
                                     value: 1,
                                     child: InkWell(
-                                      onTap: (){
-                                          Navigator.pushNamed(context, "/favoritos");
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                            context, "/favoritos");
                                       },
                                       child: Row(
                                         children: [
@@ -161,7 +268,7 @@ class _ReservaLibroState extends State<ReservaLibro> {
                           child: Column(
                             children: [
                               Text(
-                                'Perros Hambrientos',
+                                ' ${libro['titulo']} ${libro['id']}',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 17,
@@ -226,10 +333,22 @@ class _ReservaLibroState extends State<ReservaLibro> {
                   ],
                 ),
               ),
-              Container(
-                  color: themeProvider.isDiurno ? Colors.white : Colors.white10,
-                  //formulario
-                  child: _formulario())
+              Column(
+                children: [
+                  Container(
+                    color:
+                        themeProvider.isDiurno ? Colors.white : Colors.white10,
+                    //formulario
+                    child: _formulario(),
+                  ),
+                  Container(
+                    color:
+                        themeProvider.isDiurno ? Colors.white : Colors.white10,
+                    //formulario
+                    child: _crudReserbalibro(),
+                  ),
+                ],
+              )
             ],
           ),
         ],
@@ -237,13 +356,13 @@ class _ReservaLibroState extends State<ReservaLibro> {
     );
   }
 
-  Widget _textCenter() {
+  Widget _textCenter({required String titulo}) {
     return Container(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "Formulario",
+            titulo,
             style: TextStyle(
               color:
                   themeProvider.isDiurno ? HexColor("#0e1b4d") : Colors.white,
@@ -270,44 +389,77 @@ class _ReservaLibroState extends State<ReservaLibro> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _textCenter(),
+          _textCenter(
+            titulo:
+                'formulario', // Utiliza ':' para asignar el valor a 'titulo'
+          ),
           SizedBox(height: 20),
           Text(
-            'Usuario: Guino Elvis Yujra Vargas',
+            'Libro: ${libro['titulo']} (ID: ${libro['id']})',
             style: TextStyle(
               color: themeProvider.isDiurno ? Colors.black : Colors.white,
             ),
           ),
           Text(
-            'Codigo: 202100458',
+            'Id usuario:$accountId',
+            style: TextStyle(
+              color: themeProvider.isDiurno ? Colors.black : Colors.white,
+            ),
+          ),
+          Text(
+            'email :$accountEmail',
+            style: TextStyle(
+              color: themeProvider.isDiurno ? Colors.black : Colors.white,
+            ),
+          ),
+          Text(
+            'nombre :$accountName',
+            style: TextStyle(
+              color: themeProvider.isDiurno ? Colors.black : Colors.white,
+            ),
+          ),
+          Text(
+            'codigo :$accountCodigo',
             style: TextStyle(
               color: themeProvider.isDiurno ? Colors.black : Colors.white,
             ),
           ),
           SizedBox(height: 10),
-          TextFormField(
-            decoration: InputDecoration(
-              labelText: 'Nombre',
-              border: OutlineInputBorder(),
-            ),
-            style: TextStyle(
-              color: themeProvider.isDiurno ? Colors.black : Colors.white,
-            ),
-          ),
-          SizedBox(height: 10),
-          TextFormField(
-            decoration: InputDecoration(
-              labelText: 'Correo electrónico',
-              border: OutlineInputBorder(),
-            ),
-            style: TextStyle(
-              color: themeProvider.isDiurno ? Colors.black : Colors.white,
-            ),
+          Row(
+            children: [
+              Text(
+                'Fecha de reserva:',
+                style: TextStyle(
+                  color: themeProvider.isDiurno ? Colors.black : Colors.white,
+                ),
+              ),
+              SizedBox(width: 10),
+              InkWell(
+                onTap: () => _selectDate(context),
+                child: Text(
+                  selectedDate == null
+                      ? 'Seleccionar fecha'
+                      : DateFormat('yyyy-MM-dd').format(selectedDate!),
+                  style: TextStyle(
+                    color: themeProvider.isDiurno ? Colors.black : Colors.white,
+                  ),
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 10),
           OutlinedButton(
             onPressed: () {
-              // Acción al enviar el formulario
+              _realizarReserva(accountName, accountEmail);
+
+              // Agrega la navegación a la otra página aquí
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ReservaLibro(
+                          libro: libro,
+                        )),
+              );
             },
             style: ButtonStyle(
               shape: MaterialStateProperty.resolveWith(
@@ -323,6 +475,27 @@ class _ReservaLibroState extends State<ReservaLibro> {
             ),
             child: Text('Enviar', style: TextStyle(color: Colors.white)),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _crudReserbalibro() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _textCenter(
+            titulo: 'reservas', // Utiliza ':' para asignar el valor a 'titulo'
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+              padding: EdgeInsets.only(left: 5, right: 5, bottom: 15),
+              child: ReservaLibItem0(
+                id: '',
+              )),
         ],
       ),
     );

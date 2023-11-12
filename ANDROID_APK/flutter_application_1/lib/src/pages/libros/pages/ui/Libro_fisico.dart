@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/component/search_component.dart';
 import 'package:flutter_application_1/src/config/theme.dart';
+import 'package:flutter_application_1/src/controller/setup/Biblioteca/LibroController.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Inicio.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/inicioItem/ItemWidgets0.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/librofisico/ItemWidgets0_libfisico.dart';
@@ -9,11 +10,51 @@ import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/librofis
 import 'package:provider/provider.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class LibroFisico extends StatelessWidget {
+class LibroFisico extends StatefulWidget {
   const LibroFisico({super.key});
 
   @override
+  State<LibroFisico> createState() => _LibroFisicoState();
+}
+
+class _LibroFisicoState extends State<LibroFisico> {
+  
+   List<dynamic> item = []; // Lista para almacenar los libros
+     LibroController libroController = LibroController();
+
+      @override
+  void initState() {
+    super.initState();
+    _getData();
+  }
+
+  String truncateText(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    } else {
+      return text.substring(0, maxLength) + "...";
+    }
+  }
+
+  Future<void> _getData() async {
+    try {
+      // Llamada al método getDataLibro del controlador para obtener la lista de libros
+      //final librosData = await libroController.getDataLibro();
+      final librosData = await libroController.getDataLibro(formato: 'fisico');
+      setState(() {
+        item = librosData;
+      });
+    } catch (error) {
+      // Manejar errores, por ejemplo, mostrando un mensaje al usuario
+     
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+     
+
     final themeProvider = context.watch<ThemeProvider>();
     final themeColors = themeProvider.getThemeColors();
     return Scaffold(
@@ -153,7 +194,7 @@ class LibroFisico extends StatelessWidget {
                                     textAlign: TextAlign.start,
                                   ),
                                   Text(
-                                    '20',
+                                   '${item.length}',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 25,

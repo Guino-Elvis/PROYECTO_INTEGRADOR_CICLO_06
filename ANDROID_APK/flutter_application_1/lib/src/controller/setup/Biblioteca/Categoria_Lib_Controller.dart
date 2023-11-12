@@ -7,6 +7,25 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class CategorialibControllerLib {
+  Future<Map<String, dynamic>> getCategoriaPorId(int categoriaId) async {
+  final authResponse = await ShareApiTokenService.loginDetails();
+  if (authResponse != null) {
+    final token = authResponse.token;
+    if (token != null && token.isNotEmpty) {
+      final url = Uri.parse(ConfigApi.buildUrl('/categorialib/$categoriaId'));
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      return json.decode(response.body);
+    }
+  }
+
+  return {}; // Otra acción que consideres apropiada si el token no está disponible.
+}
+
   
   Future<List<dynamic>> getDataCategorialib() async {
     final authResponse = await ShareApiTokenService.loginDetails();

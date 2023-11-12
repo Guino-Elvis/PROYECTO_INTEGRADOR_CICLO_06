@@ -42,25 +42,7 @@ class _ItemWidgets1State extends State<ItemWidgets1> {
         item = libroData;
       });
     } catch (error) {
-      // Manejar errores, por ejemplo, mostrando un mensaje al usuario
-      //   showDialog(
-      //   context: context,
-      //   builder: (BuildContext context) {
-      //     return AlertDialog(
-      //       title: Text('Error'),
-      //       content: Text(
-      //           'Login expirado . Vuelva a iniciar secion por favor .'),
-      //       actions: [
-      //         TextButton(
-      //           onPressed: () {
-      //              ShareApiTokenService.logout(context);
-      //           },
-      //           child: Text('OK'),
-      //         ),
-      //       ],
-      //     );
-      //   },
-      // );
+     
     }
   }
 

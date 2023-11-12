@@ -94,11 +94,11 @@ class MyApp extends StatelessWidget {
         //LIBRO RUTAS
         '/librohome': (context) => Inicio(),
         '/librocategory': (context) {
-  final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-  return CategoriView(categoryId: args['categoryId']);
-},
+            final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+            return CategoriView(categoryId: args['categoryId']);
+          },
         '/librofisico': (context) => const LibroFisico(),
-        '/reserbalibro': (context) => const ReservaLibro(),
+        '/reserbalibro': (context) => const ReservaLibro(libro: null,),
         '/favoritos': (context) => const Favoritos(),
         '/detalle': (context) => const Detalle(libro: null,),
         //COLEGIO RUTAS 

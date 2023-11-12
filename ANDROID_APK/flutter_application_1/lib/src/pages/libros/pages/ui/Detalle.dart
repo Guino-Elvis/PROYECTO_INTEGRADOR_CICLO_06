@@ -4,6 +4,7 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/controller/setup/Biblioteca/LibroController.dart';
+import 'package:flutter_application_1/src/pages/libros/pages/ui/Reserva_libro.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/detalle/ItemAppBar.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/inicioItem/ItemWidgets2.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -167,8 +168,14 @@ class _DetalleState extends State<Detalle> {
                                   if (libro['formato']?.toString() == 'fisico')
                                     InkWell(
                                       onTap: () {
-                                        Navigator.pushNamed(
-                                            context, "/reserbalibro");
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ReservaLibro(
+                                              libro: libro,
+                                            ),
+                                          ),
+                                        );
                                       },
                                       child: Container(
                                         padding: EdgeInsets.all(5),
@@ -345,10 +352,10 @@ class _DetalleState extends State<Detalle> {
                           ),
                         ),
                         if (libro['formato']?.toString() == 'fisico')
-                        Container(
-                          height: 60,
-                          color: Colors.white,
-                        )
+                          Container(
+                            height: 60,
+                            color: themeProvider.isDiurno ? Colors.white : Colors.transparent,
+                          )
                       ],
                     ),
                   ),
