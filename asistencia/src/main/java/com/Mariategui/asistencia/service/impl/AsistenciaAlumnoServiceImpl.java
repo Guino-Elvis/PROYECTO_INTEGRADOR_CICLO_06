@@ -3,12 +3,12 @@ package com.Mariategui.asistencia.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.Mariategui.asistencia.dto.Alumno;
+import com.Mariategui.asistencia.dto.AuthUser;
 import com.Mariategui.asistencia.dto.Curso;
 import com.Mariategui.asistencia.entity.AsistenciaAlumno;
 import com.Mariategui.asistencia.entity.AsistenciaAlumnoDetalle;
 import com.Mariategui.asistencia.entity.Horario;
-import com.Mariategui.asistencia.feign.AlumnoFeign;
+import com.Mariategui.asistencia.feign.AuthUserFeign;
 import com.Mariategui.asistencia.feign.CursoFeign;
 import com.Mariategui.asistencia.repository.AsistenciaAlumnoRepository;
 import com.Mariategui.asistencia.service.AsistenciaAlumnoService;
@@ -21,8 +21,11 @@ import java.util.stream.Collectors;
 public class AsistenciaAlumnoServiceImpl implements AsistenciaAlumnoService {
     // inyectamos con autowired
 
+    // @Autowired
+    // private AlumnoFeign alumnoFeign;
+
     @Autowired
-    private AlumnoFeign alumnoFeign;
+    private AuthUserFeign authUserFeign;
 
     @Autowired
     private CursoFeign cursoFeign;
@@ -64,11 +67,11 @@ public class AsistenciaAlumnoServiceImpl implements AsistenciaAlumnoService {
                             System.out.println(asistenciaAlumnoDetalle.toString());
                             System.out.println("Antes de la petición");
                             // Cambio en la obtención del alumno
-                            Alumno alumno = alumnoFeign.listById(asistenciaAlumnoDetalle.getAlumnoId()).getBody();
+                            AuthUser authUser = authUserFeign.listById(asistenciaAlumnoDetalle.getUserId()).getBody();
                             System.out.println("Después de la petición");
-                            System.out.println(alumno.toString());
-                            System.out.println(alumno.getNombre());
-                            asistenciaAlumnoDetalle.setAlumno(alumno);
+                            System.out.println(authUser.toString());
+                            System.out.println(authUser.getName());
+                            asistenciaAlumnoDetalle.setAuthUser(authUser);
 
                             return asistenciaAlumnoDetalle;
                         }).collect(Collectors.toList());
