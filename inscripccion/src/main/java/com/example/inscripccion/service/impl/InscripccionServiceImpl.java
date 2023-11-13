@@ -3,11 +3,12 @@ package com.example.inscripccion.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.inscripccion.dto.Alumno;
+import com.example.inscripccion.dto.AuthUser;
 import com.example.inscripccion.dto.Curso;
 import com.example.inscripccion.entity.Inscripccion;
 import com.example.inscripccion.entity.InscripccionDetalle;
-import com.example.inscripccion.feign.AlumnoFeign;
+
+import com.example.inscripccion.feign.AuthUserFeign;
 import com.example.inscripccion.feign.CursoFeign;
 import com.example.inscripccion.repository.InscripccionRepository;
 import com.example.inscripccion.service.InscripccionService;
@@ -22,8 +23,11 @@ public class InscripccionServiceImpl implements InscripccionService {
     // inyectamos con autowired
     @Autowired
     private InscripccionRepository inscripccionRepository;
+    // @Autowired
+    // private AlumnoFeign alumnoFeign;
+
     @Autowired
-    private AlumnoFeign alumnoFeign;
+    private AuthUserFeign authUserFeign;
 
     @Autowired
     private CursoFeign cursoFeign;
@@ -48,7 +52,7 @@ public class InscripccionServiceImpl implements InscripccionService {
         // union de tablas
         Inscripccion inscripccion = inscripccionRepository.findById(id).get();
 
-        Alumno alumno = alumnoFeign.listById(inscripccion.getAlumnoId()).getBody();
+        AuthUser authUser = authUserFeign.listById(inscripccion.getUserId()).getBody();
         List<InscripccionDetalle> inscripccionDetalles = inscripccion.getDetalle().stream().map(inscripccionDetalle -> {
             System.out.println(inscripccionDetalle.toString());
             System.out.println("Antes de la peticion");
@@ -61,7 +65,7 @@ public class InscripccionServiceImpl implements InscripccionService {
         }).collect(Collectors.toList());
         inscripccion.setDetalle(inscripccionDetalles);
 
-        inscripccion.setAlumno(alumno);
+        inscripccion.setAuthUser(authUser);
         return Optional.of(inscripccion);
     }
 

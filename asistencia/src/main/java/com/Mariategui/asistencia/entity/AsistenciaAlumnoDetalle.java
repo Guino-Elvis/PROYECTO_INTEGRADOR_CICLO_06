@@ -20,6 +20,12 @@ public class AsistenciaAlumnoDetalle {
     @Transient
     private AuthUser authUser;
     private Integer status = 1;
+
     private LocalDateTime created_at = LocalDateTime.now();
     private LocalDateTime updated_at = LocalDateTime.now();
+
+    @PreUpdate
+    private void preUpdate() {
+        updated_at = LocalDateTime.now();
+    }
 }

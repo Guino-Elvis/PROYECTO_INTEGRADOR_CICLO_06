@@ -8,7 +8,10 @@ import Modal from "../components/Modal";
 import AppLayout from '../components/admin/AppLayout';
 import NNavbar from "../components/admin/NNavbar";
 const Horarios = () => {
-
+  // paginacion
+  // token
+  const token = localStorage.getItem("token");
+  // end token
   // paginacion
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
@@ -51,7 +54,11 @@ const Horarios = () => {
 
   const getHorarios = () => {
     axios
-      .get(`${API_URL}/horario`)
+      .get(`${API_URL}/horario`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         // Ordenar de manera descendente
         const sortedHorarios = response.data.sort();
@@ -212,7 +219,11 @@ const Horarios = () => {
       return; // do nothing if any required input is empty or only whitespace
     }
     axios
-      .post(`${API_URL}/horario`, horarioEditado)
+      .post(`${API_URL}/horario`, horarioEditado,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         setHorarioEditado({
           id: null,
@@ -231,7 +242,11 @@ const Horarios = () => {
   const actualizarHorario = (event) => {
     event.preventDefault();
     axios
-      .put(`${API_URL}/horario`, horarioEditado)
+      .put(`${API_URL}/horario`, horarioEditado,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         setHorarioEditado({
           id: null,
@@ -248,7 +263,11 @@ const Horarios = () => {
 
   const eliminarHorario = (id) => {
     axios
-      .delete(`${API_URL}/horario/${id}`)
+      .delete(`${API_URL}/horario/${id}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         getHorarios();
       })

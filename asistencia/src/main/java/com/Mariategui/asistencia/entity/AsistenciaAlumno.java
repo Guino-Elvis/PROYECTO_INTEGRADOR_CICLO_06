@@ -6,7 +6,6 @@ import java.util.List;
 import com.Mariategui.asistencia.dto.Curso;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.persistence.Entity;
 import lombok.Data;
 
 @Entity
@@ -29,6 +28,12 @@ public class AsistenciaAlumno {
 
     private LocalDateTime created_at = LocalDateTime.now();
     private LocalDateTime updated_at = LocalDateTime.now();
+
+    @PreUpdate
+    private void preUpdate() {
+        updated_at = LocalDateTime.now();
+    }
+
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "asistencia_alumno_id")

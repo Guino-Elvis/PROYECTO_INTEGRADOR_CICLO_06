@@ -1,6 +1,5 @@
 import axios from "axios";
 import ExcelJS from 'exceljs';
-import ListaDeAlumnos from '../components/ListaDeAlumnos';
 import SelectHorario from '../components/SelectHorario';
 import SelectCurso from '../components/SelectCurso';
 import { useState, useEffect } from "react";
@@ -9,6 +8,7 @@ import 'jspdf-autotable';
 import alumnoa from '../styles/add.css';
 import Modal from "../components/Modal";
 import AppLayout from '../components/admin/AppLayout';
+import ListaDeUsers from "../components/ListaDeUsers";
 const Asistencias = () => {
 
   // token
@@ -61,41 +61,41 @@ const Asistencias = () => {
 
 
 
-  const NombreAlumnoyCurso = ({ alumnoId }) => {
-    const [nombreAlumno, setNombreAlumno] = useState('');
-    const [fotoAlumno, setFotoAlumno] = useState('');
+  const NombreUseryCurso = ({ userId }) => {
+    const [nombreUser, setNombreUser] = useState('');
+    const [fotoUser, setFotoUser] = useState('');
 
     useEffect(() => {
       axios
-        .get(`${API_URL}/alumno/${alumnoId}`,{
+        .get(`${API_URL}/auth/${userId}`,{
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => {
-          const alumno = response.data;
-          const nombreCompleto = `${alumno.nombre} ${alumno.apellido}`;
-          setNombreAlumno(nombreCompleto);
-          setFotoAlumno(alumno.foto);
+          const user = response.data;
+          const nombreCompleto = `${user.name} ${user.apellido_p}${user.apellido_m}`;
+          setNombreUser(nombreCompleto);
+          setFotoUser(user.foto);
         })
         .catch((error) => {
           console.log(error);
-          setNombreAlumno('');
-          setFotoAlumno('');
+          setNombreUser('');
+          setFotoUser('');
         });
-    }, [alumnoId]);
+    }, [userId]);
 
     return (
       <>
         <div className="w-28">
           <img
-            src={fotoAlumno}
+            src={fotoUser}
             className="inline-flex items-center justify-center mr-4 text-sm text-white transition-all duration-200 ease-in-out h-9 w-9 rounded-xl"
             alt="user1"
           />
         </div>
         <div class="flex flex-col justify-center">
-          <h6 class="mb-0 text-sm leading-normal dark:text-white">{nombreAlumno}</h6>
+          <h6 class="mb-0 text-sm leading-normal dark:text-white">{nombreUser}</h6>
         </div>
       </>
     );
@@ -310,7 +310,7 @@ const Asistencias = () => {
       !Array.isArray(asistenciaEditado.detalle) ||
       asistenciaEditado.detalle.length === 0 ||
       asistenciaEditado.detalle.some(
-        (detalle) => !detalle.alumnoId || detalle.status === ""
+        (detalle) => !detalle.userId || detalle.status === ""
       )
     ) {
       console.log('Error de validación en los datos de la asistencia');
@@ -325,7 +325,7 @@ const Asistencias = () => {
         cursoId: asistenciaEditado.cursoId,
         detalle: asistenciaEditado.detalle.map((detalle) => ({
 
-          alumnoId: detalle.alumnoId,
+          userId: detalle.userId,
           status: detalle.status === 1 ? 1 : 0, // Convertir el valor de status a número
         })),
       };
@@ -379,7 +379,7 @@ const Asistencias = () => {
         horario: asistenciaEditado.horario,
         cursoId: asistenciaEditado.cursoId,
         detalle: asistenciaEditado.detalle.map((detalle) => ({
-          alumnoId: detalle.alumnoId,
+          userId: detalle.userId,
           status: detalle.status === 1 ? 1 : 0,
         })),
       };
@@ -469,20 +469,20 @@ const Asistencias = () => {
           </div>
           <div className="ml-1 pt-2">
             <label className="block">curso</label>
-            <ListaDeAlumnos
-              onChange={(alumnoId, checked) => {
+            <ListaDeUsers
+              onChange={(userId, checked) => {
                 const updatedDetalle = asistenciaEditado.detalle.map((detalle) => {
-                  if (detalle.alumnoId === alumnoId) {
+                  if (detalle.userId === userId) {
                     return { ...detalle, status: checked ? 1 : 0 };
                   }
                   return detalle;
                 });
-                if (!updatedDetalle.some((detalle) => detalle.alumnoId === alumnoId)) {
-                  updatedDetalle.push({ alumnoId: alumnoId, status: checked ? 1 : 0 });
+                if (!updatedDetalle.some((detalle) => detalle.userId === userId)) {
+                  updatedDetalle.push({ userId: userId, status: checked ? 1 : 0 });
                 }
                 setAsistenciaEditado({ ...asistenciaEditado, detalle: updatedDetalle });
               }}
-              selectedAlumnoId={asistenciaEditado.detalle.map((detalle) => detalle.alumnoId)}
+              selectedUserId={asistenciaEditado.detalle.map((detalle) => detalle.userId)}
             />
           </div>
 
@@ -642,7 +642,7 @@ const Asistencias = () => {
                             {asistencia.detalle.map((detalle) => (
                               <div class="flex px-2 py-1" key={detalle.id}>
                                 <div className="w-28">
-                                  <NombreAlumnoyCurso alumnoId={detalle.alumnoId} />
+                                  <NombreUseryCurso userId={detalle.userId} />
                                 </div>
                                 <div class="flex pl-10 flex-col justify-center">
                                   <p class="mb-0 text-xs leading-tight dark:text-white dark:opacity-80 text-slate-400">
