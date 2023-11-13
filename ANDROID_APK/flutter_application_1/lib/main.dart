@@ -88,8 +88,6 @@ class MyApp extends StatelessWidget {
         '/alumno': (context) => const AlumnoList(),
         '/usuario': (context) => const UsuarioList(),
         '/admin_home': (context) => AdminHomePage(),
-        // '/docente_home': (context) => const UsuarioList(),
-        // '/panadero_home': (context) => const UsuarioList(),
         '/user_home': (context) => UserHomePage(),
         //LIBRO RUTAS
         '/librohome': (context) => Inicio(),

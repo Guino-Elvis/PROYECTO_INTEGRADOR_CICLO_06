@@ -14,6 +14,8 @@ import com.mariategui.biblioteca.feign.AuthUserFeign;
 import com.mariategui.biblioteca.repository.ReservaRepository;
 import com.mariategui.biblioteca.service.ReservaService;
 
+import feign.FeignException;
+
 @Service
 public class ReservaServiceImpl implements ReservaService {
 
@@ -41,11 +43,6 @@ public class ReservaServiceImpl implements ReservaService {
         return reservaRepository.save(reserva);
     }
 
-    // @Override
-    // public Optional<Reserva> listarPorId(Integer id) {
-    // return reservaRepository.findById(id);
-    // }
-
     @Override
     public Optional<Reserva> listarPorId(Integer id) {
         Reserva reserva = reservaRepository.findById(id).orElse(null);
@@ -61,12 +58,26 @@ public class ReservaServiceImpl implements ReservaService {
                 reserva.setLibro(libro);
             }
 
-            AuthUser authUser = authUserFeign.listById(reserva.getUserId()).getBody();
-            if (authUser != null) {
-                System.out.println("Después de la petición de AuthUser");
-                System.out.println(authUser.toString());
-                System.out.println(authUser.getName());
-                reserva.setAuthUser(authUser);
+            try {
+                AuthUser authUser = authUserFeign.listById(reserva.getUserId()).getBody();
+                if (authUser != null) {
+                    System.out.println("Después de la petición de AuthUser");
+                    System.out.println(authUser.toString());
+                    System.out.println(authUser.getName());
+                    reserva.setAuthUser(authUser);
+                } else {
+                    // Manejo del caso en el que no se encuentra el usuario.
+                    System.out.println("No se encontró el usuario.");
+                    // Setea userId como null y authUser como null en la reserva.
+                    reserva.setUserId(null);
+                    reserva.setAuthUser(null);
+                }
+            } catch (FeignException ex) {
+                // Manejo de errores específicos de Feign
+                System.out.println("Error al llamar al servicio de autenticación: " + ex.getMessage());
+                // Setea userId como null y authUser como null en la reserva.
+                reserva.setUserId(null);
+                reserva.setAuthUser(null);
             }
         }
 

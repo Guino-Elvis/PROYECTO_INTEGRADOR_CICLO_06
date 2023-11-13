@@ -6,8 +6,9 @@ import 'dart:math' as math;
 
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
-import 'package:flutter_application_1/src/controller/CategoriaController.dart';
+
 import 'package:flutter_application_1/src/controller/UsuarioController.dart';
+import 'package:flutter_application_1/src/controller/setup/Biblioteca/Categoria_Lib_Controller.dart';
 import 'package:flutter_application_1/src/pages/cruds/categoria/CategoriaList.dart';
 import 'package:flutter_application_1/src/pages/cruds/categoria/EditCategoria.dart';
 import 'package:flutter_application_1/src/pages/cruds/usuario/EditUsuario.dart';
@@ -44,7 +45,7 @@ class _DetalleCategoriaState extends State<DetalleCategoria> {
         overlays: SystemUiOverlay.values);
   }
 
-  final CategoriaController categoriaController = CategoriaController();
+  final CategorialibControllerLib categorialibControllerLib = CategorialibControllerLib();
   _navigateList(BuildContext context) async {
     final result = await Navigator.push(
       context,
@@ -95,7 +96,7 @@ class ProfilePage extends StatelessWidget {
     
               Text("Descripcion", style: _style(),),
               SizedBox(height: 4,),
-              Text(widget.list[widget.index]['descripccion']?? 'No tienes descripccion',),
+              Text(widget.list[widget.index]['descripcion']?? 'No tienes descripcion',),
               SizedBox(height: 16,),
              
               Row(

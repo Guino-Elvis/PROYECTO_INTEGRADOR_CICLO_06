@@ -48,15 +48,16 @@ public class CursoServiceImpl implements CursoService {
         if (curso != null) {
             System.out.println("Antes de la petición");
             // Obtención del docente asociado al curso
-            Optional<Video> videoOptional = videoService.listarPorId(curso.getVideo().getId());
+            // Optional<Video> videoOptional =
+            // videoService.listarPorId(curso.getVideo().getId());
             Docente docente = docenteFeign.listById(curso.getDocenteId()).getBody();
-            videoOptional.ifPresent(video -> {
-                System.out.println("Después de la petición");
-                System.out.println(video.toString());
-                System.out.println(video.getTitulo());
-                System.out.println(video.getId());
-                curso.setVideo(video);
-            });
+            // videoOptional.ifPresent(video -> {
+            // System.out.println("Después de la petición");
+            // System.out.println(video.toString());
+            // System.out.println(video.getTitulo());
+            // System.out.println(video.getId());
+            // curso.setVideo(video);
+            // });
             System.out.println("Después de la petición");
             System.out.println(docente.toString());
             System.out.println(docente.getNombre());

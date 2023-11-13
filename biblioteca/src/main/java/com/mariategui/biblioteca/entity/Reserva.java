@@ -41,4 +41,13 @@ public class Reserva {
     private void preUpdate() {
         updated_at = LocalDateTime.now();
     }
+
+    // Custom method to set userId with a message if authUser is null
+    public void setUserIdWithMessage(String message) {
+        if (authUser == null) {
+            userId = null;
+        } else {
+            userId = authUser.getId();
+        }
+    }
 }

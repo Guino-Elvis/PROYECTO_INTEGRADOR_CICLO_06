@@ -9,10 +9,11 @@ import 'package:flutter_application_1/src/component/BottomNavBarFlex2.dart';
 import 'package:flutter_application_1/src/component/Sidebar.dart';
 import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
 import 'package:flutter_application_1/src/config/ConfigApi.dart';
-import 'package:flutter_application_1/src/controller/CategoriaController.dart';
+import 'package:flutter_application_1/src/controller/setup/Biblioteca/Categoria_Lib_Controller.dart';
 import 'package:flutter_application_1/src/pages/cruds/categoria/CreateCategoria.dart';
 import 'package:flutter_application_1/src/pages/cruds/categoria/DetalleCategoria.dart';
 import 'package:flutter_application_1/src/component/LeftNotifier.dart';
+import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -32,26 +33,63 @@ class CategoriaList extends StatefulWidget {
 class _CategoriaListtState extends State<CategoriaList> {
   
   late List<dynamic> data = [];
-  CategoriaController categoriaController = CategoriaController();
+  CategorialibControllerLib categorialibControllerLib = CategorialibControllerLib();
   late File excelFile;
 
-  Future<List<dynamic>> getData() async {
-    final response = await http.get(Uri.parse(ConfigApi.buildUrl('/categoriablog')));
-    final responseData = json.decode(response.body);
+  // Future<List<dynamic>> getData() async {
+ 
+  //   final response = await http.get(Uri.parse(ConfigApi.buildUrl('/categorialib')));
+  //   final responseData = json.decode(response.body);
 
-    // Itera sobre los elementos y convierte las fechas de cadenas a objetos DateTime
-    for (var item in responseData) {
-      if (item['created_at'] is String) {
-        item['created_at'] = DateTime.parse(item['created_at']);
+  //   // Itera sobre los elementos y convierte las fechas de cadenas a objetos DateTime
+  //   for (var item in responseData) {
+  //     if (item['created_at'] is String) {
+  //       item['created_at'] = DateTime.parse(item['created_at']);
+  //     }
+  //     if (item['updated_at'] is String) {
+  //       item['updated_at'] = DateTime.parse(item['updated_at']);
+  //     }
+  //     // Repite el proceso para otras fechas si es necesario.
+  //   }
+
+  //   return responseData;
+  // }
+
+ Future<List<dynamic>> getData() async {
+  final authResponse = await ShareApiTokenService.loginDetails();
+  
+  if (authResponse != null) {
+    final token = authResponse.token;
+
+    if (token != null && token.isNotEmpty) {
+      final url = Uri.parse(ConfigApi.buildUrl('/categorialib'));
+      
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      // Itera sobre los elementos y convierte las fechas de cadenas a objetos DateTime
+      List<dynamic> responseData = json.decode(response.body);
+
+      for (var item in responseData) {
+        if (item['created_at'] is String) {
+          item['created_at'] = DateTime.parse(item['created_at']);
+        }
+        if (item['updated_at'] is String) {
+          item['updated_at'] = DateTime.parse(item['updated_at']);
+        }
+        // Repite el proceso para otras fechas si es necesario.
       }
-      if (item['updated_at'] is String) {
-        item['updated_at'] = DateTime.parse(item['updated_at']);
-      }
-      // Repite el proceso para otras fechas si es necesario.
+
+      return responseData;
     }
-
-    return responseData;
   }
+
+  return []; // Otra acción que consideres apropiada si el token no está disponible.
+}
 
   // void actualizarVista(List<dynamic> newData) => getData().then((result) {
   //   Provider.of<Actualizar>(context, listen: false).setData(result);
@@ -173,7 +211,7 @@ class _CategoriaListtState extends State<CategoriaList> {
                             onPressed: () async {
                               Navigator.of(context).pop(); // Cierra el modal
                               try {
-                                await categoriaController.exportDataToExcel();
+                                await categorialibControllerLib.exportDataToExcel();
                                 print("Excel file saved and copied successfully");
                                 // await OpenFile.open(excelFile.path); // Abre el archivo
                               } catch (e) {
@@ -224,7 +262,7 @@ class _CategoriaListtState extends State<CategoriaList> {
                             onPressed: () async {
                               Navigator.of(context).pop(); // Cierra el modal
                               try {
-                                await categoriaController.exportDataToPDF();
+                                await categorialibControllerLib.exportDataToPDF();
                                 print("PDF file saved and copied successfully");
                                 // Puedes abrir el archivo PDF aquí si lo deseas
                                 // await OpenFile.open(pdfFile.path);
@@ -268,7 +306,7 @@ class _CategoriaListtState extends State<CategoriaList> {
 class ItemList extends StatelessWidget {
   final Function(List<dynamic>) actualizarVista;
   final List<dynamic> list;
-  final CategoriaController categoriaController = CategoriaController();
+  final CategorialibControllerLib categorialibControllerLib = CategorialibControllerLib();
   final BuildContext scaffoldContext; // Agrega un miembro para almacenar el contexto del Scaffold
 
   ItemList({Key? key, required this.list, required this.actualizarVista, required this.scaffoldContext}) : super(key: key);
@@ -283,7 +321,7 @@ class ItemList extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = list[index];
           final titulo = truncateString(item['titulo']?.toString() ?? 'titulo no especificado', 15);
-          final descripccion = truncateString(item['descripccion']?.toString() ?? 'titulo no especificado', 13);
+          final descripcion = truncateString(item['descripcion']?.toString() ?? 'titulo no especificado', 13);
           final created_at = item['created_at'] != null ? DateTime.parse(item['created_at'].toString()) : DateTime.now();
           final fechaFormateada = DateFormat('yyyy-MM-dd').format(created_at);
           final foto = item.containsKey('foto') && item['foto'] != null ? item['foto'].toString() : 'assets/nofoto.jpg';
@@ -354,7 +392,7 @@ class ItemList extends StatelessWidget {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text('Fecha: $fechaFormateada'),
-                                          Text('Descripcion: $descripccion'),
+                                          Text('Descripcion: $descripcion'),
                                         ],
                                       ),
                                       trailing: IconButton(
@@ -425,7 +463,7 @@ class ItemList extends StatelessWidget {
                                                       onPressed: () {
                                                         final id = item['id'].toString();
                                                         final fotoURL = item['foto'].toString();
-                                                        categoriaController.removerCategoria(id, fotoURL).then((response) async {
+                                                        categorialibControllerLib.removerCategoria(id, fotoURL).then((response) async {
                                                           if (response.statusCode == 200) {
                                                             ScaffoldMessenger.of(scaffoldContext).showSnackBar(SnackBar(content: Text("Item eliminado con éxito.")));
                                                             // actualizarVista([]);

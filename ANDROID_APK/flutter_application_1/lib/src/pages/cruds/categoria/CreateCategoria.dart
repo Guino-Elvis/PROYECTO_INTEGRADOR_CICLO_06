@@ -1,7 +1,8 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/controller/CategoriaController.dart';
+
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_application_1/src/controller/setup/Biblioteca/Categoria_Lib_Controller.dart';
 import 'package:flutter_application_1/src/pages/cruds/categoria/CategoriaList.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -12,11 +13,12 @@ class CreateCategoria extends StatefulWidget {
 }
 
 class _CreateCategoriaState extends State<CreateCategoria> {
-  CategoriaController categoriaController = CategoriaController();
+  CategorialibControllerLib categorialibControllerLib = CategorialibControllerLib();
   final TextEditingController tituloController = TextEditingController();
-  final TextEditingController descripccionController = TextEditingController();
+  final TextEditingController descripcionController = TextEditingController();
 
   File? selectedImage;
+  
   _navigateList(BuildContext context) async {
     final result = await Navigator.push(
       context,
@@ -40,17 +42,25 @@ class _CreateCategoriaState extends State<CreateCategoria> {
     }
   }
 
-  Future<String?> _uploadImage() async {
+Future<String?> _uploadImage(String categoryTitle) async {
+  try {
     if (selectedImage != null) {
-      final firebaseStorageReference =
-          FirebaseStorage.instance.ref().child('categoriablog/${DateTime.now()}.png');
+      final fileName = 'categoriablog/$categoryTitle-${DateTime.now()}.png';
+      final firebaseStorageReference = FirebaseStorage.instance.ref().child(fileName);
+
       await firebaseStorageReference.putFile(selectedImage!);
       final downloadUrl = await firebaseStorageReference.getDownloadURL();
+
       return downloadUrl;
     } else {
-      return null; // Devuelve null en caso de que la imagen no se cargue.
+      return null;
     }
+  } catch (error) {
+    print("Error uploading image: $error");
+    return null;
   }
+}
+  
 
   Future<void> _getImage() async {
     final picker = ImagePicker();
@@ -88,7 +98,7 @@ class _CreateCategoriaState extends State<CreateCategoria> {
                 ),
                 SizedBox(height: 16.0),
                 TextFormField(
-                  controller: descripccionController,
+                  controller: descripcionController,
                   decoration: InputDecoration(
                     labelText: 'Descripcion',
                     hintText: 'Descripcion de la categoria',
@@ -106,16 +116,16 @@ class _CreateCategoriaState extends State<CreateCategoria> {
                     style: ElevatedButton.styleFrom(
                       primary: Colors.blue,
                     ),
-                    onPressed: () async {
-                      // Primero, carga la imagen en Firebase Storage
-                      final downloadUrl = await _uploadImage();
-                      categoriaController.CrearCategoria(
-                        tituloController.text.trim(), // Nombre
-                        descripccionController.text.trim(), // Correo
-                        downloadUrl ?? "", // URL de la imagen
-                      );
-                      _navigateList(context); // Utiliza _navigateList aquí
-                    },
+                   onPressed: () async {
+  final downloadUrl = await _uploadImage(tituloController.text.trim());
+  categorialibControllerLib.CrearCategoria(
+    tituloController.text.trim(), // Nombre
+    descripcionController.text.trim(), // Descripción
+    downloadUrl ?? "", // URL de la imagen
+  );
+  _navigateList(context);
+},
+
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

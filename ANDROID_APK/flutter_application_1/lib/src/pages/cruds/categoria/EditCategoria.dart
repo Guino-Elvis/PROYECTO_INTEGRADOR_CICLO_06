@@ -1,8 +1,9 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/src/controller/CategoriaController.dart';
 
+import 'package:flutter_application_1/src/controller/setup/Biblioteca/Categoria_Lib_Controller.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter_application_1/src/pages/cruds/categoria/CategoriaList.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -21,11 +22,11 @@ class EditCategoria extends StatefulWidget {
 }
 
 class _EditCategoriaState extends State<EditCategoria> {
-  CategoriaController categoriaController = CategoriaController();
+  CategorialibControllerLib categorialibControllerLib = CategorialibControllerLib();
 
   late TextEditingController controllerid;
   late TextEditingController controllertitulo;
-  late TextEditingController controllerdescripccion;
+  late TextEditingController controllerdescripcion;
   late TextEditingController controllerfoto;
   File? selectedImage;
   String categoriaImageURL = "";
@@ -49,8 +50,8 @@ class _EditCategoriaState extends State<EditCategoria> {
     controllertitulo = TextEditingController(
         text: widget.list[widget.index]['titulo']?.toString() ??
             'titulo no especificado');
-    controllerdescripccion = TextEditingController(
-        text: widget.list[widget.index]['descripccion']?.toString() ??
+    controllerdescripcion = TextEditingController(
+        text: widget.list[widget.index]['descripcion']?.toString() ??
             'descripcion no especificado');
     categoriaImageURL = widget.list[widget.index]['foto'] != null
         ? widget.list[widget.index]['foto'].toString()
@@ -70,40 +71,113 @@ class _EditCategoriaState extends State<EditCategoria> {
     }
   }
 
-  Future<void> _updateImageInFirebase() async {
-    String newImageUrl =
-        widget.list[widget.index]['foto'] ?? ""; // Default to an empty string
-    if (selectedImage != null) {
-      final firebaseStorageReference =
-          FirebaseStorage.instance.ref().child('categoriablog/${DateTime.now()}.png');
+  // Future<void> _updateImageInFirebase() async {
+  //   String newImageUrl =
+  //       widget.list[widget.index]['foto'] ?? ""; // Default to an empty string
+  //   if (selectedImage != null) {
+  //     final firebaseStorageReference =
+  //         FirebaseStorage.instance.ref().child('categoriablog/${DateTime.now()}.png');
 
-      try {
-        await firebaseStorageReference.putFile(selectedImage!);
-        final downloadUrl = await firebaseStorageReference.getDownloadURL();
+  //     try {
+  //       await firebaseStorageReference.putFile(selectedImage!);
+  //       final downloadUrl = await firebaseStorageReference.getDownloadURL();
 
-        if (downloadUrl != null) {
-          newImageUrl =
-              downloadUrl;
-        } else {
+  //       if (downloadUrl != null) {
+  //         newImageUrl =
+  //             downloadUrl;
+  //       } else {
          
-        }
-      } catch (e) {
-        print("Error al cargar la imagen: $e");
+  //       }
+  //     } catch (e) {
+  //       print("Error al cargar la imagen: $e");
+  //     }
+  //   }
+
+  //   // Actualiza la categoría, incluyendo la URL de la imagen (ya sea la existente o la nueva)
+  //   categorialibControllerLib.editarCategoria(
+  //     controllerid.text.trim(),
+  //     controllertitulo.text.trim(),
+  //     controllerdescripcion.text.trim(),
+  //     newImageUrl,
+  //   );
+
+  //   _navigateList(context);
+  // }
+
+String calculateMD5(File file) {
+  final content = file.readAsBytesSync();
+  final digest = md5.convert(content);
+  return digest.toString();
+}
+
+// Future<void> _updateImageInFirebase() async {
+//   String newImageUrl = widget.list[widget.index]['foto'] ?? "";
+
+//   if (selectedImage != null) {
+//     final firebaseStorageReference = FirebaseStorage.instance
+//         .ref()
+//         .child('categoriablog/${calculateMD5(selectedImage!)}.png');
+
+//     try {
+//       await firebaseStorageReference.putFile(selectedImage!);
+//       final downloadUrl = await firebaseStorageReference.getDownloadURL();
+
+//       if (downloadUrl != null) {
+//         newImageUrl = downloadUrl;
+//       } else {
+//         // Handle the case where the download URL is null
+//       }
+//     } catch (e) {
+//       print("Error al cargar la imagen: $e");
+//     }
+//   }
+
+//   categorialibControllerLib.editarCategoria(
+//     controllerid.text.trim(),
+//     controllertitulo.text.trim(),
+//     controllerdescripcion.text.trim(),
+//     newImageUrl,
+//   );
+
+//   _navigateList(context);
+// }
+
+
+Future<void> _updateImageInFirebase() async {
+  String newImageUrl = widget.list[widget.index]['foto'] ?? "";
+  String categoryId = controllerid.text.trim();
+  String categoryTitle = controllertitulo.text.trim();
+
+  if (selectedImage != null) {
+    // Concatena el ID y el título de la categoría en el nombre del archivo
+    String fileName = 'categoriablog/$categoryId-$categoryTitle.png';
+
+    final firebaseStorageReference =
+        FirebaseStorage.instance.ref().child(fileName);
+
+    try {
+      await firebaseStorageReference.putFile(selectedImage!);
+      final downloadUrl = await firebaseStorageReference.getDownloadURL();
+
+      if (downloadUrl != null) {
+        newImageUrl = downloadUrl;
+      } else {
+        // Manejar el caso donde la URL de descarga es nula
       }
+    } catch (e) {
+      print("Error al cargar la imagen: $e");
     }
-
-    // Actualiza la categoría, incluyendo la URL de la imagen (ya sea la existente o la nueva)
-    categoriaController.editarCategoria(
-      controllerid.text.trim(),
-      controllertitulo.text.trim(),
-      controllerdescripccion.text.trim(),
-      newImageUrl,
-    );
-
-    _navigateList(context);
   }
 
+  categorialibControllerLib.editarCategoria(
+    categoryId,
+    categoryTitle,
+    controllerdescripcion.text.trim(),
+    newImageUrl,
+  );
 
+  _navigateList(context);
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -172,7 +246,7 @@ class _EditCategoriaState extends State<EditCategoria> {
                     ListTile(
                       leading: Icon(Icons.person, color: Colors.black),
                       title: TextFormField(
-                        controller: controllerdescripccion,
+                        controller: controllerdescripcion,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "El campo no puede estar vacío";
