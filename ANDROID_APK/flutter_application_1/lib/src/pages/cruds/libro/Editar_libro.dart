@@ -22,7 +22,7 @@ class EditLibro extends StatefulWidget {
 
 class _EditLibroState extends State<EditLibro> {
   LibroController libroController = LibroController();
-
+ 
   late TextEditingController controllerid;
   late TextEditingController controllertitulo;
   late TextEditingController controllerautor;
@@ -52,7 +52,7 @@ class _EditLibroState extends State<EditLibro> {
   @override
   void initState() {
     super.initState();
-      _getData();
+    _getData();
     controllerid =
         TextEditingController(text: widget.list[widget.index]['id'].toString());
     controllertitulo = TextEditingController(
@@ -70,11 +70,12 @@ class _EditLibroState extends State<EditLibro> {
     controllerdisponibilidad = TextEditingController(
         text: widget.list[widget.index]['disponibilidad']?.toString() ??
             'disponibilidad no especificado');
-       selectedFormato = widget.list[widget.index]['formato']?.toString() ?? "";       
+    selectedFormato = widget.list[widget.index]['formato']?.toString() ?? "";
     controllerestado = TextEditingController(
         text: widget.list[widget.index]['estado']?.toString() ??
             'estado no especificado');
-    selectedCategorialib = categorias.isNotEmpty ? categorias.first['id'].toString() : "";
+    selectedCategorialib =
+        categorias.isNotEmpty ? categorias.first['id'].toString() : "";
     libroImageURL = widget.list[widget.index]['foto'] != null
         ? widget.list[widget.index]['foto'].toString()
         : 'assets/nofoto.jpg';
@@ -92,7 +93,6 @@ class _EditLibroState extends State<EditLibro> {
     } else {}
   }
 
-
   String calculateMD5(File file) {
     final content = file.readAsBytesSync();
     final digest = md5.convert(content);
@@ -105,7 +105,6 @@ class _EditLibroState extends State<EditLibro> {
     String libroTitle = controllertitulo.text.trim();
 
     if (selectedImage != null) {
-
       String fileName = 'libro/$libroId-$libroTitle.png';
 
       final firebaseStorageReference =
@@ -117,20 +116,21 @@ class _EditLibroState extends State<EditLibro> {
 
         if (downloadUrl != null) {
           newImageUrl = downloadUrl;
-        } else {
-        }
+        } else {}
       } catch (e) {
         print("Error al cargar la imagen: $e");
       }
     }
-  // Obtén el objeto de categoría seleccionado
-  Map<String, dynamic> selectedCategoria = categorias.firstWhere(
-    (categoria) => categoria['id'].toString() == selectedCategorialib,
-    orElse: () => Map<String, dynamic>(), // Devuelve un mapa vacío si no se encuentra
-  );
+    // Obtén el objeto de categoría seleccionado
+    Map<String, dynamic> selectedCategoria = categorias.firstWhere(
+      (categoria) => categoria['id'].toString() == selectedCategorialib,
+      orElse: () =>
+          Map<String, dynamic>(), // Devuelve un mapa vacío si no se encuentra
+    );
 
-  // Asegúrate de que selectedCategoria no sea null antes de pasarlo a editarLibro
-  selectedCategoria = selectedCategoria.isNotEmpty ? selectedCategoria : {'id': ''};
+    // Asegúrate de que selectedCategoria no sea null antes de pasarlo a editarLibro
+    selectedCategoria =
+        selectedCategoria.isNotEmpty ? selectedCategoria : {'id': ''};
 
     libroController.editarLibro(
       libroId,
@@ -139,7 +139,7 @@ class _EditLibroState extends State<EditLibro> {
       controllerisbn.text.trim(),
       controllerdescripcion.text.trim(),
       controllerdisponibilidad.text.trim(),
-       selectedFormato ?? "", // Rol seleccionado
+      selectedFormato ?? "", // Rol seleccionado
       //controllerformato.text.trim(),
       controllerestado.text.trim(),
       selectedCategoria, // Objeto de categoría seleccionado
@@ -149,21 +149,22 @@ class _EditLibroState extends State<EditLibro> {
 
     _navigateList(context);
   }
- String?
+
+  String?
       selectedFormato; // Debes definir esta variable para almacenar el rol seleccionado
   List<String> formatos = ['online', 'fisico'];
 
-
- List<Map<String, dynamic>> categorias = [];
-   String? selectedCategorialib = ""; // Declaración de la variable
+  List<Map<String, dynamic>> categorias = [];
+  String? selectedCategorialib = ""; // Declaración de la variable
 
   CategorialibControllerLib categorialibControllerLib =
       CategorialibControllerLib();
-
-       Future<void> _getData() async {
+  
+  Future<void> _getData() async {
     try {
       print("Calling _getData");
-      final categoriesData = await categorialibControllerLib.getDataCategorialib();
+      final categoriesData =
+          await categorialibControllerLib.getDataCategorialib();
       setState(() {
         categorias = List<Map<String, dynamic>>.from(categoriesData);
       });
@@ -172,6 +173,7 @@ class _EditLibroState extends State<EditLibro> {
       print("Error fetching data: $error");
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -225,7 +227,8 @@ class _EditLibroState extends State<EditLibro> {
                       ),
                     ),
                     ListTile(
-                        leading: Icon(CupertinoIcons.book_solid, color: Colors.black),
+                      leading:
+                          Icon(CupertinoIcons.book_solid, color: Colors.black),
                       title: TextFormField(
                         controller: controllertitulo,
                         validator: (value) {
@@ -240,8 +243,9 @@ class _EditLibroState extends State<EditLibro> {
                         ),
                       ),
                     ),
-                     ListTile(
-                        leading: Icon(CupertinoIcons.book_solid, color: Colors.black),
+                    ListTile(
+                      leading:
+                          Icon(CupertinoIcons.book_solid, color: Colors.black),
                       title: TextFormField(
                         controller: controllerautor,
                         validator: (value) {
@@ -256,8 +260,9 @@ class _EditLibroState extends State<EditLibro> {
                         ),
                       ),
                     ),
-                     ListTile(
-                        leading: Icon(CupertinoIcons.book_solid, color: Colors.black),
+                    ListTile(
+                      leading:
+                          Icon(CupertinoIcons.book_solid, color: Colors.black),
                       title: TextFormField(
                         controller: controllerisbn,
                         validator: (value) {
@@ -272,8 +277,9 @@ class _EditLibroState extends State<EditLibro> {
                         ),
                       ),
                     ),
-                     ListTile(
-                        leading: Icon(CupertinoIcons.book_solid, color: Colors.black),
+                    ListTile(
+                      leading:
+                          Icon(CupertinoIcons.book_solid, color: Colors.black),
                       title: TextFormField(
                         controller: controllerdescripcion,
                         validator: (value) {
@@ -289,7 +295,8 @@ class _EditLibroState extends State<EditLibro> {
                       ),
                     ),
                     ListTile(
-                        leading: Icon(CupertinoIcons.book_solid, color: Colors.black),
+                      leading:
+                          Icon(CupertinoIcons.book_solid, color: Colors.black),
                       title: TextFormField(
                         controller: controllerdisponibilidad,
                         validator: (value) {
@@ -305,7 +312,10 @@ class _EditLibroState extends State<EditLibro> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left:16.0,right: 20.0), // Margen izquierdo para alinear visualmente con los otros campos
+                      margin: EdgeInsets.only(
+                          left: 16.0,
+                          right:
+                              20.0), // Margen izquierdo para alinear visualmente con los otros campos
                       child: DropdownButtonFormField<String>(
                         value: selectedFormato,
                         onChanged: (String? newValue) {
@@ -327,7 +337,8 @@ class _EditLibroState extends State<EditLibro> {
                       ),
                     ),
                     ListTile(
-                        leading: Icon(CupertinoIcons.book_solid, color: Colors.black),
+                      leading:
+                          Icon(CupertinoIcons.book_solid, color: Colors.black),
                       title: TextFormField(
                         controller: controllerestado,
                         validator: (value) {
@@ -342,29 +353,33 @@ class _EditLibroState extends State<EditLibro> {
                         ),
                       ),
                     ),
-                     DropdownButton<String>(
-  value: selectedCategorialib,
-  items: [
-    DropdownMenuItem<String>(
-      value: '', // Valor por defecto
-      child: Text('Seleccione Categoría'),
-    ),
-    ...categorias.map((categoria) {
-      final id = categoria['id'].toString();
-      final titulo = categoria['titulo'];
-      return DropdownMenuItem<String>(
-        value: id,
-        child: Text(titulo ?? 'No Disponible'),
-      );
-    }).toList(),
-  ],
-  onChanged: (value) {
-    setState(() {
-      selectedCategorialib = value!;
-    });
-  },
-),
-                  
+                    Container(
+                      margin: EdgeInsets.only(left: 16.0, right: 20.0),
+                      child: DropdownButton<String>(
+                        value: selectedCategorialib,
+                        items: [
+                          DropdownMenuItem<String>(
+                            value: '', // Valor por defecto
+                            child: Text(categorias.isNotEmpty
+                                ? categorias[0]['titulo'].toString()
+                                : ''),
+                          ),
+                          ...categorias.map((categoria) {
+                            final id = categoria['id'].toString();
+                            final titulo = categoria['titulo'];
+                            return DropdownMenuItem<String>(
+                              value: id,
+                              child: Text(titulo ?? 'No Disponible'),
+                            );
+                          }).toList(),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            selectedCategorialib = value!;
+                          });
+                        },
+                      ),
+                    ),
                     Divider(
                       height: 1.0,
                     ),
