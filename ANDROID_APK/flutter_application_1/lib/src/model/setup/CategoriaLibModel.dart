@@ -1,5 +1,5 @@
-class CategoriaLibModel {
-  final dynamic categoria;
+// class CategoriaLibModel {
+//   final dynamic categoria;
 
-  CategoriaLibModel({required this.categoria});
-}
+//   CategoriaLibModel({required this.categoria});
+// }

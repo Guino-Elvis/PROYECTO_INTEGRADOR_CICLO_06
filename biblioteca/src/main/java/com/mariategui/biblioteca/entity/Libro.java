@@ -33,16 +33,11 @@ public class Libro {
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private CategoriaLib categorialib;
 
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
-
-    @PrePersist
-    protected void onCreate() {
-        created_at = LocalDateTime.now();
-    }
+    private LocalDateTime created_at = LocalDateTime.now();
+    private LocalDateTime updated_at = LocalDateTime.now();
 
     @PreUpdate
-    protected void onUpdate() {
+    private void preUpdate() {
         updated_at = LocalDateTime.now();
     }
 

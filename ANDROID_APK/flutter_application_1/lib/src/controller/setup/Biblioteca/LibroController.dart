@@ -1,30 +1,15 @@
 import 'dart:io';
 
+import 'package:android_path_provider/android_path_provider.dart';
+import 'package:excel/excel.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_application_1/src/config/ConfigApi.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:pdf/pdf.dart';
 class LibroController {
-  
-  // Future<List<dynamic>> getDataLibro() async {
-  //   final authResponse = await ShareApiTokenService.loginDetails();
-  //   if (authResponse != null) {
-  //     final token = authResponse.token;
-  //     if (token != null && token.isNotEmpty) {
-  //       final url = Uri.parse(ConfigApi.buildUrl('/libro'));
-  //       final response = await http.get(
-  //         url,
-  //         headers: {
-  //           'Authorization': 'Bearer $token',
-  //         },
-  //       );
-  //       return json.decode(response.body);
-  //     }
-  //   }
-
-  //   return []; // Otra acción que consideres apropiada si el token no está disponible.
-  // }
 
 Future<List<dynamic>> getDataLibro({String formato = ''}) async {
   final authResponse = await ShareApiTokenService.loginDetails();
@@ -70,7 +55,7 @@ Future<List<dynamic>> getDataLibro({String formato = ''}) async {
     String formatoController,
     String estadoController,
     String fotoController,
-    String categoriaIdController,
+    dynamic categoria,
   ) async {
     final authResponse = await ShareApiTokenService.loginDetails();
     if (authResponse != null) {
@@ -85,7 +70,7 @@ Future<List<dynamic>> getDataLibro({String formato = ''}) async {
           'formato': '$formatoController',
           'estado': '$estadoController',
           'foto': '$fotoController',
-          'categorialib': '$categoriaIdController',
+          'categorialib': categoria, // Usa directamente el parámetro categoria
         };
 
         var body = json.encode(data);
@@ -99,16 +84,16 @@ Future<List<dynamic>> getDataLibro({String formato = ''}) async {
           },
           body: body,
         );
-
+        // print("Selected Category: $categorialibController");
         print("${response.statusCode}");
         print("${response.body}");
+   
         return response;
       }
     }
-
-    // Manejar el caso en el que no se pudo obtener el token de autenticación lanzando una excepción.
     throw Exception('Token de autenticación no disponible');
   }
+
 
   Future<http.Response> editarLibro(
       String id,
@@ -119,7 +104,7 @@ Future<List<dynamic>> getDataLibro({String formato = ''}) async {
       String disponibilidadController,
       String formatoController,
       String estadoController,
-      String categoriaIdController,
+     dynamic categoriaController,
       String fotoController) async {
     final authResponse = await ShareApiTokenService.loginDetails();
     if (authResponse != null) {
@@ -136,7 +121,7 @@ Future<List<dynamic>> getDataLibro({String formato = ''}) async {
           'disponibilidad': '$disponibilidadController',
           'formato': '$formatoController',
           'estado': '$estadoController',
-          'categorialib': '$categoriaIdController',
+         'categorialib': categoriaController,
           'foto': '$fotoController',
         };
 
@@ -162,36 +147,124 @@ Future<List<dynamic>> getDataLibro({String formato = ''}) async {
     throw Exception('Token de autenticación no disponible');
   }
 
+
+
+
   Future<http.Response> removerLibro(String id, String fotoURL) async {
-    final authResponse = await ShareApiTokenService.loginDetails();
-    if (authResponse != null) {
-      final token = authResponse.token;
-      if (token != null && token.isNotEmpty) {
-        int a = int.parse(id);
-        print(a);
+  final authResponse = await ShareApiTokenService.loginDetails();
+  if (authResponse != null) {
+    final token = authResponse.token;
+    if (token != null && token.isNotEmpty) {
+      int a = int.parse(id);
+      print(a);
 
-        var url = ConfigApi.buildUrl('/Libro/$a');
-
-        // Verifica si la fotoURL no es nula ni vacía antes de intentar eliminarla
-        if (fotoURL != null && fotoURL.isNotEmpty) {
-          // Elimina la foto de Firebase Storage
-          await FirebaseStorage.instance.refFromURL(fotoURL).delete();
-        }
-
-        var response = await http.delete(
-          Uri.parse(url),
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization':
-                'Bearer $token', // Agregar el token de autenticación en el encabezado
-          },
-        );
-        print("${response.statusCode}");
-        return response;
+      // Verifica si la fotoURL es una URL válida de Firebase Storage
+      if (fotoURL != null && (fotoURL.startsWith('gs://') || fotoURL.startsWith('https://'))) {
+        // Elimina la foto de Firebase Storage
+        await FirebaseStorage.instance.refFromURL(fotoURL).delete();
       }
-    }
 
-    // Manejar el caso en el que no se pudo obtener el token de autenticación lanzando una excepción.
-    throw Exception('Token de autenticación no disponible');
+      // Elimina la categoría
+      var url = ConfigApi.buildUrl('/libro/$a');
+      var response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+      );
+      print("${response.statusCode}");
+      return response;
+    }
+  }
+
+  // Manejar el caso en el que no se pudo obtener el token de autenticación lanzando una excepción.
+  throw Exception('Token de autenticación no disponible');
+}
+
+    Future<void> exportDataToExcel() async {
+    try {
+      List<dynamic> data = await getDataLibro();
+      final excel = Excel.createExcel();
+
+      final sheet = excel['Sheet1'];
+      sheet.appendRow(
+          ['id', 'titulo', 'descripcion', 'created_at', 'updated_at']);
+      for (var item in data) {
+        // Obtener solo el año, mes y día de created_at y updated_at
+        DateTime createdAt = DateTime.parse(item['created_at']);
+        DateTime updatedAt = DateTime.parse(item['updated_at']);
+        String createdAtFormatted =
+            "${createdAt.year}-${createdAt.month}-${createdAt.day}";
+        String updatedAtFormatted =
+            "${updatedAt.year}-${updatedAt.month}-${updatedAt.day}";
+
+        sheet.appendRow([
+          item['id'],
+          item['titulo'],
+          item['descripcion'],
+          createdAtFormatted,
+          updatedAtFormatted
+        ]);
+      }
+
+      final dir = await AndroidPathProvider.downloadsPath;
+      final excelFile = File('$dir/cateogoriadata.xlsx');
+
+      final excelData = excel.encode();
+      if (excelData != null) {
+        await excelFile.writeAsBytes(excelData);
+        print("Excel file saved in Downloads directory: ${excelFile.path}");
+      } else {
+        print("Excel data is null");
+      }
+    } catch (e) {
+      print("Error during export: $e");
+      throw e;
+    }
+  }
+
+  Future<void> exportDataToPDF() async {
+    try {
+      List<dynamic> data = await getDataLibro();
+
+      final pdf = pw.Document();
+
+      // Establecer el tamaño de la página en orientación horizontal
+      pdf.addPage(
+        pw.Page(
+          pageFormat: PdfPageFormat.a4.copyWith(
+            width: PdfPageFormat.a4.height,
+            height: PdfPageFormat.a4.width,
+          ),
+          build: (context) {
+            return pw.Column(
+              children: [
+                pw.Table.fromTextArray(context: context, data: [
+                  ['id', 'titulo', 'descripcion', 'created_at', 'updated_at'],
+                  for (var item in data)
+                    [
+                      item['id'],
+                      item['titulo'],
+                      item['descripcion'],
+                      item['created_at'],
+                      item['updated_at']
+                    ],
+                ]),
+              ],
+            );
+          },
+        ),
+      );
+
+      final dir = await AndroidPathProvider.downloadsPath;
+      final pdfFile = File('$dir/cateogoriadata.pdf');
+
+      await pdfFile.writeAsBytes(await pdf.save());
+      print("PDF file saved in Downloads directory: ${pdfFile.path}");
+    } catch (e) {
+      print("Error during export: $e");
+      throw e;
+    }
   }
 }

@@ -153,6 +153,14 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         Navigator.of(context).pushNamed('/alumno');
                       },
                     ),
+                    const SizedBox(height: 16),
+                    buildMenuItem(
+                      text: 'Libro_Crud',
+                      icon: CupertinoIcons.book_solid,
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/libro_crud');
+                      },
+                    ),
                   ],
                   const SizedBox(height: 24),
                   Divider(color: Colors.white70),
