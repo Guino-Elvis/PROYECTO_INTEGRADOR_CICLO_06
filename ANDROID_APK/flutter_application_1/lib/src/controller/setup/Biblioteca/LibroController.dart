@@ -95,57 +95,62 @@ Future<List<dynamic>> getDataLibro({String formato = ''}) async {
   }
 
 
-  Future<http.Response> editarLibro(
-      String id,
-      String tituloController,
-      String autorController,
-      String isbnController,
-      String descripcionController,
-      String disponibilidadController,
-      String formatoController,
-      String estadoController,
-     dynamic categoriaController,
-      String fotoController) async {
-    final authResponse = await ShareApiTokenService.loginDetails();
-    if (authResponse != null) {
-      final token = authResponse.token;
-      if (token != null && token.isNotEmpty) {
-        int a = int.parse(id);
+ Future<http.Response> editarLibro(
+  String id,
+  String tituloController,
+  String autorController,
+  String isbnController,
+  String descripcionController,
+  String disponibilidadController,
+  String formatoController,
+  String estadoController,
+  dynamic categoriaController,
+  String fotoController,
+) async {
+  final authResponse = await ShareApiTokenService.loginDetails();
+  if (authResponse != null) {
+    final token = authResponse.token;
+    if (token != null && token.isNotEmpty) {
+      int a = int.parse(id);
 
-        Map data = {
-          'id': '$a',
-          'titulo': '$tituloController',
-          'autor': '$autorController',
-          'isbn': '$isbnController',
-          'descripcion': '$descripcionController',
-          'disponibilidad': '$disponibilidadController',
-          'formato': '$formatoController',
-          'estado': '$estadoController',
-         'categorialib': categoriaController,
-          'foto': '$fotoController',
-        };
+      // Convierte la categoría a un formato esperado por el backend
+      Map<String, dynamic> categoriaData = {
+        'id': categoriaController['id'],
+        // Puedes agregar más propiedades según sea necesario
+      };
 
-        var body = json.encode(data);
+      Map data = {
+        'id': '$a',
+        'titulo': '$tituloController',
+        'autor': '$autorController',
+        'isbn': '$isbnController',
+        'descripcion': '$descripcionController',
+        'disponibilidad': '$disponibilidadController',
+        'formato': '$formatoController',
+        'estado': '$estadoController',
+        'categorialib': categoriaData, // Usa la categoría convertida
+        'foto': '$fotoController',
+      };
 
-        var response = await http.put(
-          Uri.parse(ConfigApi.buildUrl('/libro')),
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization':
-                'Bearer $token', // Agregar el token de autenticación en el encabezado
-          },
-          body: body,
-        );
+      var body = json.encode(data);
 
-        print("${response.statusCode}");
-        print("${response.body}");
-        return response;
-      }
+      var response = await http.put(
+        Uri.parse(ConfigApi.buildUrl('/libro')),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+        body: body,
+      );
+
+      print("${response.statusCode}");
+      print("${response.body}");
+      return response;
     }
-
-    // Manejar el caso en el que no se pudo obtener el token de autenticación lanzando una excepción.
-    throw Exception('Token de autenticación no disponible');
   }
+
+  throw Exception('Token de autenticación no disponible');
+}
 
 
 

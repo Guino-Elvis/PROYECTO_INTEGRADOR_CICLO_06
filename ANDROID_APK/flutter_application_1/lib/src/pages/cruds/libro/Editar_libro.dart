@@ -71,13 +71,9 @@ class _EditLibroState extends State<EditLibro> {
         text: widget.list[widget.index]['disponibilidad']?.toString() ??
             'disponibilidad no especificado');
        selectedFormato = widget.list[widget.index]['formato']?.toString() ?? "";       
-    // controllerformato = TextEditingController(
-    //     text: widget.list[widget.index]['formato']?.toString() ??
-    //         'formato no especificado');
     controllerestado = TextEditingController(
         text: widget.list[widget.index]['estado']?.toString() ??
             'estado no especificado');
-     //selectedCategorialib = widget.list[widget.index]['categorialib']?.toString() ?? "";       
     selectedCategorialib = categorias.isNotEmpty ? categorias.first['id'].toString() : "";
     libroImageURL = widget.list[widget.index]['foto'] != null
         ? widget.list[widget.index]['foto'].toString()
@@ -127,6 +123,14 @@ class _EditLibroState extends State<EditLibro> {
         print("Error al cargar la imagen: $e");
       }
     }
+  // Obtén el objeto de categoría seleccionado
+  Map<String, dynamic> selectedCategoria = categorias.firstWhere(
+    (categoria) => categoria['id'].toString() == selectedCategorialib,
+    orElse: () => Map<String, dynamic>(), // Devuelve un mapa vacío si no se encuentra
+  );
+
+  // Asegúrate de que selectedCategoria no sea null antes de pasarlo a editarLibro
+  selectedCategoria = selectedCategoria.isNotEmpty ? selectedCategoria : {'id': ''};
 
     libroController.editarLibro(
       libroId,
@@ -138,7 +142,7 @@ class _EditLibroState extends State<EditLibro> {
        selectedFormato ?? "", // Rol seleccionado
       //controllerformato.text.trim(),
       controllerestado.text.trim(),
-      selectedCategorialib, // Rol seleccionado
+      selectedCategoria, // Objeto de categoría seleccionado
 
       newImageUrl,
     );
@@ -360,22 +364,7 @@ class _EditLibroState extends State<EditLibro> {
     });
   },
 ),
-                    //   ListTile(
-                    //   leading: Icon(CupertinoIcons.book_solid, color: Colors.black),
-                    //   title: TextFormField(
-                    //     controller: controllercategorialib,
-                    //     validator: (value) {
-                    //       if (value == null || value.isEmpty) {
-                    //         return "El campo no puede estar vacío";
-                    //       }
-                    //       return null;
-                    //     },
-                    //     decoration: InputDecoration(
-                    //       hintText: "categoria",
-                    //       labelText: "categoria del libro",
-                    //     ),
-                    //   ),
-                    // ),
+                  
                     Divider(
                       height: 1.0,
                     ),
