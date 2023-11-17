@@ -6,9 +6,6 @@ import 'package:flutter_application_1/src/config/theme.dart';
 import 'package:flutter_application_1/src/controller/setup/Biblioteca/Categoria_Lib_Controller.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Detalle.dart';
 import 'package:flutter_application_1/src/pages/libros/pages/ui/Inicio.dart';
-import 'package:flutter_application_1/src/pages/libros/pages/ui/widgets/categoria/Item_categoria_seccion.dart';
-import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
-
 import 'package:provider/provider.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 

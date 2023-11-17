@@ -4,6 +4,7 @@ import 'package:android_path_provider/android_path_provider.dart';
 import 'package:excel/excel.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_application_1/src/config/ConfigApi.dart';
+import 'package:flutter_application_1/src/model/setup/Categoria_Lib_Model.dart';
 import 'package:flutter_application_1/src/service/authService/ShareApiTokenService.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdf/widgets.dart' as pw;
@@ -93,77 +94,29 @@ class CategorialibControllerLib {
   }
 
   //add categoria - CRUD
-  Future<http.Response> CrearCategoria(
-    String tituloController,
-    String descripcionController,
-    String fotoController,
-    // String created_atController,
-    // String updated_atController,
-  ) async {
-    // var url = 'http://192.168.0.104:9090/categorialib';
-    final authResponse = await ShareApiTokenService.loginDetails();
-    if (authResponse != null) {
-      final token = authResponse.token;
-      if (token != null && token.isNotEmpty) {
-        Map data = {
-          'titulo': '$tituloController',
-          'descripcion': '$descripcionController',
-          'foto': '$fotoController',
-          // 'created_at': '$created_atController',
-          // 'updated_at': '$updated_atController',
-        };
+  Future<http.Response> CrearCategoria(CategoriaLibModel nuevaCategoria) async {
+  final authResponse = await ShareApiTokenService.loginDetails();
 
-        var body = json.encode(data);
-
-        var response =
-            await http.post(Uri.parse(ConfigApi.buildUrl('/categorialib')),
-                headers: {
-                  "Content-Type": "application/json",
-                  'Authorization': 'Bearer $token',
-                },
-                body: body);
-        print("${response.statusCode}");
-        print("${response.body}");
-        return response;
-      }
-    }
-    // Manejar el caso en el que no se pudo obtener el token de autenticación lanzando una excepción.
-    throw Exception('Token de autenticación no disponible');
-  }
-
-
-
-  //function for update or put
-  Future<http.Response> editarCategoria(
-    String id, String tituloController,
-      String descripcionController, 
-      String fotoController) async {
-   final authResponse = await ShareApiTokenService.loginDetails();
-     if (authResponse != null) {
+  if (authResponse != null) {
     final token = authResponse.token;
+
     if (token != null && token.isNotEmpty) {
-    int a = int.parse(id);
-    print(a);
+      final body = json.encode(nuevaCategoria.toJson());
 
-    Map data = {
-      'id': '$a',
-      'titulo': '$tituloController',
-      'descripcion': '$descripcionController',
-      'foto': '$fotoController',
-    };
-    
-    var body = json.encode(data);
-
-    // var response = await http.put(Uri.parse(url),
-    var response = await http.put(
+      final response = await http.post(
         Uri.parse(ConfigApi.buildUrl('/categorialib')),
-        headers: {"Content-Type": "application/json",
-         'Authorization': 'Bearer $token',},
-        body: body);
-    print("${response.statusCode}");
-    print("${response.body}");
-    return response;
- }
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+        body: body,
+      );
+
+      print("${response.statusCode}");
+      print("${response.body}");
+
+      return response;
+    }
   }
 
   // Manejar el caso en el que no se pudo obtener el token de autenticación lanzando una excepción.
@@ -171,36 +124,36 @@ class CategorialibControllerLib {
 }
 
 
+  //function for update or put
+Future<http.Response> editarCategoria(CategoriaLibModel categoria) async {
+  final authResponse = await ShareApiTokenService.loginDetails();
 
-//   Future<http.Response> removerCategoria(String id, String fotoURL) async {
-//       final authResponse = await ShareApiTokenService.loginDetails();
-//   if (authResponse != null) {
-//     final token = authResponse.token;
-//     if (token != null && token.isNotEmpty) {
-//     int a = int.parse(id);
-//     print(a);
-//     // var url = 'http://192.168.0.104:9090/categorialib/$a';
-//     var url = ConfigApi.buildUrl('/categorialib/$a');
+  if (authResponse != null) {
+    final token = authResponse.token;
 
-//     // Verifica si la fotoURL no es nula ni vacía antes de intentar eliminarla
-//     if (fotoURL != null && fotoURL.isNotEmpty) {
-//       // Elimina la foto de Firebase Storage
-//       await FirebaseStorage.instance.refFromURL(fotoURL).delete();
-//     }
+    if (token != null && token.isNotEmpty) {
+      var body = json.encode(categoria.toJson());
 
-//     var response = await http.delete(
-//       Uri.parse(url),
-//       headers: {"Content-Type": "application/json",
-//         'Authorization': 'Bearer $token',},
-//     );
-//     print("${response.statusCode}");
-//     return response;
-//      }
-//   }
+      var response = await http.put(
+        Uri.parse(ConfigApi.buildUrl('/categorialib')),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+        body: body,
+      );
 
-//   // Manejar el caso en el que no se pudo obtener el token de autenticación lanzando una excepción.
-//   throw Exception('Token de autenticación no disponible');
-// }
+      print("${response.statusCode}");
+      print("${response.body}");
+
+      return response;
+    }
+  }
+
+  // Manejar el caso en el que no se pudo obtener el token de autenticación lanzando una excepción.
+  throw Exception('Token de autenticación no disponible');
+}
+
 
 Future<http.Response> removerCategoria(String id, String fotoURL) async {
   final authResponse = await ShareApiTokenService.loginDetails();

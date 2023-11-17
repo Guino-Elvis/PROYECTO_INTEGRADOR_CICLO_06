@@ -147,10 +147,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     ),
                     const SizedBox(height: 16),
                     buildMenuItem(
-                      text: 'Alumnos_Crud',
-                      icon: Icons.person,
+                      text: 'reserva_crud',
+                      icon: CupertinoIcons.book_solid,
                       onTap: () {
-                        Navigator.of(context).pushNamed('/alumno');
+                        Navigator.of(context).pushNamed('/reserva_crud');
                       },
                     ),
                     const SizedBox(height: 16),

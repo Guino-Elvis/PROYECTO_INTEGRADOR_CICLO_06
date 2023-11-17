@@ -22,7 +22,7 @@ class EditLibro extends StatefulWidget {
 
 class _EditLibroState extends State<EditLibro> {
   LibroController libroController = LibroController();
- 
+
   late TextEditingController controllerid;
   late TextEditingController controllertitulo;
   late TextEditingController controllerautor;
@@ -75,7 +75,9 @@ class _EditLibroState extends State<EditLibro> {
         text: widget.list[widget.index]['estado']?.toString() ??
             'estado no especificado');
     selectedCategorialib =
-        categorias.isNotEmpty ? categorias.first['id'].toString() : "";
+        widget.list[widget.index]['categorialib']['id'].toString();
+    // selectedCategorialib =
+    //     categorias.isNotEmpty ? categorias.first['id'].toString() : "";
     libroImageURL = widget.list[widget.index]['foto'] != null
         ? widget.list[widget.index]['foto'].toString()
         : 'assets/nofoto.jpg';
@@ -159,7 +161,7 @@ class _EditLibroState extends State<EditLibro> {
 
   CategorialibControllerLib categorialibControllerLib =
       CategorialibControllerLib();
-  
+
   Future<void> _getData() async {
     try {
       print("Calling _getData");
@@ -356,7 +358,10 @@ class _EditLibroState extends State<EditLibro> {
                     Container(
                       margin: EdgeInsets.only(left: 16.0, right: 20.0),
                       child: DropdownButton<String>(
-                        value: selectedCategorialib,
+                        value: categorias.isNotEmpty
+                            ? selectedCategorialib ??
+                                categorias[0]['id'].toString()
+                            : '',
                         items: [
                           DropdownMenuItem<String>(
                             value: '', // Valor por defecto
@@ -404,6 +409,7 @@ class _EditLibroState extends State<EditLibro> {
                           ),
                           onPressed: () {
                             _updateImageInFirebase();
+                            Navigator.pushNamed(context, '/libro_crud');
                           },
                           child: Container(child: Text("Editar")),
                         ),
@@ -411,7 +417,7 @@ class _EditLibroState extends State<EditLibro> {
                             width: 16), // Agrega un espacio entre los botones
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/category');
+                            Navigator.pushNamed(context, '/libro_crud');
                           },
                           child: Text("Cancelar"),
                           style: ElevatedButton.styleFrom(

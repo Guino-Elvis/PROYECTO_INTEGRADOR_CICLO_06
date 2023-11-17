@@ -17,7 +17,7 @@ class _CrearLibroState extends State<CrearLibro> {
   LibroController libroController = LibroController();
 
   List<Map<String, dynamic>> categorias = [];
-   String selectedCategoria = ""; // Declaración de la variable
+  String selectedCategoria = ""; // Declaración de la variable
 
   CategorialibControllerLib categorialibControllerLib =
       CategorialibControllerLib();
@@ -28,10 +28,11 @@ class _CrearLibroState extends State<CrearLibro> {
     _getData();
   }
 
-   Future<void> _getData() async {
+  Future<void> _getData() async {
     try {
       print("Calling _getData");
-      final categoriesData = await categorialibControllerLib.getDataCategorialib();
+      final categoriesData =
+          await categorialibControllerLib.getDataCategorialib();
       setState(() {
         categorias = List<Map<String, dynamic>>.from(categoriesData);
       });
@@ -50,7 +51,6 @@ class _CrearLibroState extends State<CrearLibro> {
   final TextEditingController formatoController = TextEditingController();
   final TextEditingController estadoController = TextEditingController();
 
-
   File? selectedImage;
 
   _navigateList(BuildContext context) async {
@@ -62,6 +62,42 @@ class _CrearLibroState extends State<CrearLibro> {
     if (result != null && result) {
       setState(() {});
     }
+  }
+
+// Add this function to validate fields
+  bool _validateFields() {
+    if (tituloController.text.isEmpty ||
+        autorController.text.isEmpty ||
+        isbnController.text.isEmpty ||
+        descripcionController.text.isEmpty ||
+        disponibilidadController.text.isEmpty ||
+        selectedCategoria == null ||
+        selectedCategoria.isEmpty ||
+        selectedFormato == null ||
+        selectedFormato!.isEmpty ||
+        estadoController.text.isEmpty) {
+      // Show a modal indicating that all fields must be filled.
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Campos Incompletos"),
+            content: Text(
+                "Por favor, complete todos los campos antes de crear el libro."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+      return false;
+    }
+    return true;
   }
 
   Future<void> _pickImage() async {
@@ -168,7 +204,7 @@ class _CrearLibroState extends State<CrearLibro> {
                   ),
                 ),
                 SizedBox(height: 16.0),
-               DropdownButtonFormField<String>(
+                DropdownButtonFormField<String>(
                   value: selectedFormato,
                   onChanged: (String? newValue) {
                     // Aquí puedes manejar el cambio de valor seleccionado
@@ -199,29 +235,28 @@ class _CrearLibroState extends State<CrearLibro> {
                 ),
                 SizedBox(height: 16.0),
 
-             DropdownButton<String>(
-  value: selectedCategoria,
-  items: [
-    DropdownMenuItem<String>(
-      value: '',
-      child: Text('Seleccione Categoría'),
-    ),
-    ...categorias.map((categoria) {
-      final id = categoria['id'].toString();
-      final titulo = categoria['titulo'];
-      return DropdownMenuItem<String>(
-        value: id,
-        child: Text(titulo ?? 'No Disponible'),
-      );
-    }).toList(),
-  ],
-  onChanged: (value) {
-    setState(() {
-      selectedCategoria = value!;
-    });
-  },
-),
-
+                DropdownButton<String>(
+                  value: selectedCategoria,
+                  items: [
+                    DropdownMenuItem<String>(
+                      value: '',
+                      child: Text('Seleccione Categoría'),
+                    ),
+                    ...categorias.map((categoria) {
+                      final id = categoria['id'].toString();
+                      final titulo = categoria['titulo'];
+                      return DropdownMenuItem<String>(
+                        value: id,
+                        child: Text(titulo ?? 'No Disponible'),
+                      );
+                    }).toList(),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCategoria = value!;
+                    });
+                  },
+                ),
 
                 SizedBox(height: 16.0),
                 ElevatedButton(
@@ -234,36 +269,38 @@ class _CrearLibroState extends State<CrearLibro> {
                     style: ElevatedButton.styleFrom(
                       primary: Colors.blue,
                     ),
-                  onPressed: () async {
-    final downloadUrl = await _uploadImage(tituloController.text.trim());
-    if (selectedCategoria != null) {
-      final categoriaId = int.tryParse(selectedCategoria!);
-      if (categoriaId != null) {
-        final categoriaSeleccionada = {
-          'id': categoriaId,
-        };
+                    onPressed: () async {
+                      if (_validateFields()) {
+                        final downloadUrl =
+                            await _uploadImage(tituloController.text.trim());
+                        if (selectedCategoria != null) {
+                          final categoriaId = int.tryParse(selectedCategoria!);
+                          if (categoriaId != null) {
+                            final categoriaSeleccionada = {
+                              'id': categoriaId,
+                            };
 
-        libroController.CrearLibro(
-          tituloController.text.trim(),
-          autorController.text.trim(),
-          isbnController.text.trim(),
-          descripcionController.text.trim(),
-          disponibilidadController.text.trim(),
-          selectedFormato ?? "", // Rol seleccionado
-        //  formatoController.text.trim(),
-          estadoController.text.trim(),
-          // categoriaSeleccionada,
-          downloadUrl ?? '',
-          categoriaSeleccionada,
-        );
-        _navigateList(context);
-      } else {
-        print("Error: No se pudo convertir 'selectedCategoria' a entero.");
-      }
-    } else {
-      print("Error: 'selectedCategoria' es null");
-    }
-  },
+                            libroController.CrearLibro(
+                              tituloController.text.trim(),
+                              autorController.text.trim(),
+                              isbnController.text.trim(),
+                              descripcionController.text.trim(),
+                              disponibilidadController.text.trim(),
+                              selectedFormato ?? "",
+                              estadoController.text.trim(),
+                              downloadUrl ?? '',
+                              categoriaSeleccionada,
+                            );
+                            _navigateList(context);
+                          } else {
+                            print(
+                                "Error: No se pudo convertir 'selectedCategoria' a entero.");
+                          }
+                        } else {
+                          print("Error: 'selectedCategoria' es null");
+                        }
+                      }
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

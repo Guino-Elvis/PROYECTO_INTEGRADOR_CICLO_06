@@ -103,7 +103,7 @@ class _ReservaLibroState extends State<ReservaLibro> {
           'fecha_reserva': '$fechaReservaController',
           'estado_reserva': '$estado_reservaController',
         };
-        final response = await ReservaLibController().CrearReservaLib(
+        final response = await ReservaLibController().crearReservaLib(
           userIdController,
           libro,
           fechaReservaController,

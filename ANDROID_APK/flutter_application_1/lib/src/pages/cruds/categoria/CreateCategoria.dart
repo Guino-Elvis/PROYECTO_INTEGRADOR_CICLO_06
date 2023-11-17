@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_application_1/src/controller/setup/Biblioteca/Categoria_Lib_Controller.dart';
+import 'package:flutter_application_1/src/model/setup/Categoria_Lib_Model.dart';
 import 'package:flutter_application_1/src/pages/cruds/categoria/CategoriaList.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -13,12 +14,13 @@ class CreateCategoria extends StatefulWidget {
 }
 
 class _CreateCategoriaState extends State<CreateCategoria> {
-  CategorialibControllerLib categorialibControllerLib = CategorialibControllerLib();
+  CategorialibControllerLib categorialibControllerLib =
+      CategorialibControllerLib();
   final TextEditingController tituloController = TextEditingController();
   final TextEditingController descripcionController = TextEditingController();
 
   File? selectedImage;
-  
+
   _navigateList(BuildContext context) async {
     final result = await Navigator.push(
       context,
@@ -37,30 +39,28 @@ class _CreateCategoriaState extends State<CreateCategoria> {
       setState(() {
         selectedImage = File(image.path);
       });
-    } else {
-  
-    }
+    } else {}
   }
 
-Future<String?> _uploadImage(String categoryTitle) async {
-  try {
-    if (selectedImage != null) {
-      final fileName = 'categoriablog/$categoryTitle-${DateTime.now()}.png';
-      final firebaseStorageReference = FirebaseStorage.instance.ref().child(fileName);
+  Future<String?> _uploadImage(String categoryTitle) async {
+    try {
+      if (selectedImage != null) {
+        final fileName = 'categoriablog/$categoryTitle-${DateTime.now()}.png';
+        final firebaseStorageReference =
+            FirebaseStorage.instance.ref().child(fileName);
 
-      await firebaseStorageReference.putFile(selectedImage!);
-      final downloadUrl = await firebaseStorageReference.getDownloadURL();
+        await firebaseStorageReference.putFile(selectedImage!);
+        final downloadUrl = await firebaseStorageReference.getDownloadURL();
 
-      return downloadUrl;
-    } else {
+        return downloadUrl;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      print("Error uploading image: $error");
       return null;
     }
-  } catch (error) {
-    print("Error uploading image: $error");
-    return null;
   }
-}
-  
 
   Future<void> _getImage() async {
     final picker = ImagePicker();
@@ -70,10 +70,8 @@ Future<String?> _uploadImage(String categoryTitle) async {
       setState(() {
         selectedImage = File(pickedFile.path);
       });
-    } else {
-    }
+    } else {}
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +79,6 @@ Future<String?> _uploadImage(String categoryTitle) async {
       appBar: AppBar(
         title: Text('Crear Categoria'),
       ),
-
       body: BounceInRight(
         child: Padding(
           padding: const EdgeInsets.all(12.0),
@@ -116,16 +113,20 @@ Future<String?> _uploadImage(String categoryTitle) async {
                     style: ElevatedButton.styleFrom(
                       primary: Colors.blue,
                     ),
-                   onPressed: () async {
-  final downloadUrl = await _uploadImage(tituloController.text.trim());
-  categorialibControllerLib.CrearCategoria(
-    tituloController.text.trim(), // Nombre
-    descripcionController.text.trim(), // Descripción
-    downloadUrl ?? "", // URL de la imagen
-  );
-  _navigateList(context);
-},
+                    onPressed: () async {
+                      final downloadUrl =
+                          await _uploadImage(tituloController.text.trim());
 
+                      CategoriaLibModel nuevaCategoria = CategoriaLibModel(
+                        titulo: tituloController.text.trim(),
+                        descripcion: descripcionController.text.trim(),
+                        foto: downloadUrl ?? "", // URL de la imagen
+                      );
+
+                      await categorialibControllerLib.CrearCategoria(
+                          nuevaCategoria);
+                      _navigateList(context);
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

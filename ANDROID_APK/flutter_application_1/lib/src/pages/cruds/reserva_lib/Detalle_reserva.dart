@@ -3,22 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math' as math;
 import 'package:flutter_application_1/src/component/user/drawer/drawers.dart';
-import 'package:flutter_application_1/src/controller/setup/Biblioteca/LibroController.dart';
-import 'package:flutter_application_1/src/pages/cruds/libro/Editar_libro.dart';
-import 'package:flutter_application_1/src/pages/cruds/libro/libro_list.dart';
+import 'package:flutter_application_1/src/controller/setup/Biblioteca/Reserba_lib_Controller.dart';
+import 'package:flutter_application_1/src/pages/cruds/reserva_lib/Editar_reserva.dart';
+import 'package:flutter_application_1/src/pages/cruds/reserva_lib/Reserva_list.dart';
 import 'package:intl/intl.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class DetalleLibro extends StatefulWidget {
+class DetalleReserva extends StatefulWidget {
   final List list;
   final int index;
-  DetalleLibro({required this.index, required this.list});
+  DetalleReserva({required this.index, required this.list});
 
   @override
-  _DetalleLibroState createState() => _DetalleLibroState();
+  _DetalleReservaState createState() => _DetalleReservaState();
 }
 
-class _DetalleLibroState extends State<DetalleLibro> {
+class _DetalleReservaState extends State<DetalleReserva> {
   @override
   void initState() {
     super.initState();
@@ -34,11 +34,11 @@ class _DetalleLibroState extends State<DetalleLibro> {
         overlays: SystemUiOverlay.values);
   }
 
-  final LibroController libroController = LibroController();
+  final ReservaLibController reservaLibController = ReservaLibController();
   _navigateList(BuildContext context) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => LibroList()),
+      MaterialPageRoute(builder: (context) => ReservasList()),
     );
 
     if (result != null && result) {
@@ -57,7 +57,7 @@ class _DetalleLibroState extends State<DetalleLibro> {
 }
 
 class ProfilePage extends StatelessWidget {
-  final DetalleLibro widget;
+  final DetalleReserva widget;
 
   ProfilePage({required this.widget});
 
@@ -75,17 +75,17 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-             Text("titulo",),
+             Text("usuario",),
               SizedBox(height: 4,),
              Text(
-                "${(widget.list[widget.index]['titulo'] ?? 'Sin titulo').toUpperCase()}",
+                "${(widget.list[widget.index]['userId']?.toString() ?? 'Sin titulo').toUpperCase()}",
                 style: _style(),
               ),
               SizedBox(height: 16,),
     
               Text("Descripcion", style: _style(),),
               SizedBox(height: 4,),
-              Text(widget.list[widget.index]['descripcion']?? 'No tienes descripcion',),
+              Text(widget.list[widget.index]['fecha_reserva']?? 'No tienes descripcion',),
               SizedBox(height: 16,),
              
               Row(
@@ -110,7 +110,7 @@ class ProfilePage extends StatelessWidget {
 
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final DetalleLibro widget;
+  final DetalleReserva widget;
 
   CustomAppBar({required this.widget});
 
@@ -162,7 +162,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           color: HexColor("#F82249"),
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/libro_crud');
+                          Navigator.pushNamed(context, '/reserva_crud');
                         },
                       ),
                   Text(
@@ -218,7 +218,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         height: 16,
                       ),
                       Text(
-                       "${(widget.list[widget.index]['titulo'] ?? 'Sin nombre')}",
+                       "${(widget.list[widget.index]['libro']['titulo'] ?? 'Sin nombre')}",
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       )
                     ],
@@ -235,7 +235,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   onTap: () {
                     print("//TODO: button clicked");
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => EditLibro(
+                      builder: (BuildContext context) => EditReserva(
                         list: widget.list,
                         index: widget.index,
                       ),
@@ -250,7 +250,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         width: 110,
                         height: 32,
                         child: Center(
-                          child: Text("Edit Libro",style: TextStyle(color:Colors.white),),
+                          child: Text("Edit Reserva",style: TextStyle(color:Colors.white),),
                         ),
                         decoration: BoxDecoration(
                             color: HexColor("#F82249"),
