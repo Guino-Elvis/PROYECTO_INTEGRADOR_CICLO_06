@@ -22,7 +22,7 @@ class _Seccion3EscolarDetalleAsistenciaState extends State<Seccion3EscolarDetall
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildTitle(),
-              _buildIcon(),
+          
             ],
           ),
         ],
@@ -32,7 +32,7 @@ class _Seccion3EscolarDetalleAsistenciaState extends State<Seccion3EscolarDetall
 
   Widget _buildTitle() {
     return Container(
-      padding: EdgeInsets.only(left: 65),
+     
       child: Column(
         children: [
           Text(
@@ -56,17 +56,6 @@ class _Seccion3EscolarDetalleAsistenciaState extends State<Seccion3EscolarDetall
     );
   }
 
-  Widget _buildIcon() {
-    return Container(
-      padding: EdgeInsets.only(left: 50),
-      child: InkWell(
-        onTap: () {
-        
-        },
-        child: Icon(Icons.list), // Cambia los íconos según el estado
-      ),
-    );
-  }
 
 
 

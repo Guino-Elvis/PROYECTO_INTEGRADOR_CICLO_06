@@ -10,7 +10,14 @@ import 'package:flutter_application_1/src/pages/escolar/widgets/ui/home_screen_e
 import 'package:snippet_coder_utils/hex_color.dart';
 
 class AsistenciaEscolar extends StatelessWidget {
-  const AsistenciaEscolar({super.key});
+  final String nombreCurso;
+  final String cursoId;
+  final String nombreDocente;
+  const AsistenciaEscolar(
+      {super.key,
+      required this.nombreCurso,
+      required this.nombreDocente,
+      required this.cursoId});
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -36,7 +43,11 @@ class AsistenciaEscolar extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => DetalleEscolar()),
+                                    builder: (context) => DetalleEscolar(
+                                          nombreCurso: nombreCurso,
+                                          nombreDocente: nombreDocente,
+                                          cursoId: cursoId,
+                                        )),
                               );
                             },
                             child: Icon(
@@ -61,7 +72,7 @@ class AsistenciaEscolar extends StatelessWidget {
                     ),
                     Center(
                       child: Text(
-                        'Cálculo III Ciclo: 4 - unico',
+                        '$cursoId $nombreCurso Ciclo: 4 - unico',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 25,
@@ -70,17 +81,20 @@ class AsistenciaEscolar extends StatelessWidget {
                       ),
                     ),
                     Center(
-                      child: Text(
-                        'EP Ingeniería de Sistemas - Docente: Paucara Cahuana Leandro',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
+                      child: Container(
+                        width: 300,
+                        child: Text(
+                          'EP Ingeniería de Sistemas - Docente: $nombreDocente',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                     SizedBox(
-                      height: 40,
+                      height: 25,
                     ),
                     Row(
                       children: [

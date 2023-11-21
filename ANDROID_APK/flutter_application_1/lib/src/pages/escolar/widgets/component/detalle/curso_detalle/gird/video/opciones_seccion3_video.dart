@@ -3,8 +3,8 @@ import 'package:flutter_application_1/src/pages/escolar/widgets/component/detall
 import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/curso_detalle/gird/video/lista_detalle_escolar.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/curso_detalle/gird/video/video_cuadricula.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/lista_detalle_escolar.dart';
-import 'package:flutter_application_1/src/pages/escolar/widgets/component/grid/cuadricula_escolar.dart';
-import 'package:flutter_application_1/src/pages/escolar/widgets/component/grid/lista_escolar.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/component/gridCursosIncripcion/cuadricula_escolar.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/component/gridCursosIncripcion/lista_escolar.dart';
 import 'package:flutter_application_1/src/pages/escolar/widgets/ui/Detalle_screen_escolar.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 

@@ -7,8 +7,17 @@ import 'package:flutter_application_1/src/pages/escolar/widgets/ui/home_screen_e
 import 'package:snippet_coder_utils/hex_color.dart';
 
 class DetalleEscolar extends StatelessWidget {
-  const DetalleEscolar({super.key});
-  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final String nombreCurso;
+  final String cursoId;
+  final String nombreDocente;
+
+  const DetalleEscolar({
+    super.key,
+    required this.nombreCurso,
+    required this.nombreDocente,
+    required this.cursoId,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +67,7 @@ class DetalleEscolar extends StatelessWidget {
                     ),
                     Center(
                       child: Text(
-                        'Cálculo III Ciclo: 4 - unico',
+                        '$cursoId $nombreCurso Ciclo: 4 - unico',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 25,
@@ -67,17 +76,20 @@ class DetalleEscolar extends StatelessWidget {
                       ),
                     ),
                     Center(
-                      child: Text(
-                        'EP Ingeniería de Sistemas - Docente: Paucara Cahuana Leandro',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
+                      child: Container(
+                        width: 300,
+                        child: Text(
+                          'EP Ingeniería de Sistemas - Docente: $nombreDocente',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                     SizedBox(
-                      height: 40,
+                      height: 28,
                     ),
                     Row(
                       children: [
@@ -143,7 +155,11 @@ class DetalleEscolar extends StatelessWidget {
           ),
           Container(
             color: Colors.white,
-            child: Seccion3EscolarDetalle(),
+            child: Seccion3EscolarDetalle(
+              nombreCurso: nombreCurso, // Puedes pasar los mismos datos o datos diferentes
+              nombreDocente: nombreDocente,
+              cursoId: cursoId,
+            ),
           ),
         ],
       ),

@@ -6,7 +6,11 @@ import 'package:flutter_application_1/src/pages/escolar/widgets/ui/Detalle_scree
 import 'package:snippet_coder_utils/hex_color.dart';
 
 class ListViewEscolarDetalle extends StatefulWidget {
-  const ListViewEscolarDetalle({super.key});
+  final String nombreCurso;
+  final String cursoId;
+  final String nombreDocente;
+  const ListViewEscolarDetalle(
+      {super.key, required this.nombreCurso, required this.nombreDocente, required this.cursoId});
 
   @override
   State<ListViewEscolarDetalle> createState() => _ListViewEscolarDetalleState();
@@ -28,12 +32,7 @@ class _ListViewEscolarDetalleState extends State<ListViewEscolarDetalle> {
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
         return InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => DetalleEscolar()),
-            );
-          },
+        
           child: Container(
             padding: EdgeInsets.all(0), // Sin relleno para eliminar márgenes
             decoration: BoxDecoration(
@@ -185,7 +184,14 @@ class _ListViewEscolarDetalleState extends State<ListViewEscolarDetalle> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    AsistenciaEscolar()),
+                                                    AsistenciaEscolar(
+                                                      nombreCurso:
+                                                          widget.nombreCurso,
+                                                      nombreDocente:
+                                                          widget.nombreDocente, 
+                                                          cursoId:
+                                                          widget.cursoId,
+                                                    )),
                                           );
                                         },
                                         child: Icon(

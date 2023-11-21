@@ -1,14 +1,13 @@
 import axios from "axios";
 import ExcelJS from 'exceljs';
-import ListaDeAlumnos from '../components/ListaDeAlumnos';
-import LisAlumnooIns from '../components/LisAlumnooIns';
 import { useState, useEffect } from "react";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import alumnoa from '../styles/add.css';
+import css from '../styles/add.css';
 import Modal from "../components/Modal";
 import AppLayout from '../components/admin/AppLayout';
 import ListaCursoIns from "../components/ListaCursoIns";
+import LisUserIns from "../components/LisUserIns";
 const Inscripccions = () => {
 
   // token
@@ -56,14 +55,14 @@ const Inscripccions = () => {
     serie: "",
     numero: "",
     descripcion: "",
-    alumnoId: "",
+    userId: "",
     detalle: [],
   });
 
 
 
 
-  const NombreAlumnoyCurso = ({ cursoId }) => {
+  const NombreCursoInscripcion = ({ cursoId }) => {
     const [nombreCurso, setNombreCurso] = useState('');
     const [fotoCurso, setFotoCurso] = useState('');
     const [costoCurso, setCostoCurso] = useState('');
@@ -134,8 +133,8 @@ const Inscripccions = () => {
         setFilteredInscripccions(filtered);
 
         // Obtener los nombres de los alumnos para cada inscripccion
-        const alumnoPromises = filtered.map((inscripccion) => {
-          return axios.get(`${API_URL}/alumno/${inscripccion.alumnoId}`, {
+        const userPromises = filtered.map((inscripccion) => {
+          return axios.get(`${API_URL}/auth/${inscripccion.userId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -144,15 +143,15 @@ const Inscripccions = () => {
 
 
         axios
-          .all(alumnoPromises)
+          .all(userPromises)
           .then((responses) => {
             // Mapear los nombres de los horarios a las inscripccions correspondientes
-            const inscripccionsConAlumnos = filtered.map((inscripccion, index) => {
-              const nombreAlumno = responses[index].data.nombre;
-              return { ...inscripccion, nombreAlumno };
+            const inscripccionsConUsers = filtered.map((inscripccion, index) => {
+              const nombreUser = responses[index].data.name;
+              return { ...inscripccion, nombreUser };
             });
 
-            setFilteredInscripccions(inscripccionsConAlumnos);
+            setFilteredInscripccions(inscripccionsConUsers);
           })
           .catch((error) => {
             console.log(error);
@@ -319,11 +318,12 @@ const Inscripccions = () => {
       !inscripccionEditado.numero ||
       !inscripccionEditado.descripcion ||
       // !inscripccionEditado.curso ||
-      !inscripccionEditado.alumnoId ||
+      !inscripccionEditado.userId ||
       !Array.isArray(inscripccionEditado.detalle) ||
       inscripccionEditado.detalle.length === 0 ||
       inscripccionEditado.detalle.some(
-        (detalle) => !detalle.cursoId || detalle.costo === ""
+        (detalle) => !detalle.cursoId 
+        // ||detalle.costo === ""
       )
     ) {
       console.log('Error de validación en los datos de la inscripccion');
@@ -337,10 +337,10 @@ const Inscripccions = () => {
         serie: inscripccionEditado.serie,
         numero: inscripccionEditado.numero,
         descripcion: inscripccionEditado.descripcion,
-        alumnoId: inscripccionEditado.alumnoId,
+        userId: inscripccionEditado.userId,
         detalle: inscripccionEditado.detalle.map((detalle) => ({
           cursoId: detalle.cursoId,
-          costo: detalle.costo,
+         // costo: detalle.costo,
         })),
       };
 
@@ -359,7 +359,7 @@ const Inscripccions = () => {
         serie: "",
         numero: "",
         descripcion: "",
-        alumnoId: "",
+        userId: "",
         detalle: [],
       });
 
@@ -378,7 +378,7 @@ const Inscripccions = () => {
       serie: inscripccion.serie,
       numero: inscripccion.numero,
       descripcion: inscripccion.descripcion,
-      alumnoId: inscripccion.alumnoId,
+      userId: inscripccion.userId,
       detalle: inscripccion.detalle
 
     });
@@ -397,10 +397,10 @@ const Inscripccions = () => {
         serie: inscripccionEditado.serie,
         numero: inscripccionEditado.numero,
         descripcion: inscripccionEditado.descripcion,
-        alumnoId: inscripccionEditado.alumnoId,
+        userId: inscripccionEditado.userId,
         detalle: inscripccionEditado.detalle.map((detalle) => ({
           cursoId: detalle.cursoId,
-          costo: detalle.costo,
+          // costo: detalle.costo,
         })),
       };
 
@@ -423,7 +423,7 @@ const Inscripccions = () => {
         serie: "",
         numero: "",
         descripcion: "",
-        alumnoId: "",
+        userId: "",
         detalle: [],
       });
     } catch (error) {
@@ -511,14 +511,14 @@ const Inscripccions = () => {
 
           <div className="ml-1 pt-2">
             <label className="block">Alumno</label>
-            <LisAlumnooIns
-              onChange={(alumnoId) =>
+            <LisUserIns
+              onChange={(userId) =>
                 setInscripccionEditado({
                   ...inscripccionEditado,
-                  alumnoId: alumnoId, // Actualizar la propiedad horario con un objeto
+                  userId: userId, // Actualizar la propiedad horario con un objeto
                 })
               }
-              selectedAlumnoId={inscripccionEditado.alumnoId} // Pasar el ID del ALUMNO seleccionado
+              selectedUserId={inscripccionEditado.userId} // Pasar el ID del ALUMNO seleccionado
               InscripccionEditado={inscripccionEditado}
               setInscripccionEditado={setInscripccionEditado}
             />
@@ -700,7 +700,7 @@ const Inscripccions = () => {
                             <div class="flex px-2 py-1">
                               <div class="flex flex-col justify-center">
                                 <span className=" inline-flex text-md leading-5 font-semibold   text-slate-400">
-                                  {inscripccion.nombreAlumno}
+                                  {inscripccion.nombreUser}
                                 </span>
                               </div>
                             </div>
@@ -710,7 +710,7 @@ const Inscripccions = () => {
                             {inscripccion.detalle.map((detalle) => (
                               <div class="flex px-2 py-1" key={detalle.id}>
                                 <div className="w-28">
-                                  <NombreAlumnoyCurso cursoId={detalle.cursoId} />
+                                  <NombreCursoInscripcion cursoId={detalle.cursoId} />
                                 </div>
                                 <div class="flex pl-10 flex-col justify-center">
                                   <p class="mb-0 text-xs leading-tight dark:text-white dark:opacity-80 text-slate-400">

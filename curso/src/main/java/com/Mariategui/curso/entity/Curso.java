@@ -28,7 +28,7 @@ public class Curso {
     private Integer docenteId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "video_id")
+    @JoinColumn(name = "video_id", nullable = true) // Establecer nullable a true
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private Video video;
 

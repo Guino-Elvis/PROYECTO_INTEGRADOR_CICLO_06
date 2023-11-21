@@ -35,7 +35,7 @@ class VideoEscolar extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => DetalleEscolar()),
+                                    builder: (context) => DetalleEscolar(nombreCurso: '', nombreDocente: '', cursoId:'',)),
                               );
                             },
                             child: Icon(
