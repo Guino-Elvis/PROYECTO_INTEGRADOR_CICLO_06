@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/pages/escolar/widgets/component/detalle/curso_detalle/asistencia.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class Seccion2Escolar extends StatelessWidget {
+class Seccion2Escolar extends StatefulWidget {
+  
   const Seccion2Escolar({Key? key}) : super(key: key);
 
-  Widget buildItem(BuildContext context, String link, IconData icon, String text) {
+  @override
+  State<Seccion2Escolar> createState() => _Seccion2EscolarState();
+}
+
+class _Seccion2EscolarState extends State<Seccion2Escolar> {
+  Widget buildItem(BuildContext context, dynamic link, IconData icon, String text, {bool isRoute = true}) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, link);
+       onTap: () {
+        if (isRoute) {
+          Navigator.pushNamed(context, link);
+        } else {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => link));
+        }
       },
       child: Column(
         children: [
@@ -64,6 +75,8 @@ class Seccion2Escolar extends StatelessWidget {
                 buildItem(context, "/librohome", Icons.access_alarm, "Biblioteca"),
                 buildItem(context, "link_para_columna_3", Icons.access_time, "Otros"),
                 buildItem(context, "link_para_columna_4", Icons.account_balance, "otros"),
+                buildItem(context, AsistenciaEscolar(nombreCurso: '', nombreDocente: '', cursoId: '',), Icons.checklist, "Asistencias", isRoute: false),
+
               ],
             ),
           ),

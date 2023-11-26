@@ -29,7 +29,8 @@ public class JwtProvider {
         Date now = new Date();
         // Date exp = new Date(now.getTime() + 3600000);
         // duracion 1 hora y 30 en milisegundos
-        Date exp = new Date(now.getTime() + 5400000);
+        // Date exp = new Date(now.getTime() + 5400000);
+        Date exp = new Date(now.getTime() + 3 * 60 * 60 * 1000);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)

@@ -18,7 +18,7 @@ class AsistenciaEscolar extends StatelessWidget {
       required this.nombreCurso,
       required this.nombreDocente,
       required this.cursoId});
-  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,11 +43,8 @@ class AsistenciaEscolar extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => DetalleEscolar(
-                                          nombreCurso: nombreCurso,
-                                          nombreDocente: nombreDocente,
-                                          cursoId: cursoId,
-                                        )),
+                                    builder: (context) => HomeScreenEscolar()),
+                                   
                               );
                             },
                             child: Icon(
@@ -72,7 +69,7 @@ class AsistenciaEscolar extends StatelessWidget {
                     ),
                     Center(
                       child: Text(
-                        '$cursoId $nombreCurso Ciclo: 4 - unico',
+                        ' Ciclo: 4 - unico',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 25,
@@ -84,7 +81,7 @@ class AsistenciaEscolar extends StatelessWidget {
                       child: Container(
                         width: 300,
                         child: Text(
-                          'EP Ingeniería de Sistemas - Docente: $nombreDocente',
+                          'EP Ingeniería de Sistemas',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,

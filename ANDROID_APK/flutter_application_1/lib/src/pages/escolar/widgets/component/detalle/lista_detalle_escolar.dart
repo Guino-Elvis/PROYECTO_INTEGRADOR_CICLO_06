@@ -175,38 +175,7 @@ class _ListViewEscolarDetalleState extends State<ListViewEscolarDetalle> {
                                       )
                                     ],
                                   ),
-                                  SizedBox(width: 10),
-                                  Column(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AsistenciaEscolar(
-                                                      nombreCurso:
-                                                          widget.nombreCurso,
-                                                      nombreDocente:
-                                                          widget.nombreDocente, 
-                                                          cursoId:
-                                                          widget.cursoId,
-                                                    )),
-                                          );
-                                        },
-                                        child: Icon(
-                                          Icons.checklist,
-                                          color: Colors.red,
-                                          size: 20,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Asistencia',
-                                        style: TextStyle(
-                                            color: Colors.red, fontSize: 10),
-                                      )
-                                    ],
-                                  ),
+                               
                                 ],
                               ),
                             ),

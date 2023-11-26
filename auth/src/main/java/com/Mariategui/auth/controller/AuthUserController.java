@@ -134,6 +134,7 @@ public class AuthUserController {
             String password = passwordEncoder.encode(authUserDto.getPassword());
             updatedUser.setPassword(password);
         }
+
         LocalDateTime currentDateTime = LocalDateTime.now();
         updatedUser.setUpdated_at(currentDateTime);
 
