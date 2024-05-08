@@ -246,7 +246,7 @@ class _EditReservaState extends State<EditReserva> {
                       children: [
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.blue,
+                            backgroundColor: Colors.blue,
                           ),
                           onPressed: () {
                             _updateReserva();
@@ -267,7 +267,7 @@ class _EditReservaState extends State<EditReserva> {
                           },
                           child: Text("Cancelar"),
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.red,
+                            backgroundColor: Colors.red,
                           ),
                         ),
                       ],

@@ -191,7 +191,7 @@ class _CrearReservaState extends State<CrearReserva> {
                 SizedBox(height: 16.0),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blue,
+                      backgroundColor: Colors.blue,
                     ),
                     onPressed: () async {
                       if (_validateFields()) {
@@ -243,7 +243,7 @@ class _CrearReservaState extends State<CrearReserva> {
                       Navigator.pushNamed(context, '/reserva_crud');
                     },
                     style: ElevatedButton.styleFrom(
-                      primary:
+                      backgroundColor:
                           Colors.red, // Color de fondo para el botón "Cancelar"
                     ),
                     child: Text(

@@ -397,7 +397,7 @@ class _EditLibroState extends State<EditLibro> {
                       onPressed: _pickImage,
                       child: Container(child: Text("Cambiar Foto")),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.blueAccent,
+                        backgroundColor: Colors.blueAccent,
                       ),
                     ),
                     Row(
@@ -405,7 +405,7 @@ class _EditLibroState extends State<EditLibro> {
                       children: [
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.blue,
+                            backgroundColor: Colors.blue,
                           ),
                           onPressed: () {
                             _updateImageInFirebase();
@@ -421,7 +421,7 @@ class _EditLibroState extends State<EditLibro> {
                           },
                           child: Text("Cancelar"),
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.red,
+                            backgroundColor: Colors.red,
                           ),
                         ),
                       ],

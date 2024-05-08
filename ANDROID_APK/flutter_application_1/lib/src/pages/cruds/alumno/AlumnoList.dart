@@ -75,7 +75,7 @@ class _AlumnoListState extends State<AlumnoList> {
         actions: [
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Color.fromARGB(246, 104, 36, 24),
+              backgroundColor: Colors.blueAccent,
             ),
             onPressed: () => _navigateCrearAlumno(context),
             child: Icon(

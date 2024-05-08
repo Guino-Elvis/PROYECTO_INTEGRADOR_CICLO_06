@@ -70,7 +70,7 @@ class _ListViewEscolarDetalleAsistenciaState
         ElevatedButton(
           onPressed: () => _filtrarPorCurso(cursoId),
           style: ElevatedButton.styleFrom(
-            primary:
+            backgroundColor:
                 _selectedCurso == cursoId ? Colors.red : HexColor("#0e1b4d"),
           ),
           child: Text(cursoNombre, style: TextStyle(color: Colors.white)),

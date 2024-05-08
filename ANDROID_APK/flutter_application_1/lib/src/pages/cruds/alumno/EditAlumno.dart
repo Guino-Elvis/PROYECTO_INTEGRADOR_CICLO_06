@@ -243,7 +243,7 @@ class _EditAlumnoState extends State<EditAlumno> {
                onPressed: _pickImage,
                   child: Container(child: Text("Cambiar Foto")),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.blueAccent,
+                    backgroundColor: Colors.blueAccent,
                   ),
             ),
 
@@ -252,7 +252,7 @@ class _EditAlumnoState extends State<EditAlumno> {
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
+                  backgroundColor: Colors.blue,
                 ),
                       onPressed: () {
                         _updateImageInFirebase();
@@ -267,7 +267,7 @@ class _EditAlumnoState extends State<EditAlumno> {
                       },
                       child: Text("Cancelar"),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.red, // Color de fondo para el botón "Cancelar"
+                        backgroundColor: Colors.red, // Color de fondo para el botón "Cancelar"
                       ),
                     ),
                   ],

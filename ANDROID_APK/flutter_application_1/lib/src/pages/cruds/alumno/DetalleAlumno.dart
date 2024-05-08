@@ -42,7 +42,9 @@ void confirm() {
           "Eliminar",
           style: TextStyle(color: Colors.black),
         ),
-        style: ElevatedButton.styleFrom(primary: Colors.red),
+        style: ElevatedButton.styleFrom(
+           backgroundColor: Colors.red,
+          ),
         onPressed: () async {
           await alumnoController.removerAlumno(id, fotoURL);
           _navigateList(context);
@@ -53,7 +55,9 @@ void confirm() {
           "Cancelar",
           style: TextStyle(color: Colors.black),
         ),
-        style: ElevatedButton.styleFrom(primary: Colors.green),
+        style: ElevatedButton.styleFrom(
+           backgroundColor: Colors.green,
+          ),
         onPressed: () => Navigator.pop(context),
       ),
     ],
@@ -96,7 +100,7 @@ void confirm() {
                     ElevatedButton(
                       child: Text("Edit"),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.blueAccent,
+                        backgroundColor: Colors.blueAccent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),
@@ -113,7 +117,7 @@ void confirm() {
                     ElevatedButton(
                       child: Text("Delete"),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.redAccent,
+                        backgroundColor: Colors.redAccent,
                         shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(30.0),
                         ),

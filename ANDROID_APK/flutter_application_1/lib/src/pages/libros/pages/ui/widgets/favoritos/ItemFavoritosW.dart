@@ -68,7 +68,7 @@ class ItemFavoritosW extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, "/detalle");
+                  // Navigator.pushNamed(context, "/detalle");
                 },
                 child: Container(
                   margin: EdgeInsets.all(5),

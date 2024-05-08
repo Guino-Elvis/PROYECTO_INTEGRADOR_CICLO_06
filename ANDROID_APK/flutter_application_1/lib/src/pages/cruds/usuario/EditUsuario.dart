@@ -351,7 +351,7 @@ class _EditUsuarioState extends State<EditUsuario> {
                       onPressed: _pickImage,
                       child: Container(child: Text("Cambiar Foto")),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.blueAccent,
+                        backgroundColor: Colors.blueAccent,
                       ),
                     ),
                     Row(
@@ -359,7 +359,7 @@ class _EditUsuarioState extends State<EditUsuario> {
                       children: [
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.blue,
+                            backgroundColor: Colors.blue,
                           ),
                           onPressed: () {
                             _updateImageInFirebase();
@@ -373,7 +373,7 @@ class _EditUsuarioState extends State<EditUsuario> {
                           },
                           child: Text("Cancelar"),
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.red,
+                            backgroundColor: Colors.red,
                           ),
                         ),
                       ],

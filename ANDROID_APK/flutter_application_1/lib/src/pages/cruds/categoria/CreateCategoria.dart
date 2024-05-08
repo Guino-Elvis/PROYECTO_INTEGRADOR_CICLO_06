@@ -111,7 +111,7 @@ class _CreateCategoriaState extends State<CreateCategoria> {
                 SizedBox(height: 32.0),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blue,
+                      backgroundColor: Colors.blue,
                     ),
                     onPressed: () async {
                       final downloadUrl =
@@ -153,7 +153,7 @@ class _CreateCategoriaState extends State<CreateCategoria> {
                       Navigator.pushNamed(context, '/category');
                     },
                     style: ElevatedButton.styleFrom(
-                      primary:
+                      backgroundColor:
                           Colors.red, // Color de fondo para el botón "Cancelar"
                     ),
                     child: Text(

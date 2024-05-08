@@ -137,7 +137,7 @@ class _CreateAlumnoPageState extends State<CreateAlumnoPage> {
             SizedBox(height: 32.0),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
+                  backgroundColor: Colors.blue,
                 ),
                 onPressed: () async {
                   // Primero, carga la imagen en Firebase Storage
@@ -180,8 +180,7 @@ class _CreateAlumnoPageState extends State<CreateAlumnoPage> {
                       '/category'); // Navega a la ruta "categoria" al presionar "Cancelar"
                 },
                 style: ElevatedButton.styleFrom(
-                  primary:
-                      Colors.red, // Color de fondo para el botón "Cancelar"
+                 backgroundColor: Colors.red,
                 ),
                 child: Text(
                   "Cancelar",

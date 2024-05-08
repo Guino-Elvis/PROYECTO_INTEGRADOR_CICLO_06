@@ -201,7 +201,7 @@ class _CreateUsuarioState extends State<CreateUsuario> {
                 SizedBox(height: 32.0),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blue,
+                      backgroundColor: Colors.blue,
                     ),
                     onPressed: () async {
                       // Primero, carga la imagen en Firebase Storage
@@ -247,7 +247,7 @@ class _CreateUsuarioState extends State<CreateUsuario> {
                       Navigator.pushNamed(context, '/usuario');
                     },
                     style: ElevatedButton.styleFrom(
-                      primary:
+                      backgroundColor:
                           Colors.red, // Color de fondo para el botón "Cancelar"
                     ),
                     child: Text(
